@@ -1,0 +1,12 @@
+Package: MTS
+Type: Package
+Title: What the package does (short line)
+Version: 0.1
+Date: 2013-10-07
+Author: Ruey S. Tsay
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: What Licence is it under ?
+Depends: Rcpp (>= 0.10.4), fGarch, mvtnorm
+LinkingTo: Rcpp, fGarch, mvtnorm
+Packaged: 2013-11-13 23:11:24 UTC; dwood

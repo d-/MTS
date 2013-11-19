@@ -1,0 +1,2 @@
+useDynLib(MTS)
+exportPattern("^[[:alpha:]]+")
