@@ -4,7 +4,7 @@ Title: MTS
 Version: 0.1
 Date: 2013-10-07
 Author: Ruey S. Tsay
-Maintainer:  David Wood "mts.maintainer@gmail.com"
+Maintainer: MTS Maintainer "mts.maintainer@gmail.com"
 Description: Multivariate Time Series Package for R 
 License: What Licence is it under ?
 Depends: Rcpp (>= 0.10.4), fGarch, mvtnorm
