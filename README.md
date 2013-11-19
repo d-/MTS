@@ -15,7 +15,7 @@ install.packages("MTS_VERSION.tar.gz",repos=NULL,type="source")
 library(MTS)
 ```
 
-A simpler solution is to use the 'devtools' package.
+Alternatively, a simpler solution is to use the 'devtools' package.
 
 ```
 install.packages("devtools")
