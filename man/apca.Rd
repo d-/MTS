@@ -52,28 +52,6 @@ sp100=apca(rtn,3)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (da, m) 
-{
-    if (!is.matrix(da)) 
-        da = as.matrix(da)
-    if (m < 1) 
-        m = 1
-    nT = dim(da)[1]
-    k = dim(da)[2]
-    if (k <= nT) {
-        da = t(da)
-        nT = dim(da)[1]
-        k = dim(da)[2]
-    }
-    m1 = princomp(t(da), cor = F, rotation = "none")
-    print(summary(m1))
-    factors = matrix(m1$loadings, nT, nT)
-    factors = factors[, 1:m]
-    loadings = m1$scores[, 1:m]
-    sdev = m1$sdev
-    apca <- list(sdev = sdev, factors = factors, loadings = loadings)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

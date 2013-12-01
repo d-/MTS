@@ -48,28 +48,6 @@ a positive definite matrix
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (M) 
-{
-    if (!is.matrix(M)) 
-        M = as.matrix(M)
-    n1 = nrow(M)
-    if (n1 == 1) {
-        Mh = sqrt(M)
-        Mhinv = 1/Mh
-    }
-    if (n1 > 1) {
-        M = (M + t(M))/2
-        m1 = eigen(M)
-        V = m1$vectors
-        eiv = sqrt(m1$values)
-        L = diag(eiv)
-        Linv = diag(1/eiv)
-        Mh = V \%*\% L \%*\% t(V)
-        Mhinv = V \%*\% Linv \%*\% t(V)
-    }
-    list(mtxsqrt = Mh, invsqrt = Mhinv)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

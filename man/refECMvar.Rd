@@ -52,35 +52,6 @@ m2=refECMvar(m1)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (m1, thres = 1) 
-{
-    x = m1$data
-    m = m1$ncoint
-    p = m1$arorder
-    include.con = m1$include.const
-    alpha = m1$alpha
-    se.alpha = m1$se.alpha
-    beta = m1$beta
-    se.beta = m1$se.beta
-    Phip = m1$Phip
-    se.Phip = m1$se.Phip
-    mm = ECMvar(x, p, beta, include.const = include.con, fixed = NULL)
-    alpha = mm$alpha
-    se.alpha = mm$se.alpha
-    beta = mm$beta
-    se.beta = mm$se.beta
-    Phip = mm$Phip
-    se.Phip = mm$se.Phip
-    aic = mm$aic
-    bic = mm$bic
-    resi = mm$residuals
-    sse = mm$Sigma
-    refECMvar <- list(data = x, ncoint = m, arorder = p, include.const = include.const, 
-        alpha = alpha, se.alpha = se.alpha, beta = beta, se.beta = se.beta, 
-        aic = aic, bic = bic, residuals = resi, Phip = phip, 
-        se.Phip = se.phip, Sigma = sse)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

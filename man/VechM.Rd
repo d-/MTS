@@ -50,24 +50,6 @@ m1
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (vec) 
-{
-    m = length(vec)
-    k = (-1 + sqrt(1 + 8 * m))/2
-    mtx = diag(rep(1, k))
-    ist = 0
-    for (j in 1:k) {
-        mtx[j:k, j] = vec[(ist + 1):(ist + k - j + 1)]
-        ist = ist + (k - j + 1)
-    }
-    for (i in 1:(k - 1)) {
-        for (j in (i + 1):k) {
-            mtx[i, j] = mtx[j, i]
-        }
-    }
-    mtx
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

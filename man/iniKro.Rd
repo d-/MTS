@@ -59,64 +59,6 @@ iniKro(da, at, ARid, MAid, include.mean)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (da, at, ARid, MAid, include.mean) 
-{
-    if (!is.matrix(da)) 
-        da = as.matrix(da)
-    if (!is.matrix(at)) 
-        at = as.matrix(at)
-    nT = dim(da)[1]
-    k = dim(da)[2]
-    p = floor(dim(ARid)[2]/k) - 1
-    if (p <= 0) 
-        p = 1
-    ist = p + 1
-    est = NULL
-    estse = NULL
-    for (i in 1:k) {
-        X = NULL
-        Y = da[ist:nT, i]
-        if (include.mean) 
-            X = rep(1, (nT - p))
-        if (i > 1) {
-            for (j in 1:(i - 1)) {
-                if (ARid[i, j] > 1) {
-                  tmp = at[ist:nT, j] - da[ist:nT, j]
-                  X = cbind(X, tmp)
-                }
-            }
-        }
-        for (lag in 1:p) {
-            jst = lag * k
-            for (j in 1:k) {
-                if (ARid[i, jst + j] > 1) {
-                  tmp = da[(ist - lag):(nT - lag), j]
-                  X = cbind(X, tmp)
-                }
-            }
-        }
-        for (lag in 1:p) {
-            jst = lag * k
-            for (j in 1:k) {
-                if (MAid[i, jst + j] > 1) {
-                  tmp = at[(ist - lag):(nT - lag), j]
-                  X = cbind(X, tmp)
-                }
-            }
-        }
-        XPX = crossprod(X, X)/nT
-        XPXinv = solve(XPX)
-        XPY = crossprod(X, Y)/nT
-        beta = XPXinv \%*\% XPY
-        l1 = dim(XPX)[1]
-        resi = Y - X \%*\% matrix(beta, l1, 1)
-        evar = crossprod(resi, resi)/(nT - p)
-        est = c(est, beta)
-        estse = c(estse, sqrt(diag(XPXinv) * evar/nT))
-    }
-    iniKro <- list(par = est, se = estse)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

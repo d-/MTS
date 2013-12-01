@@ -58,19 +58,6 @@ Typically, the number of fitted coefficients of the model. Default is zero.
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (model, gof = 24, adj = 0, level = F) 
-{
-    resi = model$residuals
-    colnames(resi) <- colnames(model$data)
-    ccm(resi, lag = gof, level = level)
-    cat("Hit Enter to compute MQ-statistics:", "\n")
-    readline()
-    mq(resi, lag = gof, adj = adj)
-    cat("Hit Enter to obtain residual plots:", "\n")
-    readline()
-    MTSplot(resi)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

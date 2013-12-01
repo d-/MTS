@@ -66,45 +66,6 @@ VARMAcov(Phi=Phi,Sigma=Sig)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (Phi = NULL, Theta = NULL, Sigma = NULL, lag = 12, trun = 120) 
-{
-    m1 = PSIwgt(Phi = Phi, Theta = Theta, lag = trun, plot = FALSE)
-    Psi = m1$psi.weight
-    nc = dim(Psi)[2]
-    k = dim(Psi)[1]
-    if (is.null(Sigma)) {
-        wk = PSI
-    }
-    else {
-        wk = NULL
-        for (i in 0:trun) {
-            ist = i * k
-            wk = cbind(wk, Psi[, (ist + 1):(ist + k)] \%*\% Sigma)
-        }
-    }
-    Gam0 = wk \%*\% t(Psi)
-    SE = diag(1/sqrt(diag(Gam0)))
-    covmtx = Gam0
-    cormtx = SE \%*\% Gam0 \%*\% SE
-    for (i in 1:lag) {
-        ist = i * k
-        Gami = wk[, (ist + 1):nc] \%*\% t(Psi[, 1:(nc - ist)])
-        covmtx = cbind(covmtx, Gami)
-        cormtx = cbind(cormtx, SE \%*\% Gami \%*\% SE)
-    }
-    for (i in 0:lag) {
-        ist = i * k
-        cat("Auto-Covariance matrix of lag: ", i, "\n")
-        print(round(covmtx[, (ist + 1):(ist + k)], 5))
-    }
-    for (i in 0:lag) {
-        ist = i * k
-        cat("cross correlation matrix of lag: ", i, "\n")
-        print(round(cormtx[, (ist + 1):(ist + k)], 4))
-    }
-    VARMAcov <- list(autocov = covmtx, ccm = cormtx)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

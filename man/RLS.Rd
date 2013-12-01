@@ -58,40 +58,6 @@ RLS(y, x, ist = 30, xpxi = NULL, xpy0 = NULL)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (y, x, ist = 30, xpxi = NULL, xpy0 = NULL) 
-{
-    if (!is.matrix(x)) 
-        x = as.matrix(x)
-    nT = dim(x)[1]
-    k = dim(x)[2]
-    if (is.null(xpxi)) {
-        if (ist <= k) 
-            ist = k + 1
-        xpx0 = t(x[1:ist, ]) \%*\% x[1:ist, ]
-        xpxi = solve(xpx0)
-        xpy0 = t(x[1:ist, ]) \%*\% matrix(y[1:ist], ist, 1)
-    }
-    ist = ist + 1
-    resi = NULL
-    beta = matrix(c(xpxi \%*\% xpy0), 1, k)
-    for (t in ist:nT) {
-        jdx = t - ist + 1
-        x1 = matrix(x[t, ], 1, k)
-        wk = x1 \%*\% xpxi
-        k1 = 1 + sum(wk * x1)
-        wk1 = t(wk) \%*\% wk/k1
-        xpxi = xpxi - wk1
-        Kmtx = xpxi \%*\% t(x1)
-        tmp = beta[jdx, ] - t(Kmtx) * (sum(x1 * beta[jdx, ]) - 
-            y[t])
-        beta = rbind(beta, tmp)
-        res = y[t] - tmp \%*\% t(x1)
-        resi = c(resi, res)
-    }
-    beta = beta[-1, ]
-    RLS <- list(beta = beta, resi = resi)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

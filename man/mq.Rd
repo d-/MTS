@@ -59,43 +59,6 @@ mq(x)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (x, lag = 24, adj = 0) 
-{
-    if (!is.matrix(x)) 
-        x = as.matrix(x)
-    nr = nrow(x)
-    nc = ncol(x)
-    g0 = var(x)
-    ginv = solve(g0)
-    qm = 0
-    QM = NULL
-    df = 0
-    for (i in 1:lag) {
-        x1 = x[(i + 1):nr, ]
-        x2 = x[1:(nr - i), ]
-        g = cov(x1, x2)
-        g = g * (nr - i - 1)/(nr - 1)
-        h = t(g) \%*\% ginv \%*\% g \%*\% ginv
-        qm = qm + nr * nr * sum(diag(h))/(nr - i)
-        df = df + nc * nc
-        dff = df - adj
-        mindeg = nc^2 - 1
-        pv = 1
-        if (dff > mindeg) 
-            pv = 1 - pchisq(qm, dff)
-        QM = rbind(QM, c(i, qm, dff, pv))
-    }
-    pvs = QM[, 4]
-    dimnames(QM) = list(names(pvs), c("  m  ", "    Q(m) ", "   df  ", 
-        " p-value"))
-    cat("Ljung-Box Statistics: ", "\n")
-    printCoefmat(QM, digits = 3)
-    par(mfcol = c(1, 1))
-    plot(pvs, ylim = c(0, 1), xlab = "m", ylab = "prob", main = "p-values of Ljung-Box statistics")
-    abline(h = c(0))
-    lines(rep(0.05, lag), lty = 2, col = "blue")
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

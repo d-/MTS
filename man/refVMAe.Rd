@@ -60,39 +60,6 @@ names(m3)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (model, thres = 1) 
-{
-    x = model$data
-    q = model$MAorder
-    cnst = model$cnst
-    coef = as.matrix(model$coef)
-    secoef = as.matrix(model$secoef)
-    nr = dim(coef)[1]
-    nc = dim(coef)[2]
-    for (j in 1:nc) {
-        for (i in 1:nr) {
-            if (secoef[i, j] < 10^(-8)) 
-                secoef[i, j] = 1
-        }
-    }
-    fix = matrix(0, nr, nc)
-    for (j in 1:nc) {
-        tt = coef[, j]/secoef[, j]
-        idx = c(1:nr)[abs(tt) >= thres]
-        fix[idx, j] = 1
-    }
-    if (cnst) {
-        tt = coef[1, ]/secoef[1, ]
-        idx = c(1:nc)[abs(tt) > 1]
-        if (length(idx) > 0) 
-            fix[1, idx] = 1
-    }
-    mm = VMAe(x, q = q, include.mean = cnst, fixed = fix)
-    refVMAe <- list(data = x, MAorder = q, cnst = cnst, coef = mm$coef, 
-        secoef = mm$secoef, residuals = mm$residuals, Sigma = mm$Sigma, 
-        aic = mm$aic, bic = mm$bic, mu = mm$mu, Theta = mm$Theta)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

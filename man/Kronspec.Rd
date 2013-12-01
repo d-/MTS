@@ -54,62 +54,6 @@ names(m1)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (kdx, output = TRUE) 
-{
-    k = length(kdx)
-    if (output) {
-        cat("Kronecker indices: ", kdx, "\n")
-        cat("Dimension: ", k, "\n")
-    }
-    KK = sort(kdx, index.return = T)
-    idx = KK$ix
-    p = KK$x[k]
-    q = p
-    mx = (p + 1) * k
-    Theta = matrix(2, k, k * (q + 1))
-    for (i in 1:k) {
-        Theta[i, i] = 1
-        if (kdx[i] < q) {
-            jj = (kdx[i] + 1) * k
-            Theta[i, (jj + 1):mx] = 0
-        }
-    }
-    if (k > 1) {
-        for (i in 1:(k - 1)) {
-            Theta[i, (i + 1):k] = 0
-        }
-    }
-    Phi = Theta
-    if (k > 1) {
-        for (i in 2:k) {
-            for (j in 1:(i - 1)) {
-                if (kdx[j] <= kdx[i]) 
-                  Phi[i, j] = 0
-            }
-        }
-    }
-    Theta[1:k, 1:k] = Phi[1:k, 1:k]
-    for (i in 1:k) {
-        for (j in 1:k) {
-            if (kdx[i] > kdx[j]) {
-                for (ii in 1:(kdx[i] - kdx[j])) Phi[i, ii * k + 
-                  j] = 0
-            }
-        }
-    }
-    if (output) {
-        cat("Notation: ", "\n")
-        cat(" 0: fixed to 0", "\n")
-        cat(" 1: fixed to 1", "\n")
-        cat(" 2: estimation", "\n")
-        cat("AR coefficient matrices: ", "\n")
-        print(Phi)
-        cat("MA coefficient matrices: ", "\n")
-        print(Theta)
-    }
-    Kronspec <- list(PhiID = Phi, ThetaID = Theta)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

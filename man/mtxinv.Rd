@@ -46,30 +46,6 @@ mtxinv(x)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (x) 
-{
-    if (!is.matrix(x)) 
-        x = as.matrix(x)
-    N = dim(x)[2]
-    y = diag(N) * 2 - x
-    if (N > 2) {
-        for (ii in 3:N) {
-            jj = ii - 2
-            for (k in 1:jj) {
-                j = jj - k + 1
-                tmp = -x[ii, j]
-                if ((ii - 1) > j) {
-                  for (i in (j + 1):(ii - 1)) {
-                    tmp = tmp - x[ii, i] * y[i, j]
-                  }
-                }
-                y[ii, j] = tmp
-            }
-        }
-    }
-    y
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

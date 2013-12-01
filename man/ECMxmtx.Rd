@@ -55,27 +55,6 @@ ECMxmtx(x, p, m, include.con)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (x, p, m, include.con) 
-{
-    nT = dim(x)[1]
-    k = dim(x)[2]
-    dx = x[2:nT, ] - x[1:(nT - 1), ]
-    dx = rbind(rep(0, k), dx)
-    ist = p
-    if (ist < 2) 
-        ist = 2
-    xm = x[(ist - 1):(nT - 1), ]
-    ne = nT - ist + 1
-    if (include.con) 
-        xm = cbind(xm, rep(1, ne))
-    if (p > 1) {
-        for (ii in 1:(p - 1)) {
-            xm = cbind(xm, dx[(ist - ii):(nT - ii), ])
-        }
-    }
-    ECMxmtx <- list(xm = xm, y = dx[ist:nT, ])
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

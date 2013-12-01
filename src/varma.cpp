@@ -4,6 +4,8 @@
 using namespace std;
 using namespace Rcpp;
 
+// MARK: CMatrix
+
 
 class CMatrix {
 public:
@@ -182,7 +184,7 @@ CMatrix prod(CMatrix A, CMatrix B) {
    return C;
 }
 
-
+// MARK: Varma
 
 class Varma {
 public:
@@ -427,7 +429,7 @@ Varma::Varma (CMatrix & TimeSeries, CMatrix & Mask, std::vector<double> & ParamF
    }
 }
 
-
+// MARK: Interfaces
 
 RcppExport SEXP GetVarmaResiduals(SEXP _timeSeries,
                                   SEXP _mask,

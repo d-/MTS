@@ -46,41 +46,6 @@ mtCopulaVol(par)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (par) 
-{
-    if (mtCopulaincludeth0) {
-        th1 = par[4:length(par)]
-    }
-    else {
-        th1 <- mtCopulath0
-    }
-    par0 = 1 - par[2] - par[3]
-    tmp0 = par0 * th1
-    Theta <- mtCopulaTheta
-    ncor <- mtCopulancor
-    grp <- mtCopulagrp
-    m <- mtCopulam
-    ist = m + 1
-    nT = dim(Theta)[1]
-    Xmtx = the2Xmtx(th1, grp)
-    Rt = t(Xmtx) \%*\% Xmtx
-    rho.t = NULL
-    TH = NULL
-    for (i in 1:m) {
-        rho.t = rbind(rho.t, c(Rt))
-        TH = rbind(TH, th1)
-    }
-    for (t in ist:nT) {
-        thet = Theta[t, ]
-        tht = tmp0 + TH[t - 1, ] * par[2] + par[3] * thet
-        TH = rbind(TH, tht)
-        Xmtx = the2Xmtx(tht, grp)
-        Rt = t(Xmtx) \%*\% Xmtx
-        rho.t = rbind(rho.t, c(Rt))
-    }
-    mtCopulaVol <- list(rho.t = rho.t, angles = TH)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

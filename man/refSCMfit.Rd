@@ -56,55 +56,6 @@ names(m2)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (model, thres = 1) 
-{
-    zt = model$data
-    inc.mean = model$cnst
-    scms = model$SCMs
-    Tdx = model$Tdx
-    SCMpar = model$coef
-    seSCMpar = model$secoef
-    p = max(scms[, 1])
-    q = max(scms[, 2])
-    nr = length(SCMpar)
-    fix = rep(0, nr)
-    for (j in 1:nr) {
-        tt = 0
-        if (seSCMpar[j] > 1e-06) 
-            tt = SCMpar[j]/seSCMpar[j]
-        if (abs(tt) > thres) {
-            fix[j] = 1
-        }
-        else {
-            SCMpar[j] = 0
-        }
-    }
-    SCMpar <<- SCMpar
-    seSCMpar <<- seSCMpar
-    m1 = SCMfit(zt, scms, Tdx, include.mean = inc.mean, fixed = fix, 
-        ref = 1)
-    locAR = m1$locAR
-    locMA = m1$locMA
-    Tdx = m1$Tdx
-    locTmtx = m1$locTmtx
-    SCMpar = m1$coef
-    seSCMpar = m1$secoef
-    scms = m1$SCMs
-    sig = m1$Sigma
-    aic = m1$aic
-    bic = m1$bic
-    Ph0 = m1$Ph0
-    PH = m1$Phi
-    TH = m1$Theta
-    if (length(TH) > 0) 
-        TH = -TH
-    at = m1$residuals
-    refSCMfit <- list(data = zt, SCMs = scms, Tdx = Tdx, locTmtx = locTmtx, 
-        locAR = locAR, locMA = locMA, cnst = inc.mean, coef = SCMpar, 
-        secoef = seSCMpar, residuals = at, Sigma = sig, aic = aic, 
-        bic = bic, Ph0 = Ph0, Phi = PH, Theta = TH)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

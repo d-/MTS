@@ -63,46 +63,6 @@ names(m1)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (rtn, include.mean = T, p = 0, cond.dist = "norm") 
-{
-    if (!is.matrix(rtn)) 
-        rtn = as.matrix(rtn)
-    RTN = rtn
-    if (p > 0) {
-        m1 = VAR(rtn, p)
-        RTN = m1$residuals
-    }
-    else {
-        if (include.mean) {
-            mu = apply(rtn, 2, mean)
-            RTN = scale(rtn, center = T, scale = F)
-            cat("Sample mean of the returns: ", mu, "\n")
-            RTN = as.matrix(RTN)
-        }
-    }
-    k = dim(RTN)[2]
-    Vol = NULL
-    sresi = NULL
-    Mtxest = NULL
-    Mtxse = NULL
-    Mtxtval = NULL
-    for (i in 1:k) {
-        m2 = garchFit(~garch(1, 1), data = RTN[, i], include.mean = F, 
-            trace = F, cond.dist = cond.dist)
-        Mtxest = rbind(Mtxest, m2@fit$par)
-        Mtxse = rbind(Mtxse, m2@fit$se.coef)
-        Mtxtval = rbind(Mtxtval, m2@fit$tval)
-        Vol = cbind(Vol, volatility(m2))
-        sresi = cbind(sresi, residuals(m2, standardize = T))
-        cat("Component: ", i, "\n")
-        cat("Estimates: ", round(Mtxest[i, ], 6), "\n")
-        cat("se.coef  : ", round(Mtxse[i, ], 6), "\n")
-        cat("t-value  : ", round(Mtxtval[i, ], 6), "\n")
-    }
-    dccPre <- list(marVol = Vol, sresi = sresi, est = Mtxest, 
-        se.coef = Mtxse)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

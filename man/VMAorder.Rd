@@ -56,43 +56,6 @@ VMAorder(zt)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (x, lag = 20) 
-{
-    if (!is.matrix(x)) 
-        x = as.matrix(x)
-    nr = dim(x)[1]
-    nc = dim(x)[2]
-    g0 = var(x)
-    ginv = solve(g0)
-    qm = NULL
-    for (i in 1:lag) {
-        x1 = x[(i + 1):nr, ]
-        x2 = x[1:(nr - i), ]
-        g = cov(x1, x2)
-        g = g * (nr - i - 1)/(nr - 1)
-        h = t(g) \%*\% ginv \%*\% g \%*\% ginv
-        qmi = nr * nr * sum(diag(h))/(nr - i)
-        qm = c(qmi, qm)
-    }
-    tst = rev(cumsum(qm))
-    ksq = nc * nc
-    df = ksq * lag
-    QM = NULL
-    for (i in 1:lag) {
-        pv = 1 - pchisq(tst[i], df)
-        QM = rbind(QM, c(i, tst[i], pv))
-        df = df - ksq
-    }
-    pvs = QM[, 3]
-    dimnames(QM) = list(names(pvs), c("  j  ", "  Q(j,m) ", " p-value"))
-    cat("Q(j,m) Statistics: ", "\n")
-    printCoefmat(QM, digits = 3)
-    par(mfcol = c(1, 1))
-    plot(pvs, ylim = c(0, 1), xlab = "j", ylab = "prob", main = "p-values: Q(j,m) Statistics")
-    abline(h = c(0))
-    lines(rep(0.05, lag), lty = 2, col = "blue")
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

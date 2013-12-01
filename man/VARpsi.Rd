@@ -53,40 +53,6 @@ names(m1)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (Phi, lag = 5) 
-{
-    k = nrow(Phi)
-    m = ncol(Phi)
-    p = floor(m/k)
-    Si = diag(rep(1, k))
-    if (p < 1) 
-        p = 1
-    if (lag < 1) 
-        lag = 1
-    for (i in 1:lag) {
-        if (i <= p) {
-            idx = (i - 1) * k
-            tmp = Phi[, (idx + 1):(idx + k)]
-        }
-        else {
-            tmp = matrix(0, k, k)
-        }
-        jj = i - 1
-        jp = min(jj, p)
-        if (jp > 0) {
-            for (j in 1:jp) {
-                jdx = (j - 1) * k
-                idx = (i - j) * k
-                w1 = Phi[, (jdx + 1):(jdx + k)]
-                w2 = Si[, (idx + 1):(idx + k)]
-                tmp = tmp + w1 \%*\% w2
-            }
-        }
-        Si = cbind(Si, tmp)
-    }
-    VARpsi <- list(psi = Si)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

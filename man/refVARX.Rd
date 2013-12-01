@@ -55,36 +55,6 @@ m2=refVARX(m1,thres=1.5)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (m1, thres = 1) 
-{
-    zt = m1$data
-    xt = m1$xt
-    p = m1$aror
-    m = m1$m
-    include.m = m1$include.mean
-    beta = m1$coef
-    se.beta = m1$se.coef
-    fix = matrix(0, nrow(beta), ncol(beta))
-    for (i in 1:ncol(beta)) {
-        tt = beta[, i]/se.beta[, i]
-        idx = c(1:nrow(beta))[abs(tt) > thres]
-        if (length(idx) > 0) {
-            fix[idx, i] = 1
-        }
-    }
-    mm = VARX(zt, p, xt, m, include.mean = include.m, fix)
-    Ph0 = mm$Ph0
-    Phi = mm$Phi
-    Beta = mm$beta
-    resi = mm$residuals
-    sig = mm$Sigma
-    coef = mm$beta
-    se.coef = mm$se.coef
-    refVARX <- list(data = zt, aror = p, xt = xt, m = m, Ph0 = Ph0, 
-        Phi = Phi, beta = Beta, residuals = resi, Sigma = sig, 
-        coef = beta, se.coef = se.beta, include.mean = include.m)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

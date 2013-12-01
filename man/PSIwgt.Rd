@@ -64,67 +64,6 @@ m1=PSIwgt(Phi=phi,Theta=theta)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (Phi = NULL, Theta = NULL, lag = 12, plot = TRUE, output = FALSE) 
-{
-    q = 0
-    p = 0
-    k = 0
-    if (length(Theta) > 0) {
-        k = dim(Theta)[1]
-        k1 = dim(Theta)[2]
-        q = floor(k1/k)
-    }
-    if (length(Phi) > 0) {
-        k = dim(Phi)[1]
-        k1 = dim(Phi)[2]
-        p = floor(k1/k)
-    }
-    if (k < 1) 
-        k = 1
-    PSI = diag(k)
-    WGT = c(PSI)
-    for (il in 1:lag) {
-        ilk = il * k
-        tmp = matrix(0, k, k)
-        if ((q > 0) && (il <= q)) 
-            tmp = -Theta[, (ilk - k + 1):ilk]
-        if (p > 0) {
-            iend = min(il, p)
-            for (j in 1:iend) {
-                jdx = (il - j)
-                kdx = j * k
-                tmp = tmp + Phi[, (kdx - k + 1):kdx] \%*\% PSI[, 
-                  (jdx * k + 1):(jdx * k + k)]
-            }
-        }
-        PSI = cbind(PSI, tmp)
-        WGT = cbind(WGT, c(tmp))
-    }
-    if (output) {
-        for (i in 1:lag) {
-            cat("Lag: ", i, " psi-matrix", "\n")
-            ist = i * k
-            print(round(PSI[, (ist + 1):(ist + k)], 5))
-        }
-    }
-    if (plot) {
-        tdx = c(1:(lag + 1)) - 1
-        par(mfcol = c(k, k))
-        gmax = max(WGT)
-        gmin = min(WGT)
-        cx = (gmax - gmin)/10
-        gmax = gmax + cx
-        gmin = gmin - cx
-        for (j in 1:k^2) {
-            plot(tdx, WGT[j, ], type = "l", xlab = "lag", ylab = "Psiwgt", 
-                ylim = c(gmin, gmax))
-            points(tdx, WGT[j, ], pch = "*")
-            title(main = "Psi-weights")
-        }
-    }
-    PSIwgt <- list(psi.weight = PSI, irf = WGT)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

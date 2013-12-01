@@ -47,58 +47,6 @@ dccRho(par)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (par) 
-{
-    rt <- DCCrtn
-    m <- mused
-    loccor <- Loccor
-    type <- DCCtype
-    nT = dim(rt)[1]
-    k = dim(rt)[2]
-    R0 = cor(rt)
-    th0 = Vech(R0)
-    theta1 = par[1]
-    theta2 = par[2]
-    theta0 = 1 - theta1 - theta2
-    wk0 = theta0 * th0
-    loccor = as.matrix(loccor)
-    if (type == "TseTsui") {
-        ist = m + 1
-        one1 = matrix(1, m, 1)
-        TH = one1 \%*\% th0
-        for (t in ist:nT) {
-            v1 = wk0 + theta1 * TH[t - 1, ] + theta2 * loccor[t, 
-                ]
-            TH = rbind(TH, v1)
-        }
-    }
-    else {
-        ist = 2
-        TH = matrix(th0, 1, k * (k + 1)/2)
-        for (t in ist:nT) {
-            v1 = wk0 + theta1 * TH[t - 1, ] + theta2 * loccor[t, 
-                ]
-            TH = rbind(TH, v1)
-        }
-        for (t in ist:nT) {
-            Qt = VechM(TH[t, ])
-            dd = sqrt(diag(Qt))
-            for (i in 1:k) {
-                for (j in 1:i) {
-                  Qt[i, j] = Qt[i, j]/(dd[i] * dd[j])
-                }
-            }
-            TH[t, ] = Vech(Qt)
-        }
-    }
-    rho.t = NULL
-    for (t in 1:nT) {
-        Rt = VechM(TH[t, ])
-        rho.t = rbind(rho.t, c(Rt))
-    }
-    rho.t
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

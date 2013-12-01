@@ -59,50 +59,6 @@ iniEST(y, x, p, q, include.mean)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (y, x, p, q, include.mean) 
-{
-    if (!is.matrix(y)) 
-        y = as.matrix(y)
-    if (!is.matrix(x)) 
-        x = as.matrix(x)
-    nT = dim(y)[1]
-    k = dim(y)[2]
-    pq = max(p, q)
-    ist = 1 + pq
-    ne = nT - pq
-    if (include.mean) {
-        xmtx = matrix(1, ne, 1)
-    }
-    else {
-        xmtx = NULL
-    }
-    ymtx = as.matrix(y[ist:nT, ])
-    if (p > 0) {
-        for (j in 1:p) {
-            xmtx = cbind(xmtx, y[(ist - j):(nT - j), ])
-        }
-    }
-    if (q > 0) {
-        for (j in 1:q) {
-            xmtx = cbind(xmtx, x[(ist - j):(nT - j), ])
-        }
-    }
-    xmtx = as.matrix(xmtx)
-    xtx = crossprod(xmtx, xmtx)
-    xty = crossprod(xmtx, ymtx)
-    xtxinv = solve(xtx)
-    beta = xtxinv \%*\% xty
-    resi = ymtx - xmtx \%*\% beta
-    sse = crossprod(resi, resi)/ne
-    dd = diag(xtxinv)
-    sebeta = NULL
-    for (j in 1:k) {
-        se = sqrt(dd * sse[j, j])
-        sebeta = cbind(sebeta, se)
-    }
-    iniEST <- list(estimates = beta, se = sebeta)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

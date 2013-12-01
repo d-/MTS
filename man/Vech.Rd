@@ -49,20 +49,6 @@ v1=Vech(m2)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (mtx) 
-{
-    if (!is.matrix(mtx)) 
-        mtx = as.matrix(mtx)
-    vec = mtx[, 1]
-    k = nrow(mtx)
-    if (k > 1) {
-        for (j in 2:k) {
-            vec = c(vec, mtx[j:k, j])
-        }
-    }
-    vec
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

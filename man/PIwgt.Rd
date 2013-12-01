@@ -63,39 +63,6 @@ names(m1)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (Phi = NULL, Theta = NULL, lag = 12, plot = TRUE) 
-{
-    m1 = PSIwgt(Phi = Theta, Theta = Phi, lag = lag, plot = FALSE)
-    PImtx = m1$psi.weight
-    k = dim(PImtx)[1]
-    nc = dim(PImtx)[2]
-    PImtx[, (k + 1):nc] = -PImtx[, (k + 1):nc]
-    lag = floor(nc/k) - 1
-    WGT = c(diag(k))
-    for (i in 1:lag) {
-        cat("Lag: ", i, " pi-matrix", "\n")
-        ist = (i - 1) * k
-        WGT = cbind(WGT, c(PImtx[, (ist + 1):(ist + k)]))
-        print(round(PImtx[, (ist + 1):(ist + k)], 5))
-    }
-    if (plot) {
-        tdx = c(1:(lag + 1)) - 1
-        par(mfcol = c(k, k))
-        gmax = max(WGT)
-        gmin = min(WGT)
-        cx = (gmax - gmin)/10
-        gmax = gmax + cx
-        gmin = gmin - cx
-        for (j in 1:k^2) {
-            plot(tdx, WGT[j, ], type = "l", xlab = "lag", ylab = "Piwgt", 
-                ylim = c(gmin, gmax))
-            points(tdx, WGT[j, ], pch = "*")
-            title(main = "Pi-weights")
-        }
-    }
-    PIwgt <- list(pi.weight = PImtx)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

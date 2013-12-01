@@ -65,45 +65,6 @@ v(B) = 1- v1*B - ... - vs*B^s, and n_t is an ARMA(p,q) process.
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (y, x, b = 0, s = 1, p = 0, q = 0) 
-{
-    nT = length(y)
-    T1 = length(x)
-    nT = min(nT, T1)
-    mx = b + s
-    ist = mx + 1
-    y1 = y[ist:nT]
-    X = x[(s + 1):(nT - b)]
-    if (s > 0) {
-        for (i in 1:s) {
-            X = cbind(X, x[(s + 1 - i):(nT - b - i)])
-        }
-    }
-    nx = ncol(X)
-    m1 = arima(y1, order = c(p, 0, q), xreg = X)
-    se = sqrt(diag(m1$var.coef))
-    coef.arma = NULL
-    se.arma = NULL
-    pq = p + q
-    if (pq > 0) {
-        coef.arma = m1$coef[1:pq]
-        se.arma = se[1:pq]
-        p1 = cbind(coef.arma, se.arma)
-        cat("ARMA coefficients & s.e.:", "\n")
-        print(t(p1), digits = 3)
-    }
-    v = m1$coef[(pq + 1):(pq + 1 + nx)]
-    se.v = se[(pq + 1):(pq + 1 + nx)]
-    pr = cbind(v, se.v)
-    cat("Transfer function coefficients & s.e.:", "\n")
-    print(t(pr), digits = 3)
-    res = m1$residuals
-    beta = matrix(v[2:(nx + 1)], nx, 1)
-    nt = y1 - v[1] - X \%*\% beta
-    tfm <- list(coef = v, se.coef = se.v, coef.arma = coef.arma, 
-        se.arma = se.arma, nt = nt, residuals = res)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

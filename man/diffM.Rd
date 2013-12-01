@@ -52,15 +52,6 @@ xt=diffM(zt)
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (zt, d = 1) 
-{
-    if (!is.matrix(zt)) 
-        zt = as.matrix(zt)
-    nT = dim(zt)[1]
-    dzt = zt[(d + 1):nT, ] - zt[1:(nT - d), ]
-    dzt
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
