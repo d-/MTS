@@ -1,8 +1,8 @@
 Package: MTS
 Type: Package
 Title: MTS
-Version: 0.1
-Date: 2013-10-07
+Version: 0.2
+Date: 2013-12-29
 Author: Ruey S. Tsay
 Maintainer: MTS Maintainer <mts.maintainer@gmail.com>
 Description: Multivariate Time Series Package for R 
