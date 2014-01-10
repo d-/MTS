@@ -1,2 +1,2 @@
 useDynLib(MTS)
-exportPattern("^[[:alpha:]]+")
+exportPattern("^[^\\.]")
