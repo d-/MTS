@@ -82,6 +82,7 @@ zt=diffM(z)*100
 C=0.1*diag(rep(1,7))
 V0=diag(rep(1,3))
 BVAR(zt,p=2,C,V0)
+}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ ~kwd1 }
