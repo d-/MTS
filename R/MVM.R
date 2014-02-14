@@ -1467,7 +1467,8 @@ if(k > 3){
 cat("Program Note: Dimension is limited to 3","\n")
 k=3
 }
-RTN <<- rt[,1:k]; include.M <<- include.mean
+RTN = rt[,1:k]
+include.M = include.mean
 #
 # obtain some initial estimates of the parameters
 mu=apply(RTN,2,mean)
