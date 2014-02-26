@@ -1,78 +1,60 @@
 \name{VMAe}
 \alias{VMAe}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{Estimation of VMA Model with Exact likelihood
-%%  ~~function to do ... ~~
+\title{VMA Estimation with Exact likelihood
 }
 \description{Estimation of a VMA(q) model using the exact likelihood method. 
 Multivariate Gaussian likelihood function is used.
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 VMAe(da, q = 1, include.mean = T, coef0 = NULL, secoef0 = NULL, fixed = NULL, prelim = F, details = F, thres = 2)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{da}{Data matrix (T-by-k) for a k-dimensional VMA process
-%%     ~~Describe \code{da} here~~
 }
   \item{q}{The order of a VMA model
-%%     ~~Describe \code{q} here~~
 }
   \item{include.mean}{A logicak switch to include the mean vector in estimation. Default is to include the mean vector.
-%%     ~~Describe \code{include.mean} here~~
 }
-  \item{coef0}{
-%%     ~~Describe \code{coef0} here~~
+  \item{coef0}{Initial estimates of the coefficients used mainly in model 
+refinement
 }
-  \item{secoef0}{
-%%     ~~Describe \code{secoef0} here~~
+  \item{secoef0}{Standard errors of the initial estimates
 }
-  \item{fixed}{
-%%     ~~Describe \code{fixed} here~~
+  \item{fixed}{A logical matrix to put zero parameter constraints
 }
-  \item{prelim}{
-%%     ~~Describe \code{prelim} here~~
+  \item{prelim}{A logical switch for preliminary estimation
 }
-  \item{details}{
-%%     ~~Describe \code{details} here~~
+  \item{details}{A logical switch to control output in estimation
 }
-  \item{thres}{
-%%     ~~Describe \code{thres} here~~
+  \item{thres}{The threshold value for zero parameter constraints
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+\item{data}{The observed time series}
+\item{MAorder}{The VMA order}
+\item{cnst}{A logical switch to inlcude the mean vector}
+\item{coef}{Parameter estimayes}
+\item{secoef}{Standard errors of parameter estimates}
+\item{residuals}{Residual series}
+\item{Sigma}{Residual covariance matrix}
+\item{Theta}{VMA coefficient matrix}
+\item{mu}{The mean vector}
+\item{aic,bic}{The information criteria of the fitted model}
 }
-\references{
-%% ~put references to the literature/web site here ~
+\references{Tsay (2014). Multivariate Time Series Analysis with R 
+and Financial Applications. John Wiley. Hoboken, NJ.
 }
-\author{
-%%  ~~who you are~~
+\author{Ruey S. Tsay
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\seealso{VMA
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
+theta=matrix(c(0.2,-0.6,0.3,1.1),2,2); sigma=diag(2)
+m1=VARMAsim(300,malags=c(1),theta=theta,sigma=sigma)
+zt=m1$series
+m2=VMAe(zt,1,include.mean=F)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+
+
+

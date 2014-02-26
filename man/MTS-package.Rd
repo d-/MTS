@@ -23,14 +23,14 @@ License: \tab What license is it under?\cr
 }
 \author{
 Who wrote it
-
 Maintainer: Who to complain to <yourfault@somewhere.net>
 ~~ The author and/or maintainer of the package ~~
 }
 \references{
 ~~ Literature or other references for background information ~~
 }
-\keyword{ package }
+
+
 \seealso{
 ~~ Optional links to other man pages, e.g. ~~
 ~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~

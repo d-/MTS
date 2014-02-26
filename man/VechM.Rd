@@ -1,57 +1,35 @@
 \name{VechM}
 \alias{VechM}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{Matrix constructed from output of the Vech Command
-%%  ~~function to do ... ~~
+\title{Matrix constructed from output of the Vech Command. 
+In other words, restore the original symmetric matrix from its 
+half-stacking vector.
 }
 \description{Restores the symmetric matrix from the Vech command
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 VechM(vec)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{vec}{A vector
-%%     ~~Describe \code{vec} here~~
+  \item{vec}{A vector representing the half-stacking of a symmetric matrix
 }
 }
 \details{This command re-construct a symmetric matrix from output 
 of the Vech command
-%%  ~~ If necessary, more details than the description above ~~
 }
 \value{A symmetric matrix
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
 }
 \references{Tsay (2014, Appendix A)
-%% ~put references to the literature/web site here ~
 }
 \author{Ruey S. Tsay
-%%  ~~who you are~~
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\seealso{Vech
 }
 \examples{
 v1=c(2,1,3)
 m1=VechM(v1)
 m1
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+
+
+

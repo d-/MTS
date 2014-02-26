@@ -1,6 +1,6 @@
-\name{Mtxprod}
-\alias{Mtxprod}
-\title{Matrix Product
+\name{Mtxprod1}
+\alias{Mtxprod1}
+\title{Matrix Product of two ploynomial matrices
 }
 \description{Compute the product of two polynomial matrices
 }
@@ -12,13 +12,13 @@ Mtxprod(Mtx, sMtx, p, P)
 }
   \item{sMtx}{The coefficient matrix of a seasonal polynomial matrix
 }
-  \item{p}{Degree of the regular polynomial matrix
+  \item{p}{Degree of the regular polynomial matrix. p is less than P.
 }
   \item{P}{Degree of the seasonal polynomial matrix
 }
 }
-\value{Coefficient matrix of the product. The product is in the form 
-reg-AR * sAR, etc.
+\value{Coefficient matrix of the product. The product matrix is in the form 
+sAR * reg-AR, etc.
 }
 \author{Ruey S. Tsay
 }

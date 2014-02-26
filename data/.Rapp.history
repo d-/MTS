@@ -1,0 +1,14 @@
+load(gdp.rda)
+load("gdp.rda")
+ls
+names(gdp.rda)
+names("gdp.rda")
+names("gdp")
+names()
+ls()
+tenstocks = read.table("m-ibmspko-6111.txt",header=T,sep=" ")
+tenstocks
+ibmspko = read.table("m-ibmspko-6111.txt",header=T,sep=" ")
+ibmspko
+ls()
+save(ibmspko,qgdp,tenstocks,file="mts-examples.rda")

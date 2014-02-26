@@ -1,66 +1,39 @@
 \name{MarchTest}
 \alias{MarchTest}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{Multivariate ARCH test
-%%  ~~function to do ... ~~
 }
 \description{Perform tests to check the conditional heteroscedasticity in 
 a vector time series
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
 MarchTest(zt, lag = 10)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{zt}{a nT-by-k data matrix of the time series, each column contains a series.
-%%     ~~Describe \code{zt} here~~
+  \item{zt}{a nT-by-k data matrix of a k-dimensional financial time series, 
+each column contains a series.
 }
   \item{lag}{
 The number of lags of cross-correlation matrices used in the tests
-%%     ~~Describe \code{lag} here~~
 }
 }
 \details{
 Several tests are used. First, the vector series zt is transformed into 
-rt = t(zt)%*%Sigma-inv%*%zt-k. The Ljung-Box statistics of rt is used to 
+rt = [t(zt)%*%Sigma-inv%*%zt]-k. The Ljung-Box statistics of rt is used to 
 perform the test.
 The second test is based on the ranks of the transformed rt series.
 The third test is the multivariate Ljung-Box statistics for the 
 squared vector series zt^2. The fourth test is the multivariate 
 Ljung-Box statistics applied to the 5-percent trimmed series of the transformed series rt.
-%%  ~~ If necessary, more details than the description above ~~
 }
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+\value{Various test statistics and their p-values
 }
 \references{Tsay (2014, Chapter 7)
-%% ~put references to the literature/web site here ~
 }
 \author{Ruey S. Tsay
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
 zt=matrix(rnorm(600),200,3)
 MarchTest(zt)
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
 function (zt, lag = 10) 
 {
     if (!is.matrix(zt)) 
@@ -131,7 +104,7 @@ function (zt, lag = 10)
     cat("Robust Test(5\%) : ", qm, " p-value: ", pv4, "\n")
   }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+
+
+

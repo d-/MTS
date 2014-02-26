@@ -1,86 +1,73 @@
 \name{SCMfit}
 \alias{SCMfit}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{Fitting a VARMA Model via SCM Approch
-%%  ~~function to do ... ~~
+\title{Scalar Component Model Fitting
 }
 \description{Perform estimation of a VARMA model specified via 
 the SCM approach
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-SCMfit(da, scms, Tdx, include.mean = T, fixed = NULL, prelim = F, details = F, thres = 1, ref = 0)
+SCMfit(da, scms, Tdx, include.mean = T, fixed = NULL, prelim = F, details = F, thres = 1, ref = 0, SCMpar=NULL, seSCMpar=NULL)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{da}{The T-by-k data matrix of a k-dimensional time series
-%%     ~~Describe \code{da} here~~
 }
   \item{scms}{A k-by-2 matrix of the orders of SCMs
-%%     ~~Describe \code{scms} here~~
 }
   \item{Tdx}{A k-dimensional vector for locating "1" of each row in the 
 transformation matrix.
-%%     ~~Describe \code{Tdx} here~~
 }
   \item{include.mean}{A logical switch to include the mean vector. 
 Default is to include mean vector.
-%%     ~~Describe \code{include.mean} here~~
 }
   \item{fixed}{A logical matrix to set parameters to zero
-%%     ~~Describe \code{fixed} here~~
 }
   \item{prelim}{A logical switch for preliminary estimation. 
 Default is false. 
-%%     ~~Describe \code{prelim} here~~
 }
   \item{details}{A logical switch to control details of output
-%%     ~~Describe \code{details} here~~
 }
   \item{thres}{Threshold for individual t-ratio when setting parameters 
 to zero. Default is 1.
-%%     ~~Describe \code{thres} here~~
 }
   \item{ref}{A switch to use SCMmod in model specification.
-%%     ~~Describe \code{ref} here~~
 }
+ \item{SCMpar}{Parameter estimates of the SCM model, to be used in model refinement}
+ \item{seSCMpar}{Standard errors of the parameter estimates in SCMpar}
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
+\details{Perform conditional maximum likelihood estimation of a VARMA model 
+specified by the scalar component model approach, including the transformation matrix.
 }
-\value{Results of estimation, including model specification and residuals
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+\value{
+\item{data}{Observed time series}
+\item{SCMs}{The specified SCMs}
+\item{Tdx}{Indicator vector for the transformation matrix. The length of Tdx is k.}
+\item{locTmtx}{Specification of estimable parameters of the transformation matrix}
+\item{locAR}{Locators for the estimable parameters of the VAR coefficients}
+\item{locMA}{Locators for the estimable parameters of the VMA coefficients}
+\item{cnst}{A logical switch to include the constant vector in the model}
+\item{coef}{The parameter estimates}
+\item{secoef}{Standard errors of the parameter estimates}
+\item{residuals}{Residual series}
+\item{Sigma}{Residual covariance matrix}
+\item{aic,bic}{Information criteria of the fitted model}
+\item{Ph0}{Estimates of the constant vector, if any}
+\item{Phi}{Estimates of the VAR coefficients}
+\item{Theta}{Estimates of the VMA coefficients}
 }
-\references{Tsay (2014, Chapter 4)
-%% ~put references to the literature/web site here ~
+\references{Tsay (2014, Chapter 4). Multivariate Time Series Analysis with R and Financial 
+Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
-%%  ~~who you are~~
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
-\examples{zt=read.table("flourc.txt")
-ord=matrix(c(1,1,2,0,0,0),3,2)
-Tdx=c(2,3,1)
+\examples{
+data(qgdp)
+zt=diffM(log(qgdp[,3:5]))
+ord=matrix(c(0,1,0,0,0,1),3,2)
+Tdx=c(3,1,2)
 m1=SCMfit(zt,ord,Tdx)
 names(m1)
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+
+
+

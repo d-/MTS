@@ -1,19 +1,5 @@
-
-##### Seasonal Models
-"sVARMACpp" <- function(da,order,sorder,s,include.mean=T,fixed=NULL,prelim=F,details=F,thres=0.8,switch=F){
+"sVARMACpp" <- function(da,order,sorder,s,include.mean=T,fixed=NULL,details=F,switch=F){
    # Estimation of a multiplicative vector ARMA model using conditional MLE (Gaussian dist)
-   #  This program is modified from VARMA.R. It was created first on April 21, 2011.
-   #### Modified on September 19, 2012 by adding "switch=F" to constrol Theta(B)*theta(B)
-   #
-   # The following comments are for VARMA.R program.
-   # April 16: remove some insigificant parameters at the preliminary estimation so that
-   #           the computational speed can be improved.
-   # April 18: add subcommand "prelim" to see simplification after the AR approximation.
-   # When prelim=TRUE, fixed is assigned based on the results of AR approximation.
-   # Here "thres" is used only when prelim = TRUE.
-   #
-   # The seasonal order is (AR,MA) = (P,Q). The seasonality is s.
-   #
    if(!is.matrix(da))da=as.matrix(da)
    p=order[1];d=order[2];q=order[3];P=sorder[1];D=sorder[2];Q=sorder[3]
    nT=dim(da)[1]; k=dim(da)[2]
@@ -27,7 +13,6 @@
       cat("Seasonal difference is adjusted to D=1","\n")
       D=1
    }
-   ### number of coefficient parameters
    kp=k*p
    kq=k*q
    kP=k*P
@@ -41,12 +26,11 @@
          t1=t.test(X[,j])
          if(t1$p.value < 0.05)MEAN[j]=1
       }
-      if(sum(MEAN) < 1)include.mean=F
+      if(sum(MEAN) < 1)include.mean=FALSE
    }
    else{
       X=da
    }
-   #
    if(D==1){
       DX=NULL
       Smean=rep(0,k)
@@ -55,12 +39,11 @@
          t1=t.test(DX[,j])
          if(t1$p.value < 0.05)Smean[j]=1
       }
-      if(sum(Smean) < 1)include.mean=F
+      if(sum(Smean) < 1)include.mean=FALSE 
    }
    else{
       DX=X
    }
-   #### sample size after differencing.
    nT=dim(DX)[1]
    arlags=NULL
    if(p > 0){
@@ -83,15 +66,9 @@
    nma=length(malags)
    idim=k*(nar+nma)
    if(include.mean)idim=idim+1
-   if(length(fixed)==0)fixed=matrix(1,idim,k)
-   ### Assign the data globally for estimation purpose.
-   Mtdata <<- DX
-   ARlags <<- arlags
-   MAlags <<- malags
-   Order <<- c(order,sorder)
-   inc.mean <<- include.mean
-   fix1 <<- fixed
-   swi <<- switch
+   if(length(fixed)==0){fixed=matrix(1,idim,k)}
+   Order <- c(order,sorder)
+   ARlags <- arlags; MAlags <- malags
    ####
    phi=NULL; sphi=NULL; sephi=NULL; sesphi=NULL
    if(p > 0)phi=matrix(0,k,k*p); sephi=phi
@@ -103,12 +80,10 @@
    ### For cross-series initial estimates, we use linear models with univariate at-series
    resi=NULL
    for (j in 1:k){
-      m1=arima(DX[,j],order=c(p,0,q),seasona=list(order=c(P,0,Q),period=s))
+      m1=arima(DX[,j],order=c(p,0,q),seasonal=list(order=c(P,0,Q),period=s))
       resi=cbind(resi,m1$residuals)
       seest=sqrt(diag(m1$var.coef))
-      ##print(m1$coef)
       icnt=0
-      # locate regular AR coef
       if(p > 0){
          for (i in 1:p){
             icnt=icnt+1
@@ -117,7 +92,6 @@
             sephi[j,(ii+j)]=seest[icnt]
          }
       }
-      # locate regular MA coef.
       if(q > 0){
          for (i in 1:q){
             ii=(i-1)*k
@@ -126,7 +100,6 @@
             setheta[j,(ii+j)]=seest[icnt]
          }
       }
-      # locate seasonal AR coef.
       if(P > 0){
          for (i in 1:P){
             icnt=icnt+1
@@ -135,7 +108,6 @@
             sesphi[j,(ii+j)]=seest[icnt]
          }
       }
-      # locate seasonal MA coef
       if(Q > 0){
          for (i in 1:Q){
             ii=(i-1)*k
@@ -144,8 +116,54 @@
             sestheta[j,(ii+j)]=seest[icnt]
          }
       }
-      # end of the j-loop
+    }
+
+siniEST <- function(y,x,arlags,malags,include.mean){
+   if(!is.matrix(y))y=as.matrix(y)
+   if(!is.matrix(x))x=as.matrix(x)
+   nT=dim(y)[1]
+   k=dim(y)[2]
+   nar=length(arlags)
+   nma=length(malags)
+   p=0; if(nar > 0)p=arlags[nar]
+   q=0; if(nma > 0)q=malags[nma]
+   pq=max(p,q)
+   ist=1+pq
+   ne=nT-pq
+   if(include.mean){
+      xmtx=matrix(1,ne,1)
    }
+   else {
+      xmtx=NULL
+   }
+   ymtx=as.matrix(y[ist:nT,])
+   if(nar > 0){
+      for (j in 1:nar){
+         jj=arlags[j]
+         xmtx=cbind(xmtx,y[(ist-jj):(nT-jj),])
+      }
+   }
+   if(nma > 0){
+      for (j in 1:nma){
+         jj=malags[j]
+         xmtx=cbind(xmtx,x[(ist-jj):(nT-jj),])
+      }
+   }
+   xmtx=as.matrix(xmtx)
+   xtx=crossprod(xmtx,xmtx)
+   xty=crossprod(xmtx,ymtx)
+   xtxinv=solve(xtx)
+   beta=xtxinv%*%xty
+   resi= ymtx - xmtx%*%beta
+   sse=crossprod(resi,resi)/ne
+   dd=diag(xtxinv)
+   sebeta=NULL
+   for (j in 1:k){
+      se=sqrt(dd*sse[j,j])
+      sebeta=cbind(sebeta,se)
+   }
+   siniEST <- list(estimates=beta,se=sebeta)
+ }
    #### Obtain estimates of cross-series parameters, using Least-Squares approximation.
    m2=siniEST(DX,resi,arlags,malags,include.mean)
    #### Fill in the coefficient matrices
@@ -163,10 +181,8 @@
                phi[jdx,(idx+ii)]=beta[jdx,(icnst+idx+ii)]
                sephi[jdx,(idx+ii)]=sebeta[jdx,(icnst+idx+ii)]
             }
-            #end of i-loop
          }
-         #end of if(p > 0) statement
-      }
+       }
       if(P > 0){
          for (i in 1:P){
             kdx=(i-1)*k
@@ -178,8 +194,7 @@
             }
          }
       }
-      #end of if(nar > 0) statement
-   }
+    }
    if(nma > 0){
       if(q > 0){
          for (i in 1:q){
@@ -203,95 +218,109 @@
             }
          }
       }
-      #end of the statement if(nma > 0)
-   }
+    }
    # Identify parameters to be estimated.
    par=NULL
    separ=NULL
    ist=0
    ## We took the transpose of beta and sebeta after siniEST program.
    if(include.mean){
-      jdx=c(1:k)[fix1[1,]==1]
+      jdx=c(1:k)[fixed[1,]==1]
       if(length(jdx) > 0){
          par=beta[jdx,1]
          separ=sebeta[jdx,1]
       }
       ist=1
-   }
+    }
    if(nar > 0){
       if(p > 0){
          for (j in 1:k){
-            idx=c(1:kp)[fix1[(ist+1):(ist+kp),j]==1]
+            idx=c(1:kp)[fixed[(ist+1):(ist+kp),j]==1]
             if(length(idx) > 0){
                par=c(par,phi[j,idx])
                separ=c(separ,sephi[j,idx])
             }
-            #end of j-loop
-         }
+          }
          ist=ist+kp
       }
-      ###print(ist)
-      if(P > 0){
+     if(P > 0){
          for (j in 1:k){
-            idx=c(1:kP)[fix1[(ist+1):(ist+kP),j]==1]
+            idx=c(1:kP)[fixed[(ist+1):(ist+kP),j]==1]
             if(length(idx) > 0){
                par=c(par,sphi[j,idx])
                separ=c(separ,sesphi[j,idx])
             }
          }
-         #end of if(P > 0) statement
          ist=ist+kP
       }
-      # end of if(nar > 0) statement
-   }
-   #
+    }
    if(nma > 0){
       if(q > 0){
          for (j in 1:k){
-            idx=c(1:kq)[fix1[(ist+1):(ist+kq),j]==1]
+            idx=c(1:kq)[fixed[(ist+1):(ist+kq),j]==1]
             if(length(idx) > 0){
                par=c(par,theta[j,idx])
                separ=c(separ,setheta[j,idx])
             }
-            #end of j-loop
          }
          ist=ist+kq
       }
       if(Q > 0){
          for (j in 1:k){
-            idx=c(1:kQ)[fix1[(ist+1):(ist+kQ),j]==1]
+            idx=c(1:kQ)[fixed[(ist+1):(ist+kQ),j]==1]
             if(length(idx) > 0){
                par=c(par,stheta[j,idx])
                separ=c(separ,sestheta[j,idx])
             }
          }
-         #end of if(Q > 0) statement
       }
-      #end of (if nma > 0) statement
-   }
+    }
    #### keep the first few residuals to be used in likelihood evaluation to compute "at".
-   jst=max(arlags[nar],malags[nma])
-   Sresi <<- resi[1:jst,]
-   #########
+   jst=max(arlags,malags)
+   Sresi <- resi[1:jst,]
    cat("Number of parameters: ",length(par),"\n")
    cat("initial estimates: ",par,"\n")
-   ### Set up lower and upper bounds
    lowerBounds=par; upperBounds=par
    for (j in 1:length(par)){
       lowerBounds[j] = par[j]-2*separ[j]
       upperBounds[j] = par[j]+2*separ[j]
    }
-   ###mm=optim(par,LLKvma,method=c("L-BFGS-B"),lower=lowerBounds,upper=upperBounds,hessian=TRUE)
-   ###mm=optim(par,LLKvma,method=c("BFGS"),hessian=TRUE)
-   ##est=mm$par
-   ##H=mm$hessian
-   # Step 5: Estimate Parameters and Compute Numerically Hessian:
+
+LLKsVARMACpp <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.mean=include.mean,fixed=fixed,swi=switch,Sresi=Sresi){
+   ## recall the relevant information.
+   k <- dim(zt)[2];   nT <- dim(zt)[1]
+   p=Order[1];q=Order[3];P=Order[4];Q=Order[6]
+   kp=k*p;kP=k*P;kq=k*q;kQ=k*Q
+   nar=length(ARlags); nma=length(MAlags)
+   istart=max(ARlags,MAlags)+1
+   ###  Assign parameters to their proper locations in the program.
+   
+   zt= DX
+   k=dim(zt)[2]
+   nT=dim(zt)[1]
+   nar=length(ARlags); nma=length(MAlags)
+   istart=max(ARlags[nar],MAlags[nma])+1
+   
+   ListResiduals = .Call("GetSVarmaResiduals", DX, fixed, par, Order, ARlags, MAlags, Sresi, swi, include.mean)		
+   at  = do.call(rbind,ListResiduals)
+
+   at=at[(istart:nT),]
+   sig=t(at)%*%at/(nT-istart+1)
+   ###ll=dmnorm(at,rep(0,k),sig)
+   ll=dmvnorm(at,rep(0,k),sig)
+   LLKsvarmaCpp=-sum(log(ll))
+   cat("test: ",LLKsVARMACpp,"\n")
+   LLKsVARMACpp
+  }
+  
+ ## estimation
    if(details){
-      fit = nlminb(start = par, objective = LLKsvarmaCpp,
-      lower = lowerBounds, upper = upperBounds, control = list(trace=3))
+      fit = nlminb(start = par, objective = LLKsVARMACpp,zt=DX,Order=Order,ARlags=ARlags,MAlags=MAlags,include.mean=include.mean,
+       fixed=fixed,swi=switch,Sresi=Sresi,lower = lowerBounds, upper = upperBounds, control = list(trace=3))
    }
    else {
-      fit = nlminb(start = par, objective = LLKsvarmaCpp, lower = lowerBounds, upper = upperBounds)
+      fit = nlminb(start = par, objective = LLKsVARMACpp,zt=DX,Order=Order,ARlags=ARlags,MAlags=MAlags,include.mean=include.mean, 
+          fixed=fixed,swi=switch,Sresi=Sresi,lower = lowerBounds, upper = upperBounds)
    }
    epsilon = 0.0001 * fit$par
    npar=length(par)
@@ -303,7 +332,11 @@
          x2[i] = x2[i] + epsilon[i]; x2[j] = x2[j] - epsilon[j]
          x3[i] = x3[i] - epsilon[i]; x3[j] = x3[j] + epsilon[j]
          x4[i] = x4[i] - epsilon[i]; x4[j] = x4[j] - epsilon[j]
-         Hessian[i, j] = (LLKsvarmaCpp(x1)-LLKsvarmaCpp(x2)-LLKsvarmaCpp(x3)+LLKsvarmaCpp(x4))/
+         Hessian[i, j] = 
+          (LLKsVARMACpp(x1,zt=DX,Order=Order,ARlags=ARlags,MAlags=MAlags,include.mean=include.mean,fixed=fixed,swi=switch,Sresi=Sresi)
+          -LLKsVARMACpp(x2,zt=DX,Order=Order,ARlags=ARlags,MAlags=MAlags,include.mean=include.mean,fixed=fixed,swi=switch,Sresi=Sresi)
+          -LLKsVARMACpp(x3,zt=DX,Order=Order,ARlags=ARlags,MAlags=MAlags,include.mean=include.mean,fixed=fixed,swi=switch,Sresi=Sresi)
+          +LLKsVARMACpp(x4,zt=DX,Order=Order,ARlags=ARlags,MAlags=MAlags,include.mean=include.mean,fixed=fixed,swi=switch,Sresi=Sresi))/
          (4*epsilon[i]*epsilon[j])
       }
    }
@@ -316,10 +349,7 @@
    cat("\nCoefficient(s):\n")
    printCoefmat(matcoef, digits = 4, signif.stars = TRUE)
    est=fit$par
-   #
    ### restore estimates to the format of unconstrained case for printing purpose.
-   #### icnt: parameter count
-   #### ist: location count
    ist=0
    icnt = 0
    Ph0=rep(0,k)
@@ -327,7 +357,7 @@
    beta=NULL
    sebeta=NULL
    if(include.mean){
-      idx=c(1:k)[fix1[1,]==1]
+      idx=c(1:k)[fixed[1,]==1]
       icnt=length(idx)
       if(icnt > 0){
          Ph0[idx]=est[1:icnt]
@@ -342,7 +372,7 @@
       PH=matrix(0,kp,k)
       sePH=matrix(0,kp,k)
       for (j in 1:k){
-         idx=c(1:kp)[fix1[(ist+1):(ist+kp),j]==1]
+         idx=c(1:kp)[fixed[(ist+1):(ist+kp),j]==1]
          jdx=length(idx)
          if(jdx > 0){
             PH[idx,j]=est[(icnt+1):(icnt+jdx)]
@@ -360,7 +390,7 @@
       sPH=matrix(0,kP,k)
       sesPH=matrix(0,kP,k)
       for (j in 1:k){
-         idx=c(1:kP)[fix1[(ist+1):(ist+kP),j]==1]
+         idx=c(1:kP)[fixed[(ist+1):(ist+kP),j]==1]
          jdx=length(idx)
          if(jdx > 0){
             sPH[idx,j]=est[(icnt+1):(icnt+jdx)]
@@ -368,27 +398,23 @@
             icnt=icnt+jdx
          }
       }
-      #end of if (P > 0) statement
-      ist=ist+kP
+       ist=ist+kP
       beta=rbind(beta,sPH)
       sebeta=rbind(sebeta,sesPH)
    }
-   #
    TH=NULL;seTH=NULL; sTH=NULL; sesTH=NULL
    if(q > 0){
       TH=matrix(0,kq,k)
       seTH=matrix(0,kq,k)
       for (j in 1:k){
-         idx=c(1:kq)[fix1[(ist+1):(ist+kq),j]==1]
+         idx=c(1:kq)[fixed[(ist+1):(ist+kq),j]==1]
          jdx=length(idx)
          if(jdx > 0){
             TH[idx,j]=est[(icnt+1):(icnt+jdx)]
             seTH[idx,j]=se.coef[(icnt+1):(icnt+jdx)]
             icnt=icnt+jdx
          }
-         # end of j-loop
-      }
-      # end of if(q > 0).
+       }
       ist=ist+kq
       beta=rbind(beta,-TH)
       sebeta=rbind(sebeta,seTH)
@@ -397,7 +423,7 @@
       sTH=matrix(0,kQ,k)
       sesTH=matrix(0,kQ,k)
       for (j in 1:k){
-         idx=c(1:kQ)[fix1[(ist+1):(ist+kQ),j]==1]
+         idx=c(1:kQ)[fixed[(ist+1):(ist+kQ),j]==1]
          jdx=length(idx)
          if(jdx > 0){
             sTH[idx,j]=est[(icnt+1):(icnt+jdx)]
@@ -408,7 +434,6 @@
       beta=rbind(beta,-sTH)
       sebeta=rbind(sebeta,sesTH)
    }
-   ###
    cat("---","\n")
    cat("Estimates in matrix form:","\n")
    if(include.mean){
@@ -424,10 +449,8 @@
          print(ph,digits=3)
          jcnt=jcnt+k
       }
-      # end of if (p > 0)
-   }
-   ### Seasonal AR part
-   if(P > 0){
+    }
+    if(P > 0){
       cat("Seasonal AR coefficient matrix","\n")
       jcnt=0
       for (i in 1:P){
@@ -436,8 +459,7 @@
          print(ph,digits=3)
          jcnt=jcnt+k
       }
-   }
-   ## Regular MA part
+    }
    if(q > 0){
       cat("Regular MA coefficient matrix","\n")
       icnt=0
@@ -447,9 +469,7 @@
          print(the,digits=3)
          icnt=icnt+k
       }
-      # end of the statement if(q > 0)
-   }
-   # Seasonal MA part
+    }
    if(Q > 0){
       cat("Seasonal MA coefficient matrix","\n")
       icnt=0
@@ -459,7 +479,7 @@
          print(the,digists=3)
          icnt=icnt+k
       }
-   }
+    }
    ######### Obtain product coefficient matrices
    if((p > 0)&&(P > 0)){
       if(switch){
@@ -469,7 +489,6 @@
          Phi=t(Mtxprod(t(PH),t(sPH),p,P))
       }
    }
-   #
    if((p > 0)&&(P==0))Phi=PH
    if((p==0)&&(P > 0))Phi=sPH
    if((q > 0)&&(Q > 0)){
@@ -484,8 +503,8 @@
    if((q > 0)&&(Q==0))Theta=TH
    if((q==0)&&(Q > 0))Theta=sTH
    ##### Compute the residuals
-   zt=Mtdata
-   pqmax=max(ARlags[nar],MAlags[nma])
+   zt=DX
+   pqmax=max(ARlags,MAlags)
    ist=pqmax+1
    #### consider the case t from ist to T
    at=Sresi[1:pqmax,]
@@ -509,12 +528,10 @@
       }
       at=rbind(at,tmp)
    }
-   #
    at=at[(ist:nT),]
    c1 = rep("resi",k)
    colnames(at) <- c1
    sig=t(at)%*%at/(nT-pqmax)
-   ##
    cat(" ","\n")
    cat("Residuals cov-matrix:","\n")
    print(sig)
@@ -525,12 +542,10 @@
    cat("----","\n")
    cat("aic= ",round(aic,4),"\n")
    cat("bic= ",round(bic,4),"\n")
-   ### prepare for output storage.
    if(length(PH) > 0)PH=t(PH)
    if(length(sPH) > 0)sPH=t(sPH)
    if(length(TH) > 0)TH=t(TH)
    if(length(sTH) > 0)sTH=t(sTH)
-   
    
    sVARMACpp <- list(data=da,order=order,sorder=sorder,period=s,cnst=include.mean,coef=beta,secoef=sebeta,residuals=at,Sigma=sig,aic=aic,bic=bic,regPhi=PH,seaPhi=sPH, regTheta=TH, seaTheta=sTH, Ph0=Ph0,switch=switch)
 }
