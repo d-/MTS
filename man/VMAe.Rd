@@ -6,7 +6,9 @@
 Multivariate Gaussian likelihood function is used.
 }
 \usage{
-VMAe(da, q = 1, include.mean = T, coef0 = NULL, secoef0 = NULL, fixed = NULL, prelim = F, details = F, thres = 2)
+VMAe(da, q = 1, include.mean = T, coef0 = NULL, 
+    secoef0 = NULL, fixed = NULL, prelim = F, 
+    details = F, thres = 2)
 }
 \arguments{
   \item{da}{Data matrix (T-by-k) for a k-dimensional VMA process
@@ -48,13 +50,6 @@ and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \seealso{VMA
 }
-\examples{
-theta=matrix(c(0.2,-0.6,0.3,1.1),2,2); sigma=diag(2)
-m1=VARMAsim(300,malags=c(1),theta=theta,sigma=sigma)
-zt=m1$series
-m2=VMAe(zt,1,include.mean=FALSE)
-}
-
 
 
 

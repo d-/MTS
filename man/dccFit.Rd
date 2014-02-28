@@ -8,7 +8,9 @@ and the other is by Tse and Tsui. Both models appear in the Journal of Business 
 Economic Statistics, 2002.
 }
 \usage{
-dccFit(rt, type = "TseTsui", theta = c(0.9, 0.02), ub = c(0.92, 0.079999), lb = c(0.4, 1e-04), cond.dist = "std", df = 7, m = 0)
+dccFit(rt, type = "TseTsui", theta = c(0.9, 0.02), 
+    ub = c(0.92, 0.079999), lb = c(0.4, 1e-04), 
+    cond.dist = "std", df = 7, m = 0)
 }
 \arguments{
   \item{rt}{The T-by-k data matrix of k-dimensional standardized asset returns. Typically, they are the 
@@ -45,15 +47,6 @@ Applications. John Wiley. Hoboken, NJ.
 }
 \seealso{dccPre
 }
-\examples{
-data("mts-examples",package="MTS")
-rtn=log(ibmspko[,2:4]+1)
-m1=dccPre(rtn,include.mean=TRUE,p=0)
-rtn1=m1$sresi
-m2=dccFit(rtn1)
-# continued from dccPre command demonstration
-}
-
 
 
 

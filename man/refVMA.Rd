@@ -26,15 +26,6 @@ Financial Applications. John Wiley. Hoboken, NJ.
 }
 \seealso{VMA
 }
-\examples{
-theta=matrix(c(0.4,0.5,0.0,0.6),2,2)
-sig=matrix(c(3,1,1,1),2,2)
-m1=VARMAsim(400,malags=c(1),theta=theta,sigma=sig)
-zt=m1$series
-m2=VMA(zt,q=1,include.mean=FALSE)
-m3=refVMA(m2,thres=1.8)
-names(m3)
-}
 
 
 

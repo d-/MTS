@@ -27,14 +27,6 @@ R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \seealso{VARMA
 }
-\examples{
-data("mts-examples",package="MTS")
-gdp=log(qgdp[,3:5])
-zt=diffM(gdp)
-m1=VARMA(zt,p=1,q=1)
-m2=refVARMA(m1,thres=1.0)
-names(m2)
-}
 
 
 

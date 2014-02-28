@@ -6,7 +6,9 @@
 a VARMA model. Multivariate Gaussian likelihood function is used.  This is the same function as VARMA, with the likelihood function implemented in C++ for efficiency. 
 }
 \usage{
-VARMACpp(da, p = 0, q = 0, include.mean = T, fixed = NULL, beta=NULL, sebeta=NULL, prelim = F, details = F, thres = 2)
+VARMACpp(da, p = 0, q = 0, include.mean = T, 
+    fixed = NULL, beta=NULL, sebeta=NULL, 
+    prelim = F, details = F, thres = 2)
 }
 \arguments{
   \item{da}{Data matrix (T-by-k) of a k-dimensional time series with sample 

@@ -6,7 +6,9 @@
 the SCM approach
 }
 \usage{
-SCMfit(da, scms, Tdx, include.mean = T, fixed = NULL, prelim = F, details = F, thres = 1, ref = 0, SCMpar=NULL, seSCMpar=NULL)
+SCMfit(da, scms, Tdx, include.mean = T, fixed = NULL, 
+    prelim = F, details = F, thres = 1, ref = 0, 
+    SCMpar=NULL, seSCMpar=NULL)
 }
 \arguments{
   \item{da}{The T-by-k data matrix of a k-dimensional time series
@@ -58,14 +60,6 @@ specified by the scalar component model approach, including the transformation m
 Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
-}
-\examples{
-data("mts-examples",package="MTS")
-zt=diffM(log(qgdp[,3:5]))
-ord=matrix(c(0,1,0,0,0,1),3,2)
-Tdx=c(3,1,2)
-m1=SCMfit(zt,ord,Tdx)
-names(m1)
 }
 
 

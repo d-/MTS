@@ -6,7 +6,8 @@
 indices
 }
 \usage{
-Kronfit(da, kidx, include.mean = T, fixed = NULL, Kpar=NULL, seKpar=NULL, prelim = F, details = F, thres = 1)
+Kronfit(da, kidx, include.mean = T, fixed = NULL, Kpar=NULL, 
+  seKpar=NULL, prelim = F, details = F, thres = 1)
 }
 \arguments{
   \item{da}{Data matrix (T-by-k) of a k-dimensional time series
@@ -53,15 +54,6 @@ R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \seealso{refKronfit, Kronspec
 }
-\examples{
-phi=matrix(c(.2,-.6,.3,1.1),2,2); sigma=diag(2); theta=-sigma*0.5
-m1=VARMAsim(300,arlags=c(1),malags=c(1),phi=phi,theta=theta,sigma=sigma)
-zt=m1$series
-kdx=c(1,1)
-m1=Kronfit(zt,kdx)
-names(m1)
-}
-
 
 
 

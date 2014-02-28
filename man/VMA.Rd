@@ -6,7 +6,9 @@
 Gaussian likelihood function
 }
 \usage{
-VMA(da, q = 1, include.mean = T, fixed = NULL, beta=NULL, sebeta=NULL, prelim = F, details = F, thres = 2)
+VMA(da, q = 1, include.mean = T, fixed = NULL, 
+    beta=NULL, sebeta=NULL, prelim = F, 
+    details = F, thres = 2)
 }
 \arguments{
   \item{da}{Data matrix of a k-dimensional VMA process with each column 

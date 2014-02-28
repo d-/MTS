@@ -1,2 +1,3 @@
 useDynLib(MTS)
+import(Rcpp, fGarch, mvtnorm)
 exportPattern("^[^\\.]")

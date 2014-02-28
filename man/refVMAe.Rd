@@ -28,16 +28,4 @@ R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \seealso{VMAe, refVMA
 }
-\examples{
-th1=matrix(c(0.9,0.2,0.0,0.8),2,2)
-sig=matrix(c(4,1,1,1),2,2)
-m1=VARMAsim(400,malags=c(1),theta=th1,sigma=sig)
-zt=m1$series
-m2=VMAe(zt,q=1,include.mean=FALSE)
-m3=refVMAe(m2,thres=1.8)
-names(m3)
-}
-
-
-
 

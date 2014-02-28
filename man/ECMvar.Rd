@@ -6,7 +6,9 @@
 Quasi Maximum Likelihood Method.
 }
 \usage{
-ECMvar(x, p, ibeta, include.const = FALSE, fixed = NULL,alpha=NULL,se.alpha=NULL,se.beta=NULL,phip=NULL,se.phip=NULL)
+ECMvar(x, p, ibeta, include.const = FALSE, fixed = NULL,
+                 alpha = NULL, se.alpha = NULL, se.beta = NULL, phip =
+                 NULL, se.phip = NULL)
 }
 \arguments{
   \item{x}{A T-by-k data matrix of a k-dimensional co-integrated VAR process

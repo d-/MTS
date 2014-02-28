@@ -5,7 +5,9 @@
 \description{Performs simulation of a given VARMA model
 }
 \usage{
-VARMAsim(nobs, arlags = NULL, malags = NULL, cnst = NULL, phi = NULL, theta = NULL, skip = 200, sigma)
+VARMAsim(nobs, arlags = NULL, malags = NULL, 
+  cnst = NULL, phi = NULL, theta = NULL, 
+  skip = 200, sigma)
 }
 \arguments{
   \item{nobs}{Sample size

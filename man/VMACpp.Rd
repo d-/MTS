@@ -3,11 +3,13 @@
 \title{Vector Moving Averge Model (Cpp)
 }
 \description{Performs VMA estimation using the conditional multivariate 
-Gaussian likelihood function.   This is the same function as VMA, with the likelihood function implemented in C++ for efficiency. 
+Gaussian likelihood function.  This is the same function as VMA, with the likelihood function implemented in C++ for efficiency. 
 
 }
 \usage{
-VMACpp(da, q = 1, include.mean = T, fixed = NULL, beta=NULL, sebeta=NULL, prelim = F, details = F, thres = 2)
+VMACpp(da, q = 1, include.mean = T, fixed = NULL, 
+    beta=NULL, sebeta=NULL, prelim = F, 
+    details = F, thres = 2)
 }
 \arguments{
   \item{da}{Data matrix of a k-dimensional VMA process with each column 
