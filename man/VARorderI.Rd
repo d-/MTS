@@ -32,7 +32,7 @@ VAR models.
 \item{Mstat}{Step-wise Chi-square statistics}
 \item{Mpv}{p-values of the M-statistics}
 }
-\references{Tsay (2013)
+\references{Tsay (2014)
 }
 \author{Ruey S Tsay
 }

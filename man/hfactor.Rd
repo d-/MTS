@@ -23,7 +23,7 @@ hfactor(X, H, r)
 \author{Ruey S. Tsay
 }
 \examples{
-data(tenstocks)
+data("mts-examples",package="MTS")
 rtn=log(tenstocks[,2:11]+1) # compute log returns
 h1=c(1,1,1,1,rep(0,6)) # specify the constraints
 h2=c(0,0,0,0,1,1,1,0,0,0)

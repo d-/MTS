@@ -16,7 +16,8 @@ refREGts(m1, thres = 1)
 }
 \value{The same as those of the command REGts.
 }
-\references{Tsay (2014, Chapter 6)
+\references{Tsay (2014, Chapter 6). Multivariate Time Series Analysis with 
+R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }

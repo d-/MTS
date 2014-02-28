@@ -21,7 +21,7 @@ apply(zt,2,diff)
 \author{Ruey S Tsay
 }
 \examples{
-data(qgdp)
+data("mts-examples",package="MTS")
 zt=log(qgdp[,3:5])
 xt=diffM(zt)
 }

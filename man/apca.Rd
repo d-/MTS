@@ -22,7 +22,7 @@ dimension
 \item{factors}{The common factors}
 \item{loadings}{The loading matrix}
 }
-\references{Tsay (2014, Chapter 6)
+\references{Tsay (2014, Chapter 6). Multivariate Time Series Analysis with R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }

@@ -52,7 +52,7 @@ and Financial Applications. John Wiley. Hoboken, NJ.
 theta=matrix(c(0.2,-0.6,0.3,1.1),2,2); sigma=diag(2)
 m1=VARMAsim(300,malags=c(1),theta=theta,sigma=sigma)
 zt=m1$series
-m2=VMAe(zt,1,include.mean=F)
+m2=VMAe(zt,1,include.mean=FALSE)
 }
 
 

@@ -29,14 +29,16 @@ statistics and their p-values.
 \item{Mstat}{Chi-square test statistics}
 \item{Mpv}{p-values of the Mstat}
 }
-\references{Tsay (2013)
+\references{Tsay (2014). Multivariate Time Series Analysis with R 
+and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }
 \seealso{VARorderI
 }
-\examples{data(qgdp)
-zt=diffM(log(da[,3:5]))
+\examples{
+data("mts-examples",package="MTS")
+zt=diffM(log(qgdp[,3:5]))
 VARorder(zt,maxp=8)
 }
 

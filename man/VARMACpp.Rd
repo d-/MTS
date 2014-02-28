@@ -1,12 +1,12 @@
-\name{VARMA}
-\alias{VARMA}
-\title{Vector Autoregressive Moving-Average Models
+\name{VARMACpp}
+\alias{VARMACpp}
+\title{Vector Autoregressive Moving-Average Models (Cpp)
 }
 \description{Performs conditional maximum likelihood estimation of 
-a VARMA model. Multivariate Gaussian likelihood function is used.
+a VARMA model. Multivariate Gaussian likelihood function is used.  This is the same function as VARMA, with the likelihood function implemented in C++ for efficiency. 
 }
 \usage{
-VARMA(da, p = 0, q = 0, include.mean = T, fixed = NULL, beta=NULL, sebeta=NULL, prelim = F, details = F, thres = 2)
+VARMACpp(da, p = 0, q = 0, include.mean = T, fixed = NULL, beta=NULL, sebeta=NULL, prelim = F, details = F, thres = 2)
 }
 \arguments{
   \item{da}{Data matrix (T-by-k) of a k-dimensional time series with sample 
@@ -57,7 +57,7 @@ R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }
-\seealso{refVARMA
+\seealso{VARMA
 }
 \examples{
 phi=matrix(c(0.2,-0.6,0.3,1.1),2,2); theta=matrix(c(-0.5,0,0,-0.5),2,2)

@@ -1,12 +1,13 @@
-\name{VMA}
-\alias{VMA}
-\title{Vector Moving Averge Model
+\name{VMACpp}
+\alias{VMACpp}
+\title{Vector Moving Averge Model (Cpp)
 }
 \description{Performs VMA estimation using the conditional multivariate 
-Gaussian likelihood function
+Gaussian likelihood function.   This is the same function as VMA, with the likelihood function implemented in C++ for efficiency. 
+
 }
 \usage{
-VMA(da, q = 1, include.mean = T, fixed = NULL, beta=NULL, sebeta=NULL, prelim = F, details = F, thres = 2)
+VMACpp(da, q = 1, include.mean = T, fixed = NULL, beta=NULL, sebeta=NULL, prelim = F, details = F, thres = 2)
 }
 \arguments{
   \item{da}{Data matrix of a k-dimensional VMA process with each column 
@@ -47,11 +48,13 @@ simplification
 }
 \author{Ruey S. Tsay
 }
+\seealso{VMA
+}
 \examples{
 theta=matrix(c(0.5,0.4,0,0.6),2,2); sigma=diag(2)
 m1=VARMAsim(200,malags=c(1),theta=theta,sigma=sigma)
 zt=m1$series
-m2=VMA(zt,q=1,include.mean=FALSE)
+m2=VMACpp(zt,q=1,include.mean=FALSE)
 }
 
 

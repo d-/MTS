@@ -37,12 +37,15 @@ identify those parameters for removal.
 \item{Phi }{AR coefficient polynomial}
 \item{Ph0 }{The constant vector}
 }
+\references{Tsay (2014, Chapter 3). Multivariate Time Series Analysis with 
+R and Financial Applications. John Wiley. Hoboken, NJ.
+}
 \author{Ruey S. Tsay
 }
 \seealso{refVAR command
 }
 \examples{
-data(qgdp)
+data("mts-examples",package="MTS")
 gdp=log(qgdp[,3:5])
 zt=diffM(gdp)
 m1=VAR(zt,p=2)

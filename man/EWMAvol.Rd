@@ -20,12 +20,14 @@ mean is zero
 \item{return}{The data}
 \item{lambda}{The smoothing parameeter lambda used}
 }
-\references{Tsay (2014, Chapter 7)
+\references{Tsay (2014, Chapter 7). Multivariate Time Series Analysis with 
+R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }
 \examples{
-rtn=matrix(rnorm(600),200,3)
+data("mts-examples",package="MTS")
+rtn=log(ibmspko[,2:4]+1)
 m1=EWMAvol(rtn)
 }
 

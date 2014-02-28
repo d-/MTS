@@ -308,7 +308,7 @@ LLKsVARMACpp <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,inclu
    sig=t(at)%*%at/(nT-istart+1)
    ###ll=dmnorm(at,rep(0,k),sig)
    ll=dmvnorm(at,rep(0,k),sig)
-   LLKsvarmaCpp=-sum(log(ll))
+   LLKsVARMACpp =-sum(log(ll))
    cat("test: ",LLKsVARMACpp,"\n")
    LLKsVARMACpp
   }

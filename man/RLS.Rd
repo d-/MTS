@@ -25,7 +25,7 @@ RLS(y, x, ist = 30, xpxi = NULL, xpy0 = NULL)
 }
 \author{Ruey S. Tsay
 }
-\note{This function is used internally, but can be used as a command too.
+\note{This function is used internally, but can also be used as a command.
 }
 
 

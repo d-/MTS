@@ -34,7 +34,8 @@ Default is to inlcude.
 \item{rho.t}{Cross-correlation matrices}
 \item{theta.t}{Time-varying angel mtrices}
 }
-\references{Tsay (2014, Chapter 7)
+\references{Tsay (2014, Chapter 7). Multivariate Time Series Analysis 
+with R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }

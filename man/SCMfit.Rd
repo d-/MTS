@@ -60,7 +60,7 @@ Applications. John Wiley. Hoboken, NJ.
 \author{Ruey S. Tsay
 }
 \examples{
-data(qgdp)
+data("mts-examples",package="MTS")
 zt=diffM(log(qgdp[,3:5]))
 ord=matrix(c(0,1,0,0,0,1),3,2)
 Tdx=c(3,1,2)

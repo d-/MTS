@@ -32,7 +32,8 @@ matrices}
 \item{vEccm}{The sample extended cross-correlation matrices}
 \item{ARcoef}{AR coefficient marices of iterated VAR fitting}
 }
-\references{Tsay (2014, Chapter 3)
+\references{Tsay (2014, Chapter 3). Multivariate Time Series Analysis with 
+R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }

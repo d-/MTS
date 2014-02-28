@@ -25,7 +25,8 @@ adjust the degrees of freedom of the Chi-square statistics.
 \value{The multivariate Q-statistics and their p-values. Also, it provides a 
 plot of the p-values.
 }
-\references{Tsay (2014)
+\references{Tsay (2014). Multivariate Time Series Analysis with R and 
+Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }

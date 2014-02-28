@@ -25,7 +25,7 @@
           plot(tdx,data[,j],xlab='time',ylab=colnames(data)[j],type='l')
           }
       }
-      if(k > 4){
+      if((k > 4) && (k < 13)){
          par(mfcol=c(3,2))
          k1=6
         jcnt=0
@@ -37,6 +37,14 @@
             cat("Hit return for more plots: ","\n")
             readline()
          }
+      }
+    }
+    if(k > 12){
+     par(mfcol=c(1,1))
+     yl=range(data)*1.05
+     plot(tdx,data[,1],xlab='time',ylab=' ',type='l',ylim=yl)
+     for (j in 2:k){
+      lines(tdx,data[,j],lty=j,col=j)
       }
     }
    #end of the program
@@ -6270,7 +6278,12 @@ lRegts <- function(par,zt=zt,xt=xt,p=p,include.mean=include.mean,fixed=fixed){
    iend=min(lags,Tmax-tmiss)
    if(iend > 0){
       for (i in 1:iend){
-         wk[1,]=c(zt1[tmiss+i-1,],wk[1,1:(lpi-k)])
+         if(lpi > k){
+           wk[1,]=c(zt1[tmiss+i-1,],wk[1,1:(lpi-k)])
+           }
+           else{
+            wk[1,]=zt1[tmiss+i-1,]
+            }
          yt=zt1[(tmiss+i),]-wk%*%Tpiwgt-ncnst
          kst=(i-1)*k
          xt=npiwgt[,(kst+1):(kst+k)]
@@ -7860,7 +7873,7 @@ if((nc > 1) && (Jcnt > 0)){
   msqrt <- list(mtxsqrt=Mh,invsqrt=Mhinv)
 }
 
-"BVAR" <- function(z,p=1,C,V0,n0=5,Phi0=NULL,include.mean=T){
+"BVAR" <- function(z,p=1,C,V0,n0=5,Phi0=NULL,include.mean=TRUE){
 ## Perform Bayesian estimation of a VAR(p) model
 ##
 ## z: time series (T-by-k)

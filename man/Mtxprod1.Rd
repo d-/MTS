@@ -1,11 +1,11 @@
 \name{Mtxprod1}
 \alias{Mtxprod1}
-\title{Matrix Product of two ploynomial matrices
+\title{Alternative Ploynomial Matrix Product
 }
 \description{Compute the product of two polynomial matrices
 }
 \usage{
-Mtxprod(Mtx, sMtx, p, P)
+Mtxprod1(Mtx, sMtx, p, P)
 }
 \arguments{
   \item{Mtx}{The coefficient matrix of a regular polynomial matrix
@@ -17,6 +17,10 @@ Mtxprod(Mtx, sMtx, p, P)
   \item{P}{Degree of the seasonal polynomial matrix
 }
 }
+
+\details{This polynomial product is used in seasonal VARMA modeling to check the multiplicative nature between the regular and seasonal polynomial matrices
+}
+
 \value{Coefficient matrix of the product. The product matrix is in the form 
 sAR * reg-AR, etc.
 }

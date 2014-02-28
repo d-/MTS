@@ -1,12 +1,7 @@
 #### VMA programs
-"VMACpp" <- function(da,q=1,include.mean=T,fixed=NULL,prelim=F,details=F,thres=2.0){
+"VMACpp" <- function(da,q=1,include.mean=T,fixed=NULL,beta=NULL,sebeta=NULL,prelim=F,details=F,thres=2.0){
    # Estimation of a vector MA model using conditional MLE (Gaussian dist)
    #
-   # The old version is in the 2009 subdirectory. This is a modified version
-   #    April 6, 2011.
-   #
-   # April 16: remove some insigificant parameters at the preliminary estimation so that
-   #           the computational speed can be improved.
    # April 18: add subcommand "prelim" to see simplification after the AR approximation.
    # When prelim=TRUE, fixed is assigned based on the results of AR approximation.
    # Here "thres" is used only when prelim = TRUE.
@@ -18,21 +13,52 @@
    k=dim(da)[2]
    if(q < 1)q=1
    kq=k*q
-   # Step 1: assign the data globally and load the package "mnormt".
-   VMAdata <<- da
-   #
-   # Obtain initial parameter estimates
-   ### Use VAR approximation to obtain initial parameter estimates
-   m1=VARorder(da,q+12,output=FALSE)
-   porder=m1$aicor
-   if(porder < 1)porder=1
-   m2=VAR(da,porder,output=FALSE)
-   y=da[(porder+1):nT,]
-   x=m2$residuals
-   m3=THini(y,x,q,include.mean)
-   beta=m3$estimates
-   sebeta=m3$se
-   nr=dim(beta)[1]
+#
+ THini <- function(y,x,q,include.mean){
+   # use residuals of a long VAR model to obtain initial estimates of
+   # VMA coefficients.
+   if(!is.matrix(y))y=as.matrix(y)
+   if(!is.matrix(x))x=as.matrix(x)
+   nT=dim(y)[1]
+   k=dim(y)[2]
+   ist=1+q
+   ne=nT-q
+   if(include.mean){
+      xmtx=matrix(1,ne,1)
+   }
+   else {
+      xmtx=NULL
+   }
+   ymtx=y[ist:nT,]
+   for (j in 1:q){
+      xmtx=cbind(xmtx,x[(ist-j):(nT-j),])
+   }
+   xtx=crossprod(xmtx,xmtx)
+   xty=crossprod(xmtx,ymtx)
+   xtxinv=solve(xtx)
+   beta=xtxinv%*%xty
+   resi= ymtx - xmtx%*%beta
+   sse=crossprod(resi,resi)/ne
+   dd=diag(xtxinv)
+   sebeta=NULL
+   for (j in 1:k){
+      se=sqrt(dd*sse[j,j])
+      sebeta=cbind(sebeta,se)
+   }
+    THini <- list(estimates=beta,se=sebeta)
+  }
+
+   if(length(fixed) < 1){ 
+    m1=VARorder(da,q+12,output=FALSE)
+    porder=m1$aicor
+    if(porder < 1)porder=1
+    m2=VAR(da,porder,output=FALSE)
+    y=da[(porder+1):nT,]
+    x=m2$residuals
+    m3=THini(y,x,q,include.mean)
+    beta=m3$estimates
+    sebeta=m3$se
+    nr=dim(beta)[1]
    ### Preliminary simplification
    if(prelim){
       fixed = matrix(0,nr,k)
@@ -40,16 +66,18 @@
          tt=beta[,j]/sebeta[,j]
          idx=c(1:nr)[abs(tt) >= thres]
          fixed[idx,j]=1
-      }
+       }
+     }
+   #
+    if(length(fixed) < 1){fixed=matrix(1,nr,k)}
+   }
+   else{
+    nr=dim(beta)[1]
    }
    #
-   if(length(fixed)==0){fixed=matrix(1,nr,k)}
-   #
-   fix1 <<- fixed
-   inc.mean <<- include.mean
-   MAq <<- q
    par=NULL
    separ=NULL
+   fix1=fixed
    #
    #
    VMAcnt=0
@@ -78,8 +106,67 @@
       }
    }
    #
-   ParMA <<- par
-   VMAcnt <<- VMAcnt
+   ParMA <- par
+  
+  LLKVMACpp <- function(par,zt=zt,q=q,fixed=fix1,include.mean=include.mean){
+   k=ncol(zt)
+   nT=nrow(zt)
+   kq=k*q
+   fix <- fixed
+   
+   ListObs = .Call("GetVMAObs", zt, fix1, par, q, include.mean)
+   zt  = do.call(rbind, ListObs)
+   
+   #### Slow!
+   ListTH = .Call("GetVMATH", zt, fix1, par, q, include.mean)
+   TH  = do.call(rbind, ListTH)
+       
+   mm=eigen(TH)
+   V1=mm$values
+   P1=mm$vectors
+   v1=Mod(V1)
+   ich=0
+   for (i in 1:kq){
+      if(v1[i] > 1)V1[i]=1/V1[i]
+      ich=1
+   }
+   if(ich > 0){
+      ###cat("Invertibility checked and adjusted: ","\n")
+      P1i=solve(P1)
+      GG=diag(V1)
+      TH=Re(P1%*%GG%*%P1i)
+      Theta=t(TH[1:k,])
+      ##cat("adjusted Theta","\n")
+      ##print(TH[1:k,])
+      ### re-adjust the MA parameter
+      icnt <- VMAcnt
+      ist=0
+      if(icnt > 0)ist=1
+      for (j in 1:k){
+         idx=c(1:kq)[fix[(ist+1):(ist+kq),j]==1]
+         jcnt=length(idx)
+         if(jcnt > 0){
+            par[(icnt+1):(icnt+jcnt)]=TH[j,idx]
+            icnt=icnt+jcnt
+         }
+      }
+      ##
+      ParMA <- par
+   }
+   
+   ##
+   at=mFilter(zt,t(Theta))
+   #
+   sig=t(at)%*%at/nT
+   ##ll=dmnorm(at,rep(0,k),sig)
+   ll=dmvnorm(at,rep(0,k),sig)
+   LLKVMACpp =-sum(log(ll))
+   LLKVMACpp
+}
+
+
+
+  
    #
    cat("Number of parameters: ",length(par),"\n")
    cat("initial estimates: ",round(par,4),"\n")
@@ -87,24 +174,25 @@
    lowerBounds=par; upperBounds=par
    npar=length(par)
    mult=2.0
-   if((npar > 10)||(MAq > 2))mult=1.2
+   if((npar > 10)||(q > 2))mult=1.2
    for (j in 1:npar){
       lowerBounds[j] = par[j]-mult*separ[j]
       upperBounds[j] = par[j]+mult*separ[j]
    }
    cat("Par. Lower-bounds: ",round(lowerBounds,4),"\n")
    cat("Par. Upper-bounds: ",round(upperBounds,4),"\n")
-   ###mm=optim(par,LLKvmaCpp,method=c("L-BFGS-B"),lower=lowerBounds,upper=upperBounds,hessian=TRUE)
-   ###mm=optim(par,LLKvmaCpp,method=c("BFGS"),hessian=TRUE)
+   ###mm=optim(par,LLKvma,method=c("L-BFGS-B"),lower=lowerBounds,upper=upperBounds,hessian=TRUE)
+   ###mm=optim(par,LLKvma,method=c("BFGS"),hessian=TRUE)
    ##est=mm$par
    ##H=mm$hessian
    # Step 5: Estimate Parameters and Compute Numerically Hessian:
    if(details){
-      fit = nlminb(start = ParMA, objective = LLKvmaCpp,
+      fit = nlminb(start = ParMA, objective = LLKVMACpp,zt=da,fixed=fixed,include.mean=include.mean,q=q,
       lower = lowerBounds, upper = upperBounds, control = list(trace=3))
    }
    else {
-      fit = nlminb(start = ParMA, objective = LLKvmaCpp, lower = lowerBounds, upper = upperBounds)
+      fit = nlminb(start = ParMA, objective = LLKVMACpp, zt=da, fixed=fixed, include.mean=include.mean, q=q, 
+       lower = lowerBounds, upper = upperBounds)
    }
    epsilon = 0.0001 * fit$par
    npar=length(par)
@@ -116,7 +204,10 @@
          x2[i] = x2[i] + epsilon[i]; x2[j] = x2[j] - epsilon[j]
          x3[i] = x3[i] - epsilon[i]; x3[j] = x3[j] + epsilon[j]
          x4[i] = x4[i] - epsilon[i]; x4[j] = x4[j] - epsilon[j]
-         Hessian[i, j] = (LLKvmaCpp(x1)-LLKvmaCpp(x2)-LLKvmaCpp(x3)+LLKvmaCpp(x4))/
+         Hessian[i, j] = (LLKVMACpp(x1,zt=da,q=q,fixed=fixed,include.mean=include.mean)
+                          -LLKVMACpp(x2,zt=da,q=q,fixed=fixed,include.mean=include.mean)
+                          -LLKVMACpp(x3,zt=da,q=q,fixed=fixed,include.mean=include.mean)
+                          +LLKVMACpp(x4,zt=da,q=q,fixed=fixed,include.mean=include.mean))/
          (4*epsilon[i]*epsilon[j])
       }
    }
@@ -170,7 +261,7 @@
       icnt=icnt+k
    }
    ## Compute the residuals
-   zt=VMAdata
+   zt=da
    if(include.mean){
       for (i in 1:k){
          zt[,i]=zt[,i]-cnt[i]
@@ -178,20 +269,6 @@
    }
    ### Use mFilter to compute residuals (April 18, 2012)
    at=mFilter(zt,t(TH))
-   # Comment out on April 18, 2012.
-   # Past=matrix(0,1,kq)
-   # at=NULL
-   # for (t in 1:nT){
-   # tmp=zt[t,]+Past%*%TH
-   # at=rbind(at,tmp)
-   # if(q==1){
-   # Past=tmp
-   # }
-   # else{
-   # Past=c(tmp,Past[1:(kq-k)])
-   # }
-   # }
-   ######## end of comment out.
    sig=t(at)%*%at/nT
    cat(" ","\n")
    cat("Residuals cov-matrix:","\n")

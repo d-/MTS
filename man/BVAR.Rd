@@ -6,10 +6,10 @@
 use of Minnesota prior
 }
 \usage{
-BVAR(zt,p=1,C,V0,n0=5,Phi0=NULL,include.mean=T)
+BVAR(z,p=1,C,V0,n0=5,Phi0=NULL,include.mean=TRUE)
 }
 \arguments{
-  \item{zt}{A matrix of vector time series, each column represents a series.
+  \item{z}{A matrix of vector time series, each column represents a series.
 }
   \item{p}{
 The AR order. Default is p=1.
@@ -46,7 +46,7 @@ VAR(p) model.
 \author{Ruey S. Tsay
 }
 \examples{
-data(qgdp)
+data("mts-examples",package="MTS")
 z=log(qgdp[,3:5])
 zt=diffM(z)*100
 C=0.1*diag(rep(1,7))

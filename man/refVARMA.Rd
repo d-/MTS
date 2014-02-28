@@ -6,7 +6,7 @@
 estimates to zero
 }
 \usage{
-refVARMA(model, thres = 2)
+refVARMA(model, thres = 1.5)
 }
 \arguments{
   \item{model}{An output object from the command VARMA or the command 
@@ -20,14 +20,15 @@ than the threshold (in modulus) to zero.
 }
 \value{The same as those of the command VARMA.
 }
-\references{Tsay (2014, Chapter 3)
+\references{Tsay (2014, Chapter 3). Multivariate Time Series Analysis with 
+R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }
 \seealso{VARMA
 }
 \examples{
-data(qgdp)
+data("mts-examples",package="MTS")
 gdp=log(qgdp[,3:5])
 zt=diffM(gdp)
 m1=VARMA(zt,p=1,q=1)

@@ -31,7 +31,7 @@ in degrees of freedom.
 \item{ccm}{Sample cross-correlation matrices}
 \item{pvalue}{p-values for each lag of CCM being a zero matrix}
 }
-\references{Tsay (2014, Chapter 1)
+\references{Tsay (2014, Chapter 1). Multivariate Time Series Analysis with R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }

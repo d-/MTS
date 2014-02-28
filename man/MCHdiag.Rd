@@ -22,7 +22,8 @@ T-by-k^2 matrix
 }
 \value{Four test statistics and their p-values
 }
-\references{Tsay (2014, Chapter 7)
+\references{Tsay (2014, Chapter 7). Multivariate Time Series Analysis with 
+R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }

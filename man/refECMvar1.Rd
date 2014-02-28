@@ -27,7 +27,6 @@ with R and Financial Applications. John Wiley. Hoboken, NJ.
 \seealso{ECMvar1, refECMvar
 }
 \examples{
-m2=refECMvar1(m1)
 }
 
 

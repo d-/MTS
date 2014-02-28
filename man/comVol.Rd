@@ -34,7 +34,7 @@ are also computed for the sample principal components
 \author{Ruey S. Tsay and Y.B. Hu
 }
 \examples{
-data(qgdp)
+data("mts-examples",package="MTS")
 zt=diffM(log(qgdp[,3:5]))
 m1=comVol(zt,p=2)
 names(m1)

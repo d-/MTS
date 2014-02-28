@@ -38,13 +38,19 @@ used in local correlation matrix estimation
 Each row contains elements of a cross-correlation matrix.
 }
 }
-\references{Tsay (2014, Chapter 7)
+\references{Tsay (2014, Chapter 7). Multivariate Time Series Analysis with R and Financial 
+Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }
 \seealso{dccPre
 }
 \examples{
+data("mts-examples",package="MTS")
+rtn=log(ibmspko[,2:4]+1)
+m1=dccPre(rtn,include.mean=TRUE,p=0)
+rtn1=m1$sresi
+m2=dccFit(rtn1)
 # continued from dccPre command demonstration
 }
 

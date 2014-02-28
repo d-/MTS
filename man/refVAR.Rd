@@ -27,7 +27,7 @@ less than the threshold (in modulus) to zero.
 \seealso{VAR
 }
 \examples{
-data(qgdp)
+data("mts-examples",package="MTS")
 gdp=log(qgdp[,3:5])
 zt=diffM(gdp)
 m1=VAR(zt,3)

@@ -33,7 +33,8 @@ Default is no constant.
 \item{residuals}{The residual series}
 \item{Sigma}{Residual covariance matrix}
 }
-\references{Tsay (2014, Chapter 5)
+\references{Tsay (2014, Chapter 5). Multivariate Time Series Analysis 
+with R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }

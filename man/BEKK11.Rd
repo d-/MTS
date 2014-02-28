@@ -29,9 +29,10 @@ the volatility matrix Sigma(t)}
 \author{Ruey S. Tsay
 }
 \examples{
-> da=read.table("m-ibmsp-6111.txt",header=T)
-> rtn=log(da[,2:3]+1)
-> m1=BEKK11(rtn)
+ #data("mts-examples",package="MTS")
+ #da=ibmspko
+ #rtn=log(da[,2:3]+1)
+ #m1=BEKK11(rtn)
 }
 
 

@@ -20,7 +20,8 @@ its t-ratio (in modulus) is less than the threshold.
 }
 \value{Same as those of the command Kronfit.
 }
-\references{Tsay (2014, Chapter 4)
+\references{Tsay (2014, Chapter 4). Multivariate Time Series Analysis with R 
+and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }

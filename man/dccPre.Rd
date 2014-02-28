@@ -30,7 +30,8 @@ model for each residual series after a VAR(p) fitting, if any.
 \item{est}{Parameter estimates for each marginal volatility model}
 \item{se.est}{Standard errors for parameter estimates of marginal volatility models}
 }
-\references{Tsay (2014, Chapter 7)
+\references{Tsay (2014, Chapter 7). Multivariate Time Series Analysis with 
+R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }

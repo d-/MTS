@@ -27,7 +27,8 @@ Ljung-Box statistics applied to the 5-percent trimmed series of the transformed 
 }
 \value{Various test statistics and their p-values
 }
-\references{Tsay (2014, Chapter 7)
+\references{Tsay (2014, Chapter 7). Multivariate Time Series Analysis 
+with R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }

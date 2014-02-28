@@ -36,7 +36,7 @@ R and Financial Applications. John Wiley. Hoboken, NJ.
 \seealso{Vpmiss
 }
 \examples{
-	data(qgdp)
+	data("mts-examples",package="MTS")
 	gdp=log(qgdp[,3:5])
 	m1=VAR(gdp,3)
 	piwgt=m1$Phi; Sig=m1$Sigma; cnst=m1$Ph0

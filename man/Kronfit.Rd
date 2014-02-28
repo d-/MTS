@@ -6,7 +6,7 @@
 indices
 }
 \usage{
-Kronfit(da, kidx, include.mean = T, fixed = NULL, prelim = F, details = F, thres = 1)
+Kronfit(da, kidx, include.mean = T, fixed = NULL, Kpar=NULL, seKpar=NULL, prelim = F, details = F, thres = 1)
 }
 \arguments{
   \item{da}{Data matrix (T-by-k) of a k-dimensional time series
@@ -18,6 +18,10 @@ estimation. Default is to include the mean vector.
 }
   \item{fixed}{A logical matrix used to set zero parameter constraints. 
 This is used mainly in the command refKronfit.
+}
+  \item{Kpar}{Parameter vectors for use in model simplification
+}
+  \item{seKpar}{Standard errors of the parameter estimates for use in model simplification
 }
   \item{prelim}{A lofical switch for a preliminary estimation.
 }
@@ -42,7 +46,8 @@ Default is 1.
 \item{Phi}{AR coefficient matrices}
 \item{Theta}{MA coefficient matrices}
 }
-\references{Tsay (2014, Chapter 4)
+\references{Tsay (2014, Chapter 4). Multivariate Time Series Analysis with 
+R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
 }
@@ -53,7 +58,7 @@ phi=matrix(c(.2,-.6,.3,1.1),2,2); sigma=diag(2); theta=-sigma*0.5
 m1=VARMAsim(300,arlags=c(1),malags=c(1),phi=phi,theta=theta,sigma=sigma)
 zt=m1$series
 kdx=c(1,1)
-m1=Kronfit(da,kdx)
+m1=Kronfit(zt,kdx)
 names(m1)
 }
 

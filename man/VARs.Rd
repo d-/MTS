@@ -37,7 +37,7 @@ coefficient matrices being zero.
 \item{Phi}{VAR coefficient matrix}
 \item{Ph0}{A constant vector}
 }
-\references{Ruey S. Tsay (Chapter 2). Multivariate Time Series Analysis with 
+\references{Tsay (2014, Chapter 2). Multivariate Time Series Analysis with 
 R and Financial Applications. John Wiley. Hoboken, NJ.
 }
 \author{Ruey S. Tsay
@@ -45,7 +45,7 @@ R and Financial Applications. John Wiley. Hoboken, NJ.
 \seealso{VAR command
 }
 \examples{
-data(qgdp)
+data("mts-examples",package="MTS")
 zt=log(qgdp[,3:5])
 m1=VARs(zt,lags=c(1,2,4))
 }
