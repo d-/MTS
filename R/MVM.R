@@ -300,8 +300,8 @@
       m2=garchFit(~garch(1,1),data=RTN[,i],include.mean=F,trace=F,cond.dist=cond.dist)
       Mtxest=rbind(Mtxest,m2@fit$par); Mtxse=rbind(Mtxse,m2@fit$se.coef)
       Mtxtval=rbind(Mtxtval,m2@fit$tval)
-      Vol=cbind(Vol,volatility(m2))
-      sresi=cbind(sresi,residuals(m2,standardize=T))
+      Vol=cbind(Vol,m2@sigma.t)
+      sresi=cbind(sresi,m2@residuals/m2@sigma.t)
       cat("Component: ",i,"\n")
       cat("Estimates: ",round(Mtxest[i,],6),"\n")
       cat("se.coef  : ",round(Mtxse[i,],6),"\n")
@@ -507,7 +507,7 @@
    cat("s.e.                            : ",round(Mtxse[1,],6),"\n")
    cat("t-value                         : ",round(Mtxtval[1,],6),"\n")
    #
-   VOL=volatility(m1)^2
+   v1=m1@sigma.t; VOL=v1*v1
    ### BetaU stores the smoothed beta_{ij,t} used.
    BetaU=NULL
    for (i in 2:k){
@@ -541,7 +541,7 @@
       cat("Estimate (alpha0, alpha1, beta1): ",round(Mtxcoef[i,],6),"\n")
       cat("s.e.                            : ",round(Mtxse[i,],6),"\n")
       cat("t-value                         : ",round(Mtxtval[i,],6),"\n")
-      VOL=cbind(VOL,volatility(m3)^2)
+      VOL=cbind(VOL,(m3@sigma.t)^2)
    }
    BetaU=as.matrix(BetaU)
    
