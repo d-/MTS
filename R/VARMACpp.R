@@ -134,11 +134,9 @@ nT    = dim(zt)[1]
 pqmax = max(p, q)
 
 ListResiduals = .Call("GetVarmaResiduals", zt, fixed, par, p, q, include.mean)		
-
-at  = do.call(rbind,ListResiduals)
+at  = do.call(rbind, as.list(ListResiduals))
 sig = t(at) %*% at/(nT-pqmax)
 ll  = dmvnorm(at,rep(0,k),sig)
-
 LLKVARMACpp =-sum(log(ll))   
 LLKVARMACpp
 }

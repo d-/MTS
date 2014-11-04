@@ -2273,9 +2273,8 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       at=rbind(at,tmp3)
    }
    #### skip the first max(p,q) residuals.
-   at=at[(istart:nT),]
-   sig=t(at)%*%at/(nT-pqmax)
-   #ll=dmnorm(at,rep(0,k),sig)
+   at=at[(istart:nT),]   
+   sig=t(at)%*%at/(nT-pqmax)   
    ll=dmvnorm(at,rep(0,k),sig)
    LLKvarma=-sum(log(ll))
    LLKvarma
