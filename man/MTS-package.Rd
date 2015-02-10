@@ -12,8 +12,8 @@ Multivariate Time Series (MTS) is a general package for analyzing multivariate l
 \tabular{ll}{
 Package: \tab MTS\cr
 Type: \tab Package\cr
-Version: \tab 0.3\cr
-Date: \tab 2014-02-27\cr
+Version: \tab 0.33\cr
+Date: \tab 2015-02-8\cr
 License: \tab Artistic License 2.0\cr
 }
 }

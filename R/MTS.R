@@ -26,11 +26,11 @@
           }
       }
       if((k > 4) && (k < 13)){
-         par(mfcol=c(3,2))
+         par(mfcol=c(3,2),mai=c(0.3,0.3,0.3,0.3))
          k1=6
         jcnt=0
         for (j in 1:k){
-         plot(tdx,data[,j],xlab='time',ylab=colnames(data)[j],type='l')
+         plot(tdx,data[,j],xlab='time',ylab=colnames(data)[j],type='l',cex.axis=0.8)
          jcnt=jcnt+1
          if((jcnt == k1) && (k > 6)){
             jcnt=0
@@ -273,7 +273,7 @@
       xmtx=cbind(rep(1,ne),x[(ist-jj):(nT-jj),])
    }
    else {
-      xmtx=cbind(x[(ist-jj):(T-jj),])
+      xmtx=x[(ist-jj):(nT-jj),]
    }
    if(nlags > 1){
       for (i in 2:nlags){
@@ -537,7 +537,7 @@
       plot(pv,xlab='lag',ylab='p-value',ylim=c(0,1))
       abline(h=c(0))
       abline(h=c(0.05),col="blue")
-      title(main="Signficance plot of CCM")
+      title(main="Significance plot of CCM")
     }
    ccm <- list(ccm=wk,pvalue=pv)
 }
@@ -1111,7 +1111,7 @@
    }
    
    tdx=c(1:(lag+1))-1
-   par(mfcol=c(k,k))
+   par(mfcol=c(k,k),mai=c(0.3,0.3,0.3,0.3))
    if(orth){
       gmax=max(wk1)
       gmin=min(wk1)
@@ -1119,8 +1119,8 @@
       gmax=gmax+cx
       gmin=gmin-cx
       for (j in 1:k^2){
-         plot(tdx,wk1[j,],type='l',xlab='lag',ylab='IRF',ylim=c(gmin,gmax))
-         points(tdx,wk1[j,],pch='*')
+         plot(tdx,wk1[j,],type='l',xlab='lag',ylab='IRF',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,wk1[j,],pch='*',cex=0.8)
          title(main='Orth. innovations')
       }
       cat("Press return to continue ","\n")
@@ -1131,8 +1131,8 @@
       gmax=gmax+cx
       gmin=gmin-cx
       for (j in 1:k^2){
-         plot(tdx,acuwk1[j,],type='l',xlab='lag',ylab="Acu-IRF",ylim=c(gmin,gmax))
-         points(tdx,acuwk1[j,],pch="*")
+         plot(tdx,acuwk1[j,],type='l',xlab='lag',ylab="Acu-IRF",ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,acuwk1[j,],pch="*",cex=0.8)
          title(main='Orth. innovations')
       }
    }
@@ -1143,8 +1143,8 @@
       gmax=gmax+cx
       gmin=gmin-cx
       for(j in 1:k^2){
-         plot(tdx,wk[j,],type='l',xlab='lag',ylab='IRF',ylim=c(gmin,gmax))
-         points(tdx,wk[j,],pch='*')
+         plot(tdx,wk[j,],type='l',xlab='lag',ylab='IRF',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,wk[j,],pch='*',cex=0.8)
          title(main="Orig. innovations")
       }
       cat("Press return to continue ","\n")
@@ -1155,8 +1155,8 @@
       gmax=gmax+cx
       gmin=gmin-cx
       for(j in 1:k^2){
-         plot(tdx,acuwk[j,],type='l',xlab='lag',ylab='Acu-IRF',ylim=c(gmin,gmax))
-         points(tdx,acuwk[j,],pch='*')
+         plot(tdx,acuwk[j,],type='l',xlab='lag',ylab='Acu-IRF',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,acuwk[j,],pch='*',cex=0.8)
          title(main="Orig. innovations")
       }
    }
@@ -2273,8 +2273,9 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       at=rbind(at,tmp3)
    }
    #### skip the first max(p,q) residuals.
-   at=at[(istart:nT),]   
-   sig=t(at)%*%at/(nT-pqmax)   
+   at=at[(istart:nT),]
+   sig=t(at)%*%at/(nT-pqmax)
+   #ll=dmnorm(at,rep(0,k),sig)
    ll=dmvnorm(at,rep(0,k),sig)
    LLKvarma=-sum(log(ll))
    LLKvarma
@@ -2837,8 +2838,8 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
 ### subroutines used
  Nlike <- function(par,dY=dY,dX=dX,orderN=orderN,orderX=orderX){
    resi = Gaulike(par,dY=dY,dX=dX,orderN=orderN,orderX=orderX)
+   sig=sqrt(var(resi))
    n1=length(resi)
-   sig=sqrt(sum(resi^2)/n1)
    Nlike=-sum(log(dnorm(resi,mean=rep(0,n1),sd=sig)))
   }
 
@@ -2853,19 +2854,17 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    N=length(dY)
    ist=r+1
    N1t=dY-c0
-   Nt=N1t[ist:N]
+   Nt = dX
    if(r > 0){
-      for (j in 1:r){
-         Nt=Nt-del[j]*N1t[(ist-j):(N-j)]
-       }
+     Nt=filter(dX,del,method="r",init=rep(mean(dX),r))
      }
    ##
    ist=b+s+1
    N=length(Nt)
-   N1t=Nt[ist:N]-ome[1]*dX[(ist-b+r):(N-b+r)]
+   N1t=N1t[ist:N]-ome[1]*Nt[(ist-b):(N-b)]
    if(s > 0){
       for (j in 1:s){
-         N1t=N1t-ome[j+1]*dX[(ist-j-b+r):(N-j-b+r)]
+         N1t=N1t-ome[j+1]*Nt[(ist-j-b):(N-j-b)]
        }
     }
    N1=length(N1t)
@@ -2890,19 +2889,17 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    N=length(dY)
    ist=r+1
    N1t=dY-c0
-   Nt=N1t[ist:N]
+   Nt=dX
    if(r > 0){
-      for (j in 1:r){
-         Nt=Nt-del[j]*N1t[(ist-j):(N-j)]
-      }
+     Nt=filter(dX,del,method="r",init=rep(mean(dX),r))
     }
    ##
    ist=b+s+1
    N=length(Nt)
-   N1t=Nt[ist:N]-ome[1]*dX[(ist-b+r):(N-b+r)]
+   N1t=N1t[ist:N]-ome[1]*Nt[(ist-b):(N-b)]
    if(s > 0){
       for (j in 1:s){
-         N1t=N1t-ome[j+1]*dX[(ist-j-b+r):(N-j-b+r)]
+         N1t=N1t-ome[j+1]*Nt[(ist-j-b):(N-j-b)]
         }
      }
    Nts=N1t
@@ -2950,7 +2947,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       varcoef=solve(m11$hessian)
       se=sqrt(diag(varcoef))
       residuals=Gaulike(est,dY=dY,dX=dX,orderN=orderN,orderX=orderX)
-      sigma2=sum(residuals^2)/length(residuals)
+      sigma2=var(residuals)
       pq=p+q
       npar=length(est)
       v=est[1:(npar-pq)]
@@ -2974,6 +2971,564 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    Nt = Nts(est,dY=dY,dX=dX,orderN=orderN,orderX=orderX)
    
    tfm1 <- list(estimate=est,sigma2=sigma2,residuals=residuals,varcoef=varcoef, Nt=Nt)
+}
+"tfm2" <- function(y,x,x2=NULL,ct=NULL,wt=NULL,orderN=c(1,0,0),orderS=c(0,0,0),sea=12,order1=c(0,1,0),order2=c(0,-1,0)){
+   ## Estimation of a transfer function model with TWO exogenous variables
+   ### The model is Y_t- c0 -c1*c_t -c2*w_t - w(B)/d(B)X_t  - W(b)/D(B)X_{2t} = theta(B)*Theta(B)/[phi(B)*Phi(B)]a_t.
+   ### orderN = c(p,d,q) for the regular ARMA part
+   ### orderS = c(P,D,Q) for the seasonal ARMA part
+   ### order1 = c(r,s,b) where d(B) = 1 - d_1B - ... - d_r B^r
+   ###            and w(B) = w_0+w_1B + ... + w_s B^s and b is the delay.
+   ###
+   ### order2 = c(r2,s2,b2) for the second exogenous variable
+   ### wt: for co-integrated system 
+   ### ct: a given determinsitic variable such as time trend
+   ### par=c(c0,w0,w1,...,ws,d1,...,dr,c1,c2,W0, ...,Ws,D1,...,Dr,phi,theta,Phi,Theta): November 2014
+   ###
+   dify = orderN[2]; dY=y; dX=x; dX2=x2; dW=wt; dC=ct
+   phi=NULL; theta=NULL; Phi=NULL; Theta=NULL; omega=NULL; delta=NULL; Omega=NULL; Delta=NULL
+   if(dify > 0){
+      dY <- y[(dify+1):length(y)]-y[1:(length(y)-dify)]
+      dX <- x[(dify+1):length(x)]-x[1:(length(x)-dify)]
+      if(!is.null(x2)){
+        dX2 <- x2[(dify+1):length(x2)]-x2[1:(length(x2)-dify)]
+        }
+      if(!is.null(wt)){
+        dW <- wt[(dify+1):length(wt)] - wt[1:(length(wt)-dify)]
+        }
+      if(!is.null(ct)){
+       dC <- ct[(dify+1):length(ct)] - ct[1:(length(ct)-dify)]
+       }
+    }
+### seasonal difference, if any
+   difys = orderS[2]; lags=difys*sea
+   if(difys > 0){
+      dY <- dY[(lags+1):length(dY)]-dY[1:(length(dY)-lags)]
+      dX <- dX[(lags+1):length(dX)]-dX[1:(length(dX)-lags)]
+      if(!is.null(x2)){
+        dX2 <- dX2[(lags+1):length(dX2)]-dX2[1:(length(dX2)-lags)]
+        }
+      if(!is.null(wt)){
+        dW <- dW[(lags+1):length(dW)] - dW[1:(length(dW)-lags)]
+        }
+      if(!is.null(ct)){
+       dC <- dC[(lags+1):length(dC)] - dC[1:(length(dC)-lags)]
+        }
+   }
+#
+   N = length(dY); N1=length(dX)
+   N=min(N,N1)
+   if(length(dX2) > 0)N=min(N,length(dX2))
+   if(length(dW) > 0) N=min(N,length(dW))
+   if(length(dC) > 0) N=min(N,length(dC))
+   phi=NULL; theta=NULL; ome=NULL; del=NULL; ome2=NULL; del2=NULL; Phi=NULL; Theta=NULL
+   r=order1[1]; s=order1[2]; b=order1[3]; p=orderN[1]; q=orderN[3]; P=orderS[1]; Q=orderS[3]
+   r=max(r,0); s=max(0,s); b=max(0,b); p=max(0,p); q=max(0,q); P=max(0,P); Q=max(0,Q)
+   r2=order2[1]; s2=order2[2]; b2=order2[3]
+### subroutines used
+ Nlike <- function(par,dY=dY,dX=dX,dX2=dX2,dW=dW,dC=dC,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2){
+   resi = Gaulike(par,dY=dY,dX=dX,dX2=dX2,dW=dW,dC=dC,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2)
+   sig=sqrt(var(resi))
+   n1=length(resi)
+   Nlike=-sum(dnorm(resi,mean=rep(0,n1),sd=sig,log=TRUE))
+  }
+
+ Gaulike <- function(par,dY=dY,dX=dX,dX2=dX2,dW=dW,dC=dC,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2){
+   p=orderN[1]; q=orderN[3]; r=order1[1]; s=order1[2]; b=order1[3]; P=orderS[1]; Q=orderS[3]
+   r2=order2[2]; s2=order2[2]; b2=order2[3]
+   c0=par[1]
+   ome=par[2:(2+s)]
+   #
+   if(r > 0)del=par[(2+s+1):(2+s+r)]
+   icnt=2+s+r
+   if(!is.null(dC)){c1=par[icnt+1]
+                   icnt=icnt+1
+                   }
+   if(!is.null(dW)){c2=par[icnt+1]
+                   icnt=icnt+1
+                   }
+   if(!is.null(dX2)){
+          ome2=par[(icnt+1):(icnt+1+s2)]
+          icnt=icnt+1+s2
+          if(r2 > 0){del2=par[(icnt+1):(icnt+r2)]
+                      icnt=icnt+r2
+                    }
+          }
+   if(p > 0){phi=par[(icnt+1):(icnt+p)]
+             icnt=icnt+p
+             }
+   if(q > 0){theta=par[(icnt+1):(icnt+q)]
+             icnt=icnt+q
+            }
+   if(P > 0){Phi=par[(icnt+1):(icnt+P)]
+             icnt=icnt+P
+            }
+   if(Q > 0)Theta=par[(icnt+1):(icnt+Q)]
+#
+   N=length(dY)
+   N1t=dY-c0
+   Nt = dX
+   if(r > 0){
+     Nt=filter(dX,del,method="r",init=rep(mean(dX),r))
+     }
+   ##
+   ist=max(b+s+1,b2+s2+1)
+   N=length(Nt)
+   N1t=N1t[ist:N]-ome[1]*Nt[(ist-b):(N-b)]
+   if(s > 0){
+      for (j in 1:s){
+         N1t=N1t-ome[j+1]*Nt[(ist-j-b):(N-j-b)]
+       }
+    }
+   if(!is.null(dC))N1t=N1t-c1*dC[ist:N]
+   if(!is.null(dW))N1t=N1t-c2*dW[ist:N]
+   if(!is.null(dX2)){
+    Zt=dX2
+    if(r2 > 0){
+     Zt=filter(dX2,del2,method="r",init=rep(mean(dX2),r2))
+     }
+    N1t=N1t - ome2[1]*Zt[(ist-b2):(N-b2)]
+    if(s2 > 0){
+       for (j in 1:s2){
+        N1t=N1t-ome2[j+1]*Zt[(ist-j-b2):(N-j-b2)]
+        }
+       }
+    }
+   N1=length(N1t)
+   re=N1t[(p+1):N1]
+   if(p > 0){
+      for (j in 1:p){
+         re=re-phi[j]*N1t[(p+1-j):(N1-j)]
+        }
+     }
+   #
+   if(q > 0)re=filter(re,theta,method="r",init=rep(0,q))
+   N1=length(re)
+   resi=re[(P*sea+1):N1]
+   if(P > 0){
+     for (j in 1:P){
+      resi=resi-Phi[j]*re[(P*sea+1-j*sea):(N1-j*sea)]
+      }
+     }
+    if(Q > 0){
+     f1=rep(0,sea*Q)
+     for (j in 1:Q){
+      f1[j*sea]=Theta[j]
+      }
+     resi=filter(resi,f1,method="r",init=rep(0,sea*Q))
+    }
+   Gaulike = resi
+ }
+
+### Obtain the N(t) series
+ Nts <- function(par,dY=dY,dX=dX,dX2=dX2,dW=dW,dC=dC,order1=order1,order2=order2){
+   r=order1[1]; s=order1[2]; b=order1[3]
+   r2=order2[1]; s2=order2[2]; b2=order2[3]
+   c0=par[1]
+   ome=par[2:(2+s)]
+   icnt=2+s
+   #
+   if(r > 0){del=par[(2+s+1):(2+s+r)]
+             icnt=2+s+r
+            }
+   if(!is.null(dC)){c1=par[icnt+1]
+                   icnt=icnt+1
+                  }
+   if(!is.null(dW)){c2=par[icnt+1]
+                   icnt=icnt+1
+                 }
+   if(!is.null(dX2)){
+              ome2=par[(icnt+1):(icnt+1+s2)]
+              icnt=icnt+1+s2
+        if(r2 > 0){
+             del2=par[(icnt+1):(icnt+r2)]
+             icnt=icnt+r2
+             }
+        }
+   N=length(dY)
+   N1t=dY-c0
+   Nt=dX
+   if(r > 0){
+     Nt=filter(dX,del,method="r",init=rep(mean(dX),r))
+    }
+   ##
+   ist=max(b+s+1,b2+s2+1)
+   N=length(Nt)
+   N1t=N1t[ist:N]-ome[1]*Nt[(ist-b):(N-b)]
+   if(s > 0){
+      for (j in 1:s){
+         N1t=N1t-ome[j+1]*Nt[(ist-j-b):(N-j-b)]
+        }
+     }
+   if(!is.null(dC))N1t=N1t-c1*dC[ist:N]
+   if(!is.null(dW)){N1t=N1t-c2*dW[ist:N]}
+   if(!is.null(dX2)){
+     Zt=dX2
+     if(r2 > 0){
+       Zt=filter(Zt,del2,method="r",init=rep(mean(dX2),r2))
+       }
+      N1t=N1t - ome2[1]*Zt[(ist-b2):(N-b2)]
+      if(s2 > 0){
+        for (j in 1:s2){
+         N1t=N1t-ome2[j+1]*Zt[(ist-b2-j):(N-b2-j)]
+         }
+        }
+     }
+   Nts=N1t
+  }
+####
+   ## r = 0 && r2=0, the model can be fitted by the regular "arima" command.
+   if((r==0) && (r2==0)){
+      ist=max(s+b,s2+b2)+1
+      nobe=N-ist+1
+      Y=dY[ist:N]
+      X=dX[(ist-b):(N-b)]
+      if(s > 0){
+         for (j in 1:s){
+            X=cbind(X,dX[(ist-b-j):(N-b-j)])
+         }
+      }
+      if(!is.null(dC)){X=cbind(X,dC[ist:N])}
+      if(!is.null(dW)){X=cbind(X,dW[ist:N])}
+      if(!is.null(dX2)){
+         X=cbind(X,dX2[(ist-b2):(N-b2)])
+         if(s2 > 0){
+           for (j  in 1:s2){
+             X=cbind(X,dX2[(ist-b2-j):(N-b2-j)])
+             }
+            }
+        }
+      X=as.matrix(X)
+      if(min(P,Q) > 0){
+       m1=arima(Y,order=c(p,0,q),seasonal=list(order=c(P,0,Q),period=sea),xreg=X)
+       }
+       else{
+        m1=arima(Y,order=c(p,0,q),xreg=X)
+      }
+     est=m1$coef; sigma2=m1$sigma2; residuals=m1$residuals; varcoef=m1$var.coef
+#### Changing the sign of the MA coefficients, if any.
+     if(q > 0){
+      for (j in 1:q){
+       loc=p+j
+       est[loc]=-est[loc]
+       }
+      }
+     if(Q > 0){
+       for (j in 1:Q){
+        loc=p+q+P+j
+        est[loc]=-est[loc]
+        }
+      }
+#### re-ordering the estimate for computing Nt series
+     jcnt=p+q+P+Q+1
+     est1=c(est[jcnt:(jcnt+ncol(X))],est[1:(jcnt-1)])
+###   
+      nx=dim(X)[2]
+      se=sqrt(diag(m1$var.coef))
+      coef.arma=NULL
+      se.arma=NULL
+      pq=p+q
+      if(pq > 0){
+         coef.arma=est[1:pq]
+         se.arma=se[1:pq]
+         p1=cbind(coef.arma,se.arma)
+         cat("Regular ARMA coefficients & s.e.:","\n")
+         print(t(p1),digits=3)
+         if(p > 0)phi=coef.arma[1:p]
+         if(q > 0)theta=coef.arma[(p+1):pq]
+      }
+      PQ=P+Q
+      if(PQ > 0){
+       coef.sea=est[(pq+1):(pq+PQ)]
+       se.sea=se[(pq+1):(pq+PQ)]
+       psea=cbind(coef.sea,se.sea)
+       cat("Seasonal ARMA coefficients & s.e.: ","\n")
+       print(t(psea),digits=3)
+       if(P > 0)Phi=coef.sea[1:P]
+       if(Q > 0)Theta=coef.sea[(P+1):PQ]
+      }
+      icnt=pq+PQ
+      v=est[(icnt+1):(icnt+1+nx)]
+      se.v=se[(icnt+1):(icnt+1+nx)]
+      pr=cbind(v,se.v)
+      cat("Transfer function coefficients & s.e.:","\n")
+      print(t(pr),digits=3)
+      cat("Sigma-square & sigma: ",c(sigma2,sqrt(sigma2)),"\n")
+      omega=v[1:(s+1)]
+      kcnt=s+1
+      if(!is.null(dC))kcnt=kcnt+1
+      if(!is.null(dW))kcnt=kcnt+1
+      Omega=v[(kcnt+1):nx]
+   est=est1
+   }
+   else{
+      ist=max(r,s)+1+b
+      ist1=max(r2,s2)+1+b2
+      ist=max(ist,ist1)
+      par=c(mean(dY[ist:N]))
+      par=c(par,rep(0.1,s+1))
+      par=c(par,rep(0.1,r))
+      if(!is.null(dC))par=c(par,.01)
+      if(!is.null(dW))par=c(par,.1)
+      if(!is.null(dX2)){
+       par=c(par,rep(0.1,s2+1))
+       par=c(par,rep(0.1,r2))
+       }
+      if(p > 0)par=c(par,rep(0.1,p))
+      if(q > 0)par=c(par,rep(0.01,q))
+      if(P > 0)par=c(par,rep(0.01,P))
+      if(Q > 0)par=c(par,rep(0.01,Q))
+      m11=nlm(Nlike,par,hessian=TRUE,dY=dY,dX=dX,dX2=dX2,dW=dW,dC=dC,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2)
+      est=m11$estimate
+      varcoef=solve(m11$hessian)
+      se=sqrt(diag(varcoef))
+      residuals=Gaulike(est,dY=dY,dX=dX,dX2=dX2,dW=dW,dC=dC,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2)
+      sigma2=var(residuals)
+      pq=p+q
+      PQ=P+Q
+      icnt=1+s+1+r
+      v=est[1:icnt]
+      se.v=se[1:icnt]
+      pr=cbind(v,se.v)
+      cat("First exogenous variable: ","\n")
+      cat("Delay: ",b,"\n")
+      cat("Transfer function coefficients & s.e.:","\n")
+      cat("in the order: constant, omega, and delta:",c(1,s+1,r),"\n")
+      print(t(pr),digits=3)
+      cnst=v[1]
+      omega=v[2:(s+2)]
+      if(r > 0)delta=v[(s+3):icnt]
+      if(!is.null(dC)){icnt=icnt+1
+       cat("co-integrated coefficient & se: ",c(est[icnt],se[icnt]),"\n")
+       }
+      if(!is.null(dW)){icnt=icnt+1
+        cat("Co-integration coefficient & se: ",c(est[icnt],se[icnt]),"\n")
+         }
+      if(!is.null(dX2)){
+       jcnt=1+s2+r2
+       v=est[(icnt+1):(icnt+jcnt)]
+       se.v=se[(icnt+1):(icnt+jcnt)]
+       pr=cbind(v,se.v)
+       cat("Second exogenous variable: ","\n")
+       cat("Delay: ",b2,"\n")
+       cat("The transfer function coefficients & s.e.:","\n")
+       cat("in the order: omega2 and delta2: ",c(s2+1,r2),"\n")
+       print(t(pr),digits=3)
+       Omega=v[1:(s2+1)]
+       if(r2 > 0)Delta=v[(2+s2):jcnt]
+       icnt=icnt+jcnt
+      }
+      if(pq > 0){
+         coef.arma=est[(icnt+1):(icnt+pq)]
+         se.arma=se[(icnt+1):(icnt+pq)]
+         p1=cbind(coef.arma,se.arma)
+         cat("Regular ARMA order:","\n")
+         print(c(p,dify,q))
+         cat("Regular ARMA coefficients & s.e.:","\n")
+         print(t(p1),digits=3)
+         icnt=icnt+pq
+         if(p > 0)phi=coef.arma[1:p]
+         if(q > 0)theta=coef.arma[(p+1):pq]
+        }
+      if(PQ > 0){
+        coef.sea=est[(icnt+1):(icnt+PQ)]
+        se.sea=se[(icnt+1):(icnt+PQ)]
+        ps=cbind(coef.sea,se.sea)
+        cat("Seasonal ARMA order: ","\n")
+        print(c(P,difys,Q))
+        cat("Seasonal ARMA coefficients & s.e.: ","\n")
+        print(t(ps),digits=3)
+        if(P > 0)Phi=coef.sea[1:P]
+        if(Q > 0)Theta=coef.sea[(P+1):PQ]
+       }
+    cat("Sigma-square & sigma: ",c(sigma2,sqrt(sigma2)),"\n")
+   }
+#
+   Nt = Nts(est,dY=dY,dX=dX,dX2=dX2,dW=dW,dC=dC,order1=order1,order2=order2)
+   
+   tfm2 <- list(estimate=est,sigma2=sigma2,residuals=residuals,varcoef=varcoef,Nt=Nt,rAR=phi,rMA=theta,sAR=Phi,sMA=Theta,
+omega=omega,delta=delta,omega2=Omega,delta2=Delta)
+}
+
+### Back-testing
+"Btfm2" <- function(y,x,x2=NULL,wt=NULL,ct=NULL,orderN=c(1,0,0),orderS=c(0,0,0),sea=12,order1=c(0,1,0),order2=c(0,-1,0),orig=(length(y)-1)){
+err=NULL
+r=order1[1]; s=order1[2]; b=order1[3]
+r2=order2[1]; s2=order2[2]; b2=order2[3]
+p = orderN[1]; dify=orderN[2]; q=orderN[3]
+P = orderS[1]; difys=orderS[2]; Q=orderS[3]
+dY=y; dX=x; dX2=x2; dW=wt; dC=ct
+if(dify > 0){
+      dY <- y[(dify+1):length(y)]-y[1:(length(y)-dify)]
+      dX <- x[(dify+1):length(x)]-x[1:(length(x)-dify)]
+      if(!is.null(x2)){
+        dX2 <- x2[(dify+1):length(x2)]-x2[1:(length(x2)-dify)]
+        }
+      if(!is.null(wt)){
+        dW <- wt[(dify+1):length(wt)] - wt[1:(length(wt)-dify)]
+        }
+      if(!is.null(ct)){
+        dC <- ct[(dify+1):length(ct)] - ct[1:(length(ct)-dify)]
+       }
+    }
+if(difys > 0){
+      lags=difys*sea
+      dY <- dY[(lags+1):length(dY)]-dY[1:(length(dY)-lags)]
+      dX <- dX[(lags+1):length(x)]-dX[1:(length(dX)-lags)]
+      if(!is.null(x2)){
+        dX2 <- dX2[(lags+1):length(dX2)]-dX2[1:(length(dX2)-lags)]
+        }
+      if(!is.null(wt)){
+        dW <- dW[(lags+1):length(dW)] - dW[1:(length(dW)-lags)]
+        }
+      if(!is.null(ct)){
+        dC <- dC[(lags+1):length(dC)] - dC[1:(length(dC)-lags)]
+       }
+    }
+   N = length(dY); N1=length(dX)
+   N=min(N,N1)
+   if(length(dX2) > 0)N=min(N,length(dX2))
+   if(length(dW) > 0) N=min(N,length(dW))
+   if(length(dC) > 0) N=min(N,length(dC))
+   orig=orig-dify-difys*sea
+## function to perform prediction: 1-step ahead only
+###
+fore1 <- function(par,dY=dY,dX=dX,dX2=x2p,dW=wtp,dC=ctp,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2,resi=resi){
+   p=orderN[1]; q=orderN[3]; r=order1[1]; s=order1[2]; b=order1[3]
+   r2=order2[2]; s2=order2[2]; b2=order2[3]; P=orderS[1]; Q=orderS[3]
+   c0=par[1]
+   ome=par[2:(2+s)]
+   #
+   if(r > 0)del=par[(2+s+1):(2+s+r)]
+   icnt=2+s+r
+   if(!is.null(dC)){c1=par[icnt+1]
+                  icnt=icnt+1
+                  }
+   if(!is.null(dW)){c2=par[icnt+1]
+                   icnt=icnt+1
+                   }
+   if(!is.null(dX2)){
+          ome2=par[(icnt+1):(icnt+1+s2)]
+          icnt=icnt+1+s2
+          if(r2 > 0){del2=par[(icnt+1):(icnt+r2)]
+                      icnt=icnt+r2
+                    }
+          }
+   if(p > 0){phi=par[(icnt+1):(icnt+p)]
+             icnt=icnt+p
+             }
+   if(q > 0){theta=par[(icnt+1):(icnt+q)]
+            icnt=icnt+q
+            }
+   if(P > 0){Phi=par[(icnt+1):(icnt+P)]
+             icnt=icnt+P
+            }
+   if(Q > 0){Theta=par[(icnt+1):(icnt+Q)]
+            }
+   N=length(dY)
+   tmp=dY-c0
+   Nt = dX
+   if(r > 0){
+     Nt=filter(dX,del,method="r",init=rep(mean(dX),r))
+     }
+   if(b == 0){
+     tmp=tmp-ome[1]*Nt
+     }else{
+     tmp=tmp-ome[1]*c(rep(0,b),Nt[1:(N-b)])
+     }
+   if(s > 0){
+    for (j in 1:s){
+     tmp=tmp-ome[j+1]*c(rep(0,b+j),Nt[1:(N-b-j)])
+     }
+    }
+   if(!is.null(dC))tmp=tmp-c1*dC
+   if(!is.null(dW))tmp=tmp-c2*dW
+   if(!is.null(dX2)){
+    Zt=dX2
+    if(r2 > 0){
+     Zt=filter(dX2,del2,method="r",init=rep(mean(dX2),r2))
+     }
+    tmp=tmp-ome2[1]*c(rep(0,b2),Zt[1:(N-b2)])
+    if(s2 > 0){
+       for (j in 1:s2){
+        tmp=tmp-ome2[j+1]*c(rep(0,j+b2),Zt[1:(N-j-b2)])
+        }
+       }
+    }
+### The next step is for prediction, starting with exogenous variables at time t+1.
+   pred=dY[N]-tmp[N]
+   if(p > 0){
+    for (j in 1:p){
+     pred=pred+phi[j]*tmp[N-j]
+     }
+    }
+   if(P > 0){
+     for (j in 1:P){
+      pred=pred+Phi[j]*tmp[N-j*sea]
+      }
+     }
+   if((p > 0)&&(P > 0)){
+     for (j in 1:P){
+       j1=j*sea
+       for (i in 1:p){
+        pred=pred-Phi[j]*phi[i]*tmp[N-j1-i]
+        }
+       }
+     }
+   if(q > 0){
+     for (j in 1:q){
+      pred=pred-theta[j]*resi[length(resi)+1-j]
+      }
+     }
+    if(Q > 0){
+     for (j in 1:Q){
+       pred=pred-Theta[j]*resi[length(resi)+1-j*sea]
+       }
+      }
+   if((q > 0)&&(Q > 0)){
+     for (j in 1:Q){
+      j1=j*sea
+      for (i in 1:q){
+       pred=pred+Theta[j]*theta[i]*resi[length(resi)+1-i-j1]
+       }
+      }
+    }
+   err=dY[N]-pred
+   err
+}
+###
+nT=length(dY)
+if(nT > orig){
+### Estimation
+for (it in orig:(nT-1)){
+  x2p=NULL; wtp=NULL; ctp = NULL
+  if(!is.null(x2))x2p=dX2[1:it]
+  if(!is.null(wt))wtp=dW[1:it]
+  if(!is.null(ct))ctp=dC[1:it]
+  m1 = tfm2(dY[1:it],dX[1:it],x2=x2p,wt=wtp,ct=ctp,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2,output=FALSE)
+  par=m1$estimate
+  Tp1=it+1
+  resi=m1$residuals
+  nr=length(resi)
+  if(nr < it){
+   resi=c(rep(0,it-nr),resi)
+  }
+### prediction via computing the residuals
+ x2p=NULL; wtp=NULL; ctp=NULL
+ if(!is.null(x2))x2p=dX2[1:Tp1]
+ if(!is.null(wt))wtp=dW[1:Tp1]
+ if(!is.null(ct))ctp=dC[1:Tp1]
+ error = fore1(par,dY=dY[1:Tp1],dX=dX[1:Tp1],dX2=x2p,dW=wtp,dC=ctp,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2,resi=resi)
+##
+ err=c(err,error)
+ }
+}
+ bias=mean(err); nf=length(err)
+ mse=mean(err^2); mae=mean(abs(err))
+ rmse=sqrt(mse)
+ cat("Forecast origin & number of forecasts: ",c(orig,nf),"\n")
+ cat("bias,  mse, rmse & MAE: ",c(bias, mse,rmse, mae),"\n")
+ Btfm2 <- list(ferror=err,mse=mse,rmse=rmse,mae=mae,nobf=nf)
 }
 
 ####
@@ -3785,17 +4340,18 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    ## plots the psi-weights
    if(plot){
       tdx=c(1:(lag+1))-1
-      par(mfcol=c(k,k))
+      par(mfcol=c(k,k),mai=c(0.3,0.3,0.3,0.3))
       gmax=max(WGT)
       gmin=min(WGT)
       cx=(gmax-gmin)/10
       gmax=gmax+cx
       gmin=gmin-cx
       for(j in 1:k^2){
-         plot(tdx,WGT[j,],type='l',xlab='lag',ylab='Psiwgt',ylim=c(gmin,gmax))
-         points(tdx,WGT[j,],pch='*')
+         plot(tdx,WGT[j,],type='l',xlab='lag',ylab='Psiwgt',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,WGT[j,],pch='*',cex=0.8)
          title(main="Psi-weights")
       }
+     par(mfcol=c(1,1))
     }
     PSIwgt <- list(psi.weight=PSI,irf=WGT)
   }
@@ -3822,17 +4378,18 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    ## plots the pi-weights
    if(plot){
       tdx=c(1:(lag+1))-1
-      par(mfcol=c(k,k))
+      par(mfcol=c(k,k),mai=c(0.3,0.3,0.3,0.3))
       gmax=max(WGT)
       gmin=min(WGT)
       cx=(gmax-gmin)/10
       gmax=gmax+cx
       gmin=gmin-cx
       for(j in 1:k^2){
-         plot(tdx,WGT[j,],type='l',xlab='lag',ylab='Piwgt',ylim=c(gmin,gmax))
-         points(tdx,WGT[j,],pch='*')
+         plot(tdx,WGT[j,],type='l',xlab='lag',ylab='Piwgt',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,WGT[j,],pch='*',cex=0.8)
          title(main="Pi-weights")
        }
+     par(mfcol=c(1,1))
      }
    PIwgt <- list(pi.weight=PImtx)
  }
@@ -3902,7 +4459,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    }
    ## plots the psi-weights
    tdx=c(1:(lag+1))-1
-   par(mfcol=c(k,k))
+   par(mfcol=c(k,k),mai=c(0.3,0.3,0.3,0.3))
    if(orth){
       gmax=max(WGT)
       gmin=min(WGT)
@@ -3910,8 +4467,8 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       gmax=gmax+cx
       gmin=gmin-cx
       for (j in 1:k^2){
-         plot(tdx,WGT[j,],type='l',xlab='lag',ylab='IRF',ylim=c(gmin,gmax))
-         points(tdx,WGT[j,],pch='*')
+         plot(tdx,WGT[j,],type='l',xlab='lag',ylab='IRF',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,WGT[j,],pch='*',cex=0.8)
          title(main='Orth. innovations')
       }
       cat("Press return to continue ","\n")
@@ -3922,8 +4479,8 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       gmax=gmax+cx
       gmin=gmin-cx
       for (j in 1:k^2){
-         plot(tdx,wk1[j,],type='l',xlab='lag',ylab="Acu-IRF",ylim=c(gmin,gmax))
-         points(tdx,wk1[j,],pch="*")
+         plot(tdx,wk1[j,],type='l',xlab='lag',ylab="Acu-IRF",ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,wk1[j,],pch="*",cex=0.8)
          title(main='Orth. innovations')
       }
    }
@@ -3934,8 +4491,8 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       gmax=gmax+cx
       gmin=gmin-cx
       for(j in 1:k^2){
-         plot(tdx,WGT[j,],type='l',xlab='lag',ylab='IRF',ylim=c(gmin,gmax))
-         points(tdx,WGT[j,],pch='*')
+         plot(tdx,WGT[j,],type='l',xlab='lag',ylab='IRF',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,WGT[j,],pch='*',cex=0.8)
          title(main="Orig. innovations")
       }
       cat("Press return to continue ","\n")
@@ -3946,11 +4503,12 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       gmax=gmax+cx
       gmin=gmin-cx
       for(j in 1:k^2){
-         plot(tdx,wk1[j,],type='l',xlab='lag',ylab='Acu-IRF',ylim=c(gmin,gmax))
-         points(tdx,wk1[j,],pch='*')
+         plot(tdx,wk1[j,],type='l',xlab='lag',ylab='Acu-IRF',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,wk1[j,],pch='*',cex=0.8)
          title(main="Orig. innovations")
       }
    }
+   par(mfcol=c(1,1))
    VARMAirf <- list(psi=PSI,irf=WGT)
  }
 
@@ -4767,7 +5325,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    refKronfit <- list(data=zt,Kindex=kidx,ARid=ARid,MAid=MAid,cnst=inc.mean,coef=Kpar,secoef=seKpar,residuals=at,Sigma=sig,aic=aic,bic=bic, Ph0=Ph0,Phi=PH,Theta=-TH)
 }
 
-"sVARMA" <- function(da,order,sorder,s,include.mean=T,fixed=NULL,details=F,switch=F){
+"sVARMA" <- function(da,order=c(0,0,0),sorder=c(0,0,0),s=12,include.mean=T,fixed=NULL,details=F,switch=F){
    # Estimation of a multiplicative vector ARMA model using conditional MLE (Gaussian dist)
    if(!is.matrix(da))da=as.matrix(da)
    p=order[1];d=order[2];q=order[3];P=sorder[1];D=sorder[2];Q=sorder[3]
@@ -5188,7 +5746,7 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
    sig=t(at)%*%at/(nT-istart+1)
    ll=dmvnorm(at,rep(0,k),sig)
    LLKsvarma=-sum(log(ll))
-   cat("test: ",LLKsvarma,"\n")
+####   cat("test: ",LLKsvarma,"\n")
    LLKsvarma
   }
  ## estimation
@@ -5669,12 +6227,10 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
    #This program predicts the VARX model.
    ## z(t) = c0 + sum_{i=1}^p phi_i * z(t-i) + \sum_{j=0}^m xt(t-j) + a(t).
    ##
-   zt=m1$data; xt=m1$xt; p=m1$aror; m=m1$m
-   Ph0=m1$Ph0; Phi=m1$Phi; Sig=m1$Sigma; beta=m1$beta
+   zt=as.matrix(m1$data); xt=as.matrix(m1$xt); p=m1$aror; m=m1$m
+   Ph0=as.matrix(m1$Ph0); Phi=as.matrix(m1$Phi); Sig=as.matrix(m1$Sigma); beta=as.matrix(m1$beta)
    include.m=m1$include.mean
    nT=dim(zt)[1]; k=dim(zt)[2]; dx=dim(xt)[2]
-   print(dim(Phi))
-   print(dim(beta))
    se=NULL
    if(length(Ph0) < 1)Ph0=matrix(rep(0,k),k,1)
    if(hstep < 1)hstep=1
@@ -5685,7 +6241,10 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
       ### calculate predictions
       h1=dim(newxt)[1]
       hstep=min(h1,hstep)
-      nzt=zt[1:orig,]; xt=rbind(xt[1:orig,],newxt)
+      nzt=as.matrix(zt[1:orig,])
+# xt=rbind(as.matrix(xt[1:orig,]),newxt)
+### changed made on 7/30/2014
+      xt=rbind(xt[1:orig,,drop=FALSE],newxt)
       for (i in 1:hstep){
          tmp=Ph0
          ti=orig+i
@@ -7872,7 +8431,7 @@ if((nc > 1) && (Jcnt > 0)){
   msqrt <- list(mtxsqrt=Mh,invsqrt=Mhinv)
 }
 
-"BVAR" <- function(z,p=1,C,V0,n0=5,Phi0=NULL,include.mean=TRUE){
+"BVAR" <- function(z,p=1,C,V0,n0=5,Phi0=NULL,include.mean=T){
 ## Perform Bayesian estimation of a VAR(p) model
 ##
 ## z: time series (T-by-k)
@@ -7920,6 +8479,14 @@ cat("Bayesian estimate:","\n")
 print(Est)
 cat("Covariance matrix: ","\n")
 print(BSig)
+cnst=NULL; Bphi=NULL
+if(include.mean){
+   cnst=Bbhat[1,]
+   Bphi=t(Bbhat[2:idim,])
+   }else{
+    Bphi=t(Bbhat)
+   }
+BVAR <- list(phi0=cnst,Phi=Bphi,residuals=bAhat,Sigma=BSig,p=p,priorm=Phi0,precision=C)
 }
 
 
@@ -8038,3 +8605,114 @@ print(Tst,digits=3)
 comVol <- list(residuals=x,values=m2$values,vectors=m2$vectors,M=Mmtx)
 }
 
+
+"GrangerTest" <- function (X, p = 1, include.mean = T, locInput=c(1)) 
+{
+    if (!is.matrix(X))X = as.matrix(X)
+    Tn = dim(X)[1]
+    k = dim(X)[2]
+## Re-ordering the components so that the input variables are in front.
+    idx=c(1:k)
+    if(is.null(locInput))locInput=c(1)
+    endog=idx[-locInput]
+    jdx=c(locInput,endog)
+    x=X[,jdx]
+    k1 = length(locInput)
+    k2=k-k1
+#
+    if (p < 1) 
+        p = 1
+    ne = Tn - p
+    ist = p + 1
+    y = x[ist:Tn, ]
+    if (include.mean) {
+        xmtx = cbind(rep(1, ne), x[p:(Tn - 1), ])
+    }
+    else {
+        xmtx = x[p:(Tn - 1), ]
+    }
+    if (p > 1) {
+        for (i in 2:p) {
+            xmtx = cbind(xmtx, x[(ist - i):(Tn - i), ])
+        }
+    }
+    ndim = dim(xmtx)[2]
+    res = NULL
+    xm = as.matrix(xmtx)
+    xpx = crossprod(xm, xm)
+    xpxinv = solve(xpx)
+    xpy = t(xm) %*% as.matrix(y)
+    beta = xpxinv %*% xpy
+    resi = y - xm %*% beta
+    sse = t(resi) %*% resi/(Tn - p - ndim)
+    C1 = kronecker(sse, xpxinv)
+    bhat = c(beta)
+    npar = length(bhat)
+    K = NULL
+    omega = NULL
+##### Locating the zero parameters based on Granger's causality
+    for (i in 1:k1) {
+      icnt=0
+      if(include.mean)icnt=icnt+1
+       for (ii in 1:p){
+        icnt=icnt+k1
+         for (j in 1:k2){
+            icnt=icnt+1
+            idx=rep(0,npar)
+            idx[icnt] = 1
+            K = rbind(K, idx)
+            omega = c(omega, bhat[icnt])
+            }
+          }
+       }
+    K = as.matrix(K)
+    v = dim(K)[1]
+    cat("Number of targeted zero parameters: ", v, "\n")
+    if (v > 0) {
+        C2 = K %*% C1 %*% t(K)
+        C2inv = solve(C2)
+        tmp = C2inv %*% as.matrix(omega, v, 1)
+        chi = sum(omega * tmp)
+        pvalue = 1 - pchisq(chi, v)
+        cat("Chi-square test for Granger Causality and p-value: ", c(chi, pvalue), 
+            "\n")
+    }
+### If p-value is large, perform the estimation of constrained model
+ if(pvalue >= 0.05){
+  ndim=p*k
+  fixed=matrix(1,ndim,k)
+  for (i in 1:k1){
+    icnt=0
+    for (ii in 1:p){
+      icnt=icnt+k1
+      fixed[(icnt+1):(icnt+k2),i]=0
+      }
+    }
+   if(include.mean){fixed=rbind(rep(0,k),fixed)}
+   m1=VAR(X,p=p,include.mean=include.mean,fixed=fixed)
+   coef=m1$coef
+   secoef=m1$secoef
+   aic=m1$aic
+   bic=m1$bic
+   hq=m1$hq
+   resi=m1$residuals
+   Sigma=m1$Sigma
+   Phi=m1$Phi
+   Ph0=m1$Ph0
+ }
+ else{
+   coef=beta
+   secoef=NULL
+   aic=NULL
+   bic=NULL
+   hq=NULL
+   Sigma=sse
+   Phi=NULL
+   Ph0=NULL
+   }
+#
+    GrangerTest <- list(data = X, cnst = include.mean, order = p, 
+        coef = coef, constraints = K, aic=aic, bic=bic, hq=hq, 
+        residuals=resi, secoef=secoef, Sigma=Sigma, 
+        Phi=Phi, Ph0=Ph0, omega = omega, covomega = C2, locInput=locInput)
+}

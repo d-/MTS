@@ -6,7 +6,7 @@
 use of Minnesota prior
 }
 \usage{
-BVAR(z,p=1,C,V0,n0=5,Phi0=NULL,include.mean=TRUE)
+BVAR(z,p=1,C,V0,n0=5,Phi0=NULL,include.mean=T)
 }
 \arguments{
   \item{z}{A matrix of vector time series, each column represents a series.

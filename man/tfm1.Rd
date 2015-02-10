@@ -1,9 +1,9 @@
 \name{tfm1}
 \alias{tfm1}
-\title{Transfer Function Model 1
+\title{Transfer Function Model one
 }
-\description{Estimation of a general transfer function model. The model is 
-for one input and one output.
+\description{Estimation of a general transfer function model. The model can only 
+handle one input and one output.
 }
 \usage{
 tfm1(y, x, orderN, orderX)
@@ -35,6 +35,11 @@ Forecasting and Control, 3rd edition, Prentice Hall, Englewood Cliffs, NJ.
 \author{Ruey S. Tsay
 }
 \seealso{tfm
+}
+\examples{
+##da=read.table("gasfur.txt")
+##y=da[,2]; x=da[,1]
+##m1=tfm1(y,x,orderX=c(1,2,3),orderN=c(2,0,0))
 }
 
 
