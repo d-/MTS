@@ -1,6 +1,6 @@
 \name{Btfm2}
 \alias{Btfm2}
-\title{Back-Test of Transfer Function Model two
+\title{Back-Test of a Transfer Function Model with Two Input Variables
 }
 \description{Perform back-test of transfer function model with 2 input variable. 
 For a specified tfm2 model and a given forecast origin, the command 
@@ -8,7 +8,8 @@ iterated between estimation and 1-step ahead prediction starting at the forecast
 until the (T-1)th observation, where T is the sample size.
 }
 \usage{
-Btfm2(y,x,x2=NULL,wt=NULL,ct=NULL,orderN=c(1,0,0),orderS=c(0,0,0), sea=12,order1=c(0,1,0),order2=c(0,-1,0),orig=(length(y)-1))
+Btfm2(y,x,x2=NULL,wt=NULL,ct=NULL,orderN=c(1,0,0),orderS=c(0,0,0),sea=12,
+order1=c(0,1,0),order2=c(0,-1,0),orig=(length(y)-1))
 }
 \arguments{
   \item{y}{Data vector of dependent variable
@@ -54,8 +55,6 @@ Forecasting and Control, 3rd edition, Prentice Hall, Englewood Cliffs, NJ.
 \author{Ruey S. Tsay
 }
 \seealso{tfm2
-}
-\examples{
 }
 
 

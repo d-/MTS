@@ -3,7 +3,7 @@
 \title{Transfer Function Model
 }
 \description{Estimates a transform function model. This program does not allow 
-rational transfer function model.
+rational transfer function model. It is a special case of tfm1 and tfm2.
 }
 \usage{
 tfm(y, x, b = 0, s = 1, p = 0, q = 0)

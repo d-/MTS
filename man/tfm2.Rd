@@ -1,13 +1,14 @@
 \name{tfm2}
 \alias{tfm2}
-\title{Transfer Function Model two
+\title{Transfer Function Model with Two Input Variables
 }
 \description{Estimation of a general transfer function model with two input variables. The model can 
 handle one output and up-to 2 input variables. The time series noise can assume multiplicative 
 seasonal ARMA models.
 }
 \usage{
-tfm2(y,x,x2=NULL,ct=NULL,wt=NULL,orderN=c(1,0,0),orderS=c(0,0,0),sea=12,order1=c(0,1,0),order2=c(0,-1,0))
+tfm2(y,x,x2=NULL,ct=NULL,wt=NULL,orderN=c(1,0,0),orderS=c(0,0,0),
+sea=12,order1=c(0,1,0),order2=c(0,-1,0))
 }
 \arguments{
   \item{y}{Data vector of dependent variable
@@ -58,8 +59,6 @@ Forecasting and Control, 3rd edition, Prentice Hall, Englewood Cliffs, NJ.
 \author{Ruey S. Tsay
 }
 \seealso{tfm, tfm1
-}
-\examples{
 }
 
 

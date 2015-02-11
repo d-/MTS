@@ -1,6 +1,6 @@
 \name{tfm1}
 \alias{tfm1}
-\title{Transfer Function Model one
+\title{Transfer Function Model with One Input
 }
 \description{Estimation of a general transfer function model. The model can only 
 handle one input and one output.

@@ -3344,7 +3344,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
     cat("Sigma-square & sigma: ",c(sigma2,sqrt(sigma2)),"\n")
    }
 #
-   Nt = Nts(est,dY=dY,dX=dX,dX2=dX2,dW=dW,dC=dC,order1=order1,order2=order2)
+   Nt <- Nts(est,dY=dY,dX=dX,dX2=dX2,dW=dW,dC=dC,order1=order1,order2=order2)
    
    tfm2 <- list(estimate=est,sigma2=sigma2,residuals=residuals,varcoef=varcoef,Nt=Nt,rAR=phi,rMA=theta,sAR=Phi,sMA=Theta,
 omega=omega,delta=delta,omega2=Omega,delta2=Delta)
@@ -3505,7 +3505,7 @@ for (it in orig:(nT-1)){
   if(!is.null(x2))x2p=dX2[1:it]
   if(!is.null(wt))wtp=dW[1:it]
   if(!is.null(ct))ctp=dC[1:it]
-  m1 = tfm2(dY[1:it],dX[1:it],x2=x2p,wt=wtp,ct=ctp,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2,output=FALSE)
+  m1 = tfm2(dY[1:it],dX[1:it],x2=x2p,wt=wtp,ct=ctp,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2)
   par=m1$estimate
   Tp1=it+1
   resi=m1$residuals
