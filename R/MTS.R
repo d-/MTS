@@ -168,7 +168,7 @@
       # end of if(output)
    }
    
-   VAR<-list(data=x,cnst=include.mean,order=p,coef=beta,aic=aic,bic=bic,hq=hq,residuals=res,secoef=sdbeta,Sigma=sse,Phi=Phi,Ph0=Ph0)
+   VAR<-list(data=x,cnst=include.mean,order=p,coef=beta,aic=aic,bic=bic,hq=hq,residuals=res,secoef=sdbeta,Sigma=sse,Phi=Phi,Ph0=Ph0,fixed=fixed)
 }
 
 #####
@@ -244,7 +244,7 @@
    
    mm=VAR(x,p,output=T,include.mean=cnst,fixed=fix)
    
-   refVAR <- list(data=mm$data,order=p,cnst=cnst,coef=mm$coef,aic=mm$aic,bic=mm$bic,hq=mm$hq,residuals=mm$residuals,secoef=mm$secoef,Sigma=mm$Sigma,Phi=mm$Phi,Ph0=mm$Ph0)
+   refVAR <- list(data=mm$data,order=p,cnst=cnst,coef=mm$coef,aic=mm$aic,bic=mm$bic,hq=mm$hq,residuals=mm$residuals,secoef=mm$secoef,Sigma=mm$Sigma,Phi=mm$Phi,Ph0=mm$Ph0,fixed=fix)
 }
 
 ######
@@ -355,7 +355,7 @@
       # end of if(output)
    }
    
-   VARs<-list(data=x,lags=lags,order=p,cnst=include.mean,coef=beta,aic=aic,bic=bic,residuals=res,secoef=sdbeta,Sigma=sse,Phi=Phi,Ph0=Ph0)
+   VARs<-list(data=x,lags=lags,order=p,cnst=include.mean,coef=beta,aic=aic,bic=bic,residuals=res,secoef=sdbeta,Sigma=sse,Phi=Phi,Ph0=Ph0,fixed=fixed)
    
 }
 
@@ -431,7 +431,7 @@
    
    mm=VARs(x,lags,include.mean=cnst,output=T,fixed=fix)
    
-   refVARs <- list(data=x,lags=lags,cnst=cnst,coef=mm$coef,aic=mm$aic,bic=mm$bic,residuals=mm$residuals,secoef=mm$secoef,Sigma=mm$Sigma,Phi=mm$Phi,Ph0=mm$Ph0)
+   refVARs <- list(data=x,lags=lags,cnst=cnst,coef=mm$coef,aic=mm$aic,bic=mm$bic,residuals=mm$residuals,secoef=mm$secoef,Sigma=mm$Sigma,Phi=mm$Phi,Ph0=mm$Ph0,fixed=fix)
 }
 
 
@@ -552,7 +552,7 @@
    ksq=k*k
    if(maxp < 1)maxp=1
    enob=nT-maxp
-   y=x1[(maxp+1):nT,]
+   y=x1[(maxp+1):nT, , drop=FALSE]
    ist=maxp+1
    xmtx=cbind(rep(1,enob),x1[maxp:(nT-1),])
    if(maxp > 1){
@@ -645,7 +645,7 @@
       idm=k*p+1
       ist=p+1
       enob=nT-p
-      y=as.matrix(x1[ist:nT,])
+      y=as.matrix(x1[ist:nT, , drop=FALSE])
       xmtx=rep(1,enob)
       for (j in 1:p){
          xmtx=cbind(xmtx,x1[(ist-j):(nT-j),])
@@ -739,7 +739,7 @@
    VARpsi <- list(psi=Si)
 }
 
-"VARpred" <- function(model,h=1,orig=0,Out.level=F){
+"VARpred" <- function(model,h=1,orig=0,Out.level=FALSE,output=TRUE){
    # Computes the i=1, 2, ..., h-step ahead predictions of a VAR(p) model.
    # Phi=[phi1,phi2,phi3, ....] coefficient matrix
    # cnst= constant term
@@ -754,7 +754,7 @@
    #
    # model is a VAR output object.
    # Out.level : control the details of output.
-   #
+   # output: Control printing forecast results
    x=model$data
    Phi=model$Phi
    sig=model$Sigma
@@ -877,6 +877,7 @@
       MSE=MSE+Sig
       mse=rbind(mse,sqrt(diag(MSE)))
    }
+  if(output){
    cat("Forecasts at origin: ",orig,"\n")
    print(px[(orig+1):(orig+h),],digits=4)
    cat("Standard Errors of predictions: ","\n")
@@ -884,6 +885,7 @@
    pred=px[(orig+1):(orig+h),]
    cat("Root mean square errors of predictions: ","\n")
    print(mse[1:h,],digits=4)
+   }
    if(orig < nT){
       cat("Observations, predicted values,     errors, and MSE","\n")
       tmp=NULL
@@ -902,7 +904,7 @@
       print(round(tmp,4))
    }
    
-   VARpred <- list(pred=pred,se.err=se,mse=mse)
+   VARpred <- list(pred=pred,se.err=se,rmse=mse)
 }
 
 
@@ -1591,7 +1593,7 @@
      
    mm=VMA(x,q=q,include.mean=cnst,fixed=fix,beta=coef,sebeta=secoef)
    
-   refVMA <- list(data=x,MAorder=q,cnst=cnst,coef=mm$coef,secoef=mm$secoef,residuals=mm$residuals,Sigma=mm$Sigma,aic=mm$aic,bic=mm$bic,mu=mm$mu,Theta=mm$Theta)
+   refVMA <- list(data=x,MAorder=q,cnst=cnst,coef=mm$coef,secoef=mm$secoef,residuals=mm$residuals,Sigma=mm$Sigma,aic=mm$aic,bic=mm$bic,mu=mm$mu,Theta=mm$Theta,fixed=fix)
   }
 
 ####
@@ -1911,7 +1913,7 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
       seTH=rbind(secnt,seTH)
    }
    
-   VMAs <- list(data=da,MAlags=MAlag,cnst=include.mean,coef=TH,secoef=seTH,residuals=at,aic=aic,bic=bic,Sigma=sig,Theta=Theta,mu=cnt,MAorder=q)
+   VMAs <- list(data=da,MAlags=MAlag,cnst=include.mean,coef=TH,secoef=seTH,residuals=at,aic=aic,bic=bic,Sigma=sig,Theta=Theta,mu=cnt,MAorder=q,fixed=fixed)
 }
 
 
@@ -1953,7 +1955,7 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
    
    mm=VMAs(x,malags,include.mean=cnst,fixed=fix)
    
-   refVMAs <- list(data=x,MAlags=malags,cnst=cnst,coef=mm$coef,secoef=mm$secoef,residuals=mm$residuals,aic=mm$aic,bic=mm$bic,Sigma=mm$Sigma,Theta=mm$Theta,mu=mm$mu,MAorder=mm$MAorder)
+   refVMAs <- list(data=x,MAlags=malags,cnst=cnst,coef=mm$coef,secoef=mm$secoef,residuals=mm$residuals,aic=mm$aic,bic=mm$bic,Sigma=mm$Sigma,Theta=mm$Theta,mu=mm$mu,MAorder=mm$MAorder,fixed=fix)
 }
 
 #####
@@ -2789,9 +2791,13 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       for (i in 1:s){
          X=cbind(X,x[(s+1-i):(nT-b-i)])
       }
+     nx=ncol(X)
+     m1=arima(y1,order=c(p,0,q),xreg=X)
+    }
+   if(s == 0){
+    nx = 1
+    m1 = arima(y1,order=c(p,0,q),xreg=X)
    }
-   nx=ncol(X)
-   m1=arima(y1,order=c(p,0,q),xreg=X)
    se=sqrt(diag(m1$var.coef))
    coef.arma=NULL
    se.arma=NULL
@@ -2814,6 +2820,8 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    
    tfm <- list(coef=v,se.coef=se.v,coef.arma=coef.arma,se.arma=se.arma,nt=nt,residuals=res)
   }
+
+
 
 ####
 "tfm1" <- function(y,x,orderN,orderX){
@@ -2972,6 +2980,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    
    tfm1 <- list(estimate=est,sigma2=sigma2,residuals=residuals,varcoef=varcoef, Nt=Nt)
 }
+
 "tfm2" <- function(y,x,x2=NULL,ct=NULL,wt=NULL,orderN=c(1,0,0),orderS=c(0,0,0),sea=12,order1=c(0,1,0),order2=c(0,-1,0)){
    ## Estimation of a transfer function model with TWO exogenous variables
    ### The model is Y_t- c0 -c1*c_t -c2*w_t - w(B)/d(B)X_t  - W(b)/D(B)X_{2t} = theta(B)*Theta(B)/[phi(B)*Phi(B)]a_t.
@@ -3035,7 +3044,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
 
  Gaulike <- function(par,dY=dY,dX=dX,dX2=dX2,dW=dW,dC=dC,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2){
    p=orderN[1]; q=orderN[3]; r=order1[1]; s=order1[2]; b=order1[3]; P=orderS[1]; Q=orderS[3]
-   r2=order2[2]; s2=order2[2]; b2=order2[3]
+   r2=order2[1]; s2=order2[2]; b2=order2[3]
    c0=par[1]
    ome=par[2:(2+s)]
    #
@@ -3199,7 +3208,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
             }
         }
       X=as.matrix(X)
-      if(min(P,Q) > 0){
+      if(max(P,Q) > 0){
        m1=arima(Y,order=c(p,0,q),seasonal=list(order=c(P,0,Q),period=sea),xreg=X)
        }
        else{
@@ -3395,7 +3404,7 @@ if(difys > 0){
 ###
 fore1 <- function(par,dY=dY,dX=dX,dX2=x2p,dW=wtp,dC=ctp,orderN=orderN,orderS=orderS,sea=sea,order1=order1,order2=order2,resi=resi){
    p=orderN[1]; q=orderN[3]; r=order1[1]; s=order1[2]; b=order1[3]
-   r2=order2[2]; s2=order2[2]; b2=order2[3]; P=orderS[1]; Q=orderS[3]
+   r2=order2[1]; s2=order2[2]; b2=order2[3]; P=orderS[1]; Q=orderS[3]
    c0=par[1]
    ome=par[2:(2+s)]
    #
@@ -5289,7 +5298,7 @@ for (it in orig:(nT-1)){
    cat("aic= ",aic,"\n")
    cat("bic= ",bic,"\n")
     
-   Kronfit <- list(data=da,Kindex=kidx,ARid=ARid,MAid=MAid,cnst=include.mean,coef=Kpar,secoef=seKpar,residuals=at,Sigma=sig,aic=aic,bic=bic, Ph0=Ph0,Phi=PH,Theta=-TH)
+   Kronfit <- list(data=da,Kindex=kidx,ARid=ARid,MAid=MAid,cnst=include.mean,coef=Kpar,secoef=seKpar,residuals=at,Sigma=sig,aic=aic,bic=bic, Ph0=Ph0,Phi=PH,Theta=-TH,const=Cnt)
 }
 
 "refKronfit" <- function(model,thres=1.0){
@@ -5321,8 +5330,9 @@ for (it in orig:(nT-1)){
    PH=m1$Phi
    TH=-m1$Theta
    at=m1$residuals
+   Cnt=m1$const
    
-   refKronfit <- list(data=zt,Kindex=kidx,ARid=ARid,MAid=MAid,cnst=inc.mean,coef=Kpar,secoef=seKpar,residuals=at,Sigma=sig,aic=aic,bic=bic, Ph0=Ph0,Phi=PH,Theta=-TH)
+   refKronfit <- list(data=zt,Kindex=kidx,ARid=ARid,MAid=MAid,cnst=inc.mean,coef=Kpar,secoef=seKpar,residuals=at,Sigma=sig,aic=aic,bic=bic, Ph0=Ph0,Phi=PH,Theta=-TH,const=Cnt)
 }
 
 "sVARMA" <- function(da,order=c(0,0,0),sorder=c(0,0,0),s=12,include.mean=T,fixed=NULL,details=F,switch=F){
@@ -6179,6 +6189,10 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
       cat("Coefficients of exogenous","\n")
       Beta=t(beta[(icnt+1):(icnt+(m+1)*kx),])
       seBeta=t(se.beta[(icnt+1):(icnt+(m+1)*kx),])
+      if(kx == 1){
+       Beta=t(Beta)
+       seBeta=t(seBeta)
+       }
       for (i in 0:m){
          jdx=i*kx
          cat("lag-",i," coefficient matrix","\n")
@@ -6218,7 +6232,7 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
    sig=mm$Sigma; coef=mm$beta; se.coef=mm$se.coef
    
    refVARX <- list(data=zt,aror=p,xt=xt,m=m,Ph0=Ph0,Phi=Phi,beta=Beta,residuals=resi,Sigma=sig,
-   coef=beta,se.coef=se.beta,include.mean=include.m)
+   coef=coef,se.coef=se.coef,include.mean=include.m)
 }
 
 ##### Prediction of VARX models.
@@ -6244,7 +6258,13 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
       nzt=as.matrix(zt[1:orig,])
 # xt=rbind(as.matrix(xt[1:orig,]),newxt)
 ### changed made on 7/30/2014
-      xt=rbind(xt[1:orig,,drop=FALSE],newxt)
+### changed made on 3/5/2015
+      if(dx > 1){
+        xt=rbind(xt[1:orig,,drop=FALSE],newxt)
+	}
+	else{
+	 xt=as.matrix(c(c(xt[1:orig,]),c(newxt)))
+	 }
       for (i in 1:hstep){
          tmp=Ph0
          ti=orig+i
@@ -6286,6 +6306,7 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
       cat("Need new data for input variables!","\n")
    }
    #
+return <- list(pred=nzt[(orig+1):(orig+hstep),],se=se[1:hstep,],orig=orig,h=hstep)
 }
 ############################
 "VARXorder" <- function(x,exog,maxp=13,maxm=3,output=T){
@@ -6990,16 +7011,21 @@ lRegts <- function(par,zt=zt,xt=xt,p=p,include.mean=include.mean,fixed=fixed){
    SCMid <- list(Nmtx=zeroTbl,DDmtx=diagDif)
  }
 
+
 ##### Second-stage of specifiction ##################################################
 "SCMid2" <- function(zt,maxp=2,maxq=2,h=0,crit=0.05,sseq=NULL){
 ### Identify details of specified SCMs. This is a second-step specification.
 ### sseq denotes the sequence of orders (m,j) for searching SCMs.
+#### Written by Ruey Tsay in June 2012.
+#### Updated by Ruey S. Tsay in October 2013
+#### Updated by Ruey S. Tsay in March, 2015
 ####
 if(!is.matrix(zt))zt=as.matrix(zt)
 nT=dim(zt)[1]
 k=dim(zt)[2]
 nar=maxp+1; nma=maxq+1; Order=matrix(0,k,2)
 cmax=max((maxp+1)*k*k*k,100)
+####
 maxpq=maxp+maxq
 if(length(sseq) < 1){
 ## set default sequence to find SCMs
@@ -7008,9 +7034,12 @@ if(length(sseq) < 1){
    for (jj in 0:ell){
      m=ell-jj; j=jj
      if( (m <= maxp) && (j <= maxq)){sseq=rbind(sseq,c(m,j))}
+     #end of jj-loop
      }
+    #end of ell-loop
     }
-   }
+   #end of if(length(sseq) < 1)
+  }
 tcases=dim(sseq)[1]  ## The total number of SCM orders to be tested.
 ## wkspace: storage space to store genuine eigenvectors. 
 wkspace=matrix(0,tcases,cmax)
@@ -7070,8 +7099,10 @@ for (jj in 1:k1){
    for (ij in 2:(j+1)){
     d1=d1+2*m1a$acf[ij]*m1b$acf[ij]
    }
+  # end of if(j > 0)
   }
   dsq[jj]=d1
+ ## end of jj-loop
  }
 
 #### Since dsq is only valid for stationary series, we set an upper limit.
@@ -7105,6 +7136,7 @@ print(re1)
 cat("Summary:","\n")
 cat("Number of SCMs detected: ",icnt,"\n")
 Nscm[nc]=icnt; wk1 = NULL; n12=0
+###
 #####cat("Nscm[nc]", Nscm[nc],"\n")
 if(icnt > 0){
  ldx=rev(c((k1-icnt+1):k1))
@@ -7141,9 +7173,12 @@ if((nc > 1) && (Jcnt > 0)){
       }
      wk2=cbind(wk2,wk3)
      }
+###   
      n12=dim(wk2)[2]
      if(icnt <= n12){
-      cat("No new SCM found.","\n")}
+      cat("No new SCM found.","\n")
+      ngenu = 0
+      }
       else{
        chknew=cancor(wk1,wk2)
        xcoef=as.matrix(chknew$xcoef)
@@ -7159,6 +7194,7 @@ if((nc > 1) && (Jcnt > 0)){
       cat("Vectors: ","\n")
       print(wk1,digits=3)
       }
+###
 ##  Checking for possible exchangeable SCM 
    if(ngenu > 0){
     iexch = 0       
@@ -7167,6 +7203,7 @@ if((nc > 1) && (Jcnt > 0)){
      if((m1+j2)==(m+j)){
        wcnt=Nscm[j1]; leng=(m1+1)*k*wcnt
        wvector = matrix(wkspace[j1,1:leng],(m1+1)*k,wcnt)
+#
        if((wcnt > 0) && (j2 > j)){
            wk2 = rbind(wvector,matrix(0,(m-m1)*k,wcnt)); wk3=wk1}
         else{ij=dim(wk1)[1]; wk2 = wvector[1:ij,]; wk3=wk1}
@@ -7183,6 +7220,7 @@ if((nc > 1) && (Jcnt > 0)){
         } # end of (m1+j2) == m+j
       }  ##end of for-loop
      } ## end of if(ngenu > 0)   
+####
    }### end of (if (nc > 1) && (Jcnt > 0))
     newSCM=icnt-n12
     if(newSCM > 0){
@@ -7196,19 +7234,24 @@ if((nc > 1) && (Jcnt > 0)){
     Nscm[nc]=icnt
     Jcnt=Jcnt+icnt
     leng=(m+1)*k*icnt
-    if(leng > 0){wkspace[nc,1:leng] = c(wk1)}
-    Tmx=cbind(Tmx,wk1[1:k,])
-  } ### end of for-loop
+    if(leng > 0){wkspace[nc,1:leng] = c(wk1)} ### 
+### 
+###    cat("Nscm: ", Nscm[1:nc],"\n")
+    if(icnt > 0){Tmx=cbind(Tmx,wk1[1:k,])}
+#####    cat("dim: ",c(ncol(Tmx),ncol(wk1)),"\n")
+ } ### end of for-loop
+#
    cat("SUMMARY:","\n")
    cat("Overall model: ",apply(Order,2,max),"\n")
    cat("Orders of SCM: ","\n")
    print(Order)
-    cat("Transformation Matrix: ","\n")
+    cat("Transformation Matrix (Column): ","\n")
     print(Tmx,digits=3)
 
   SCMid2 <- list(Tmatrix = t(Tmx),SCMorder=Order)
- }
+}
 
+##############################
 "SCMmod" <- function(order,Ivor,output){
    ## Parameter specification for a given set of SCMs and indicator of T-matrix.
    ## order is a k-by-2 matrix of the orders of SCMs.
@@ -8620,8 +8663,7 @@ comVol <- list(residuals=x,values=m2$values,vectors=m2$vectors,M=Mmtx)
     k1 = length(locInput)
     k2=k-k1
 #
-    if (p < 1) 
-        p = 1
+    if (p < 1)p = 1
     ne = Tn - p
     ist = p + 1
     y = x[ist:Tn, ]
@@ -8682,13 +8724,13 @@ comVol <- list(residuals=x,values=m2$values,vectors=m2$vectors,M=Mmtx)
   ndim=p*k
   fixed=matrix(1,ndim,k)
   for (i in 1:k1){
-    icnt=0
     for (ii in 1:p){
+      icnt=(ii-1)*k
       icnt=icnt+k1
       fixed[(icnt+1):(icnt+k2),i]=0
       }
     }
-   if(include.mean){fixed=rbind(rep(0,k),fixed)}
+   if(include.mean){fixed=rbind(rep(1,k),fixed)}
    m1=VAR(X,p=p,include.mean=include.mean,fixed=fixed)
    coef=m1$coef
    secoef=m1$secoef
@@ -8716,3 +8758,518 @@ comVol <- list(residuals=x,values=m2$values,vectors=m2$vectors,M=Mmtx)
         residuals=resi, secoef=secoef, Sigma=Sigma, 
         Phi=Phi, Ph0=Ph0, omega = omega, covomega = C2, locInput=locInput)
 }
+
+#####
+"VARXirf" <- function(model,lag=12,orth=TRUE){
+   # Computes impulse response function of a given VARX(p,m) model.
+   # The model must be an object from the VARX command
+   #
+   Phi <- model$Phi
+   beta <- model$beta
+   p <- model$aror
+   xorder <- model$m
+   Sig <- model$Sigma
+   xt <- model$xt
+###
+   if(!is.matrix(Phi))Phi=as.matrix(Phi)
+   if(!is.matrix(Sig))Sig=as.matrix(Sig)
+   if(!is.matrix(beta))beta <- as.matrix(beta)
+   kx <- ncol(beta)/(1+xorder)
+#### The impulse response function of the pure VAR-part
+   # Compute MA representions: This gives impulse response function without considering Sigma.
+   k=nrow(Phi)
+###
+   Si=diag(rep(1,k))
+   wk=c(Si)
+   ## acuwk: accumulated response
+   awk=c(wk)
+   acuwk=c(awk)
+   if(p < 1) p =1
+   if(lag < 1) lag=1
+   #
+   for (i in 1:lag){
+      if (i <= p){
+         idx=(i-1)*k
+         tmp=Phi[,(idx+1):(idx+k)]
+      }
+      else{
+         tmp=matrix(0,k,k)
+      }
+      #
+      jj=i-1
+      jp=min(jj,p)
+      if(jp > 0){
+         for(j in 1:jp){
+            jdx=(j-1)*k
+            idx=(i-j)*k
+            w1=Phi[,(jdx+1):(jdx+k)]
+            w2=Si[,(idx+1):(idx+k)]
+            tmp=tmp+w1%*%w2
+            ##print(tmp,digits=4)
+         }
+      }
+      Si=cbind(Si,tmp)
+      wk=cbind(wk,c(tmp))
+      awk=awk+c(tmp)
+      acuwk=cbind(acuwk,awk)
+      ##print(Si,digits=3)
+   }
+   # Compute the impulse response of orthogonal innovations
+   orSi=NULL
+   wk1=NULL
+   awk1=NULL
+   acuwk1=NULL
+   if(orth){
+      m1=chol(Sig)
+      P=t(m1)
+      wk1=cbind(wk1,c(P))
+      awk1=wk1
+      acuwk1=wk1
+      orSi=cbind(orSi,P)
+      for(i in 1:lag){
+         idx=i*k
+         w1=Si[,(idx+1):(idx+k)]
+         w2=w1%*%P
+         orSi=cbind(orSi,w2)
+         wk1=cbind(wk1,c(w2))
+         awk1=awk1+c(w2)
+         acuwk1=cbind(acuwk1,awk1)
+      }
+   }
+   
+   tdx=c(1:(lag+1))-1
+   par(mfcol=c(k,k),mai=c(0.3,0.3,0.3,0.3))
+   if(orth){
+      gmax=max(wk1)
+      gmin=min(wk1)
+      cx=(gmax-gmin)/10
+      gmax=gmax+cx
+      gmin=gmin-cx
+      for (j in 1:k^2){
+         plot(tdx,wk1[j,],type='l',xlab='lag',ylab='IRF',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,wk1[j,],pch='*',cex=0.8)
+         title(main='IRF, Orth. innovations')
+      }
+      cat("Press return to continue ","\n")
+      readline()
+      gmax=max(acuwk1)
+      gmin=min(acuwk1)
+      cx=(gmax-gmin)/10
+      gmax=gmax+cx
+      gmin=gmin-cx
+      for (j in 1:k^2){
+         plot(tdx,acuwk1[j,],type='l',xlab='lag',ylab="Acu-IRF",ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,acuwk1[j,],pch="*",cex=0.8)
+         title(main='Cumulative IRF, Orth. innovations')
+      }
+   }
+   else{
+      gmax=max(wk)
+      gmin=min(wk)
+      cx=(gmax-gmin)/10
+      gmax=gmax+cx
+      gmin=gmin-cx
+      for(j in 1:k^2){
+         plot(tdx,wk[j,],type='l',xlab='lag',ylab='IRF',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,wk[j,],pch='*',cex=0.8)
+         title(main="IRF, Orig. innovations")
+      }
+      cat("Press return to continue ","\n")
+      readline()
+      gmax=max(acuwk)
+      gmin=min(acuwk)
+      cx=(gmax-gmin)/10
+      gmax=gmax+cx
+      gmin=gmin-cx
+      for(j in 1:k^2){
+         plot(tdx,acuwk[j,],type='l',xlab='lag',ylab='Acu-IRF',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,acuwk[j,],pch='*',cex=0.8)
+         title(main="Cumulative IRF, Orig. innovations")
+      }
+   }
+##### Compute the impulse response function of the exogenous variables
+  PsiX <- beta[,1:kx]
+  wk <- c(PsiX)
+  awk <- wk
+  acuwk <- wk
+###
+   for (i in 1:lag){
+      if (i <= xorder){
+         idx=i*kx
+         tmp=beta[,(idx+1):(idx+kx)]
+      }
+      else{
+         tmp=matrix(0,k,kx)
+      }
+      #
+      jj=i-1
+      jp=min(jj,p)
+      if(jp > 0){
+         for(j in 1:jp){
+            jdx=(j-1)*k
+            idx=(i-j)*kx
+            w1=Phi[,(jdx+1):(jdx+k)]
+            w2=Si[,(idx+1):(idx+kx)]
+            tmp=tmp+w1%*%w2
+            ##print(tmp,digits=4)
+         }
+      }
+      PsiX=cbind(PsiX,tmp)
+      wk=cbind(wk,c(tmp))
+      awk=awk+c(tmp)
+      acuwk=cbind(acuwk,awk)
+      ##print(PsiX,digits=3)
+   }
+### Plotting 
+ cat("Press return for impulse response of exogenous variables: ","\n")
+ readline()
+   par(mfcol=c(k,kx),mai=c(0.3,0.3,0.3,0.3))
+      gmax=max(wk)
+      gmin=min(wk)
+      cx=(gmax-gmin)/10
+      gmax=gmax+cx
+      gmin=gmin-cx
+      for(j in 1:(k*kx)){
+         plot(tdx,wk[j,],type='l',xlab='lag',ylab='IRF',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,wk[j,],pch='*',cex=0.8)
+         title(main="IRF of Exogenous Var.")
+      }
+      cat("Press return to continue ","\n")
+      readline()
+      gmax=max(acuwk)
+      gmin=min(acuwk)
+      cx=(gmax-gmin)/10
+      gmax=gmax+cx
+      gmin=gmin-cx
+      for(j in 1:k*kx){
+         plot(tdx,acuwk[j,],type='l',xlab='lag',ylab='Acu-IRF',ylim=c(gmin,gmax),cex.axis=0.8)
+         points(tdx,acuwk[j,],pch='*',cex=0.8)
+         title(main="Cumulative IRF of X-variables")
+      }
+###   
+
+   VARXirf <- list(irf=Si,orthirf=orSi,irfX=PsiX)
+}
+
+#####
+"backtest" <- function(m1,rt,orig,h,xre=NULL,fixed=NULL,inc.mean=TRUE,reest=1){
+# m1: is a time-series model object
+# orig: is the starting forecast origin
+# rt: the time series
+# xre: the independent variables
+# h: forecast horizon
+# fixed: parameter constriant
+# inc.mean: flag for constant term of the model.
+# reest: the number of new observations required for model re-estimation
+#         The default is 1 so that the model is re-estimated every time.
+##
+regor=c(m1$arma[1],m1$arma[6],m1$arma[2])
+seaor=list(order=c(m1$arma[3],m1$arma[7],m1$arma[4]),period=m1$arma[5])
+T=length(rt)
+if(orig > T)orig=T
+if(h < 1) h=1
+rmse=rep(0,h)
+mabso=rep(0,h)
+nori=T-orig
+err=matrix(0,nori,h)
+fcst=matrix(0,nori,h)
+jlast=T-1
+#### The next line to ensure that the model is estimated at the beginning forecast origin
+ireest <- reest
+for (n in orig:jlast){
+ jcnt=n-orig+1
+ x=rt[1:n]
+ if (is.null(xre))pretor=NULL else pretor=xre[1:n]
+ if(ireest == reest){
+  mm=arima(x,order=regor,seasonal=seaor,xreg=pretor,fixed=fixed,include.mean=inc.mean)
+  ireest <- 0
+  }else{
+   ireest <- ireest+1}
+ if (is.null(xre)) {nx=NULL}else{nx=xre[(n+1):(n+h)]}
+ fore=predict(mm,h,newxreg=nx)
+ kk=min(T,(n+h))
+# nof is the effective number of forecats at the forecast origin n.
+ nof=kk-n
+ pred=fore$pred[1:nof]
+ obsd=rt[(n+1):kk]
+ err[jcnt,1:nof]=obsd-pred
+ fcst[jcnt,1:nof]=pred
+}
+#
+for (i in 1:h){
+iend=nori-i+1
+tmp=err[1:iend,i]
+mabso[i]=sum(abs(tmp))/iend
+rmse[i]=sqrt(sum(tmp^2)/iend)
+}
+print("RMSE of out-of-sample forecasts")
+print(rmse)
+print("Mean absolute error of out-of-sample forecasts")
+print(mabso)
+backtest <- list(origin=orig,error=err,forecasts=fcst,rmse=rmse,mabso=mabso,reest=reest)
+}
+
+####
+"REGtspred" <- function(model,newxt,h=1,orig=0){
+### Compute the forecats of a fitted REGts model
+### newxt: data matrix for the regressors in the forecasting period
+### h: number of forecasts to be produced
+### orig: forecast origin. Set to end of the data in the default.
+###
+zt <- model$data
+xt <- model$xt
+p <- model$aror
+include.mean <- model$include.mean
+Phi <- model$Phi
+beta <- as.matrix(model$beta)
+Sigma <- model$Sigma
+nT <- nrow(zt)
+if(orig <= 0){orig=nT}
+k <- ncol(zt)
+kx <- ncol(xt)
+Xmtx = xt
+nxt <- as.matrix(newxt)
+if(include.mean){nxt <- cbind(rep(1,h),nxt)
+                 Xmtx <- cbind(rep(1,orig),xt[1:orig,])
+                 }
+wzt <- zt[1:orig,]-Xmtx[1:orig,]%*%t(beta)
+wzt <- as.matrix(wzt)
+m1 <- list(data = wzt,cnst=FALSE,order=p,Ph0=rep(0,k),Phi=Phi,Sigma=Sigma)
+pm1 <- VARpred(m1,h=h,orig=orig,output=FALSE)  ### Compute s.e. and rmse of forecasts
+se.err <- pm1$se.err
+rmse <- pm1$rmse
+### compute the point forecasts
+for (t in (orig+1):(orig+h)){
+ wk <- NULL
+ for (j in 1:p){
+  wk <- c(wk,wzt[t-j,])
+  }
+  pred <- matrix(wk,1,p*k)%*%t(Phi)
+  wzt <- rbind(wzt,pred)
+ }
+fcst <- wzt[(orig+1):(orig+h),]
+pred <- fcst + nxt%*%t(beta)
+##
+cat("### Predictions of REGts Model ###","\n")
+cat("Predictions at forecast origin: ",orig,"\n")
+cat("Point forecasts: 1-step to",h,"-step","\n")
+print(round(pred,5))
+cat("Standard errors of predictions: ","\n")
+print(round(se.err,5))
+cat("RMSE of predictions: ","\n")
+print(round(rmse,5))
+ 
+REGtspred <- list(pred=pred,se.err=se.err,rmse=rmse,orig=orig)
+
+}
+
+#####
+"sVARMApred" <- function(model,orig,h=1){
+# Prediction of a multiplicative vector ARMA model
+# where "model" is a sVARMA output.
+x <- as.matrix(model$data)
+order <- model$order
+sorder <- model$sorder
+s <- model$period
+resi <- as.matrix(model$residuals)
+Sigma <- model$Sigma
+phi <- model$regPhi
+PHI <- model$seaPhi
+theta <- model$regTheta
+THETA <- model$seaTheta
+Ph0 = model$Ph0
+inc.mean <- model$cnst
+switch <- model$switch
+p <- order[1]; d <- order[2]; q <- order[3]
+P <- sorder[1]; D <- sorder[2]; Q <- sorder[3]
+arP <- p+P*s
+maQ <- q+Q*s
+### Data handling
+k <- ncol(x)
+nT <- nrow(x)
+if(orig > nT)orig = nT
+if(orig < (arP+D*s+d))orig = arP+D*s+d
+#### definition matrix polynomial multiplication
+mtxpoly <- function(aa,AA,v,V,s,k,switch){
+coef = NULL
+if(v > 0)aa=as.matrix(aa)
+if(V > 0)AA=as.matrix(AA)
+gap <- s-1-v
+if((v == 0) && (V > 0)){
+  for (i in 1:V){
+   idx = (i-1)*k
+   if(gap > 0)coef=cbind(coef,matrix(0,k,gap*k))
+   coef=cbind(coef,AA[,(idx+1):(idx+k)])
+   }
+}
+if((v > 0) && (V == 0))coef=aa
+if((v > 0) && (V > 0)){
+ coef <- aa
+ for (i in 1:V){
+   idx = (i-1)*k
+   SS <- AA[,(idx+1):(idx+k)]
+   if(gap > 0)coef=cbind(coef,matrix(0,k,gap*k))
+   coef=cbind(coef,SS)
+   for (j in 1:v){
+     if(switch){
+      coef=cbind(coef,SS%*%aa[,((j-1)*k+1):(j*k)])
+      }
+    else{
+      coef=cbind(coef,aa[,((j-1)*k+1):(j*k)]%*%SS)
+      }
+    }
+  }
+ }
+coef
+}
+### obtain the AR and MA matrix polynomials
+arcoef <- mtxpoly(phi,PHI,p,P,s,k,switch)
+### Take care of differencing, if any.
+Ik=diag(rep(1,k))
+gap = s-1-p
+if(d > 0){
+  for (i in 1:d){
+   if(length(arcoef) < 1){arcoef=Ik
+            arP=1
+            }
+	    else{
+	      arP=arP+1
+	      arcoef1 <- cbind(arcoef,Ik)
+	      arcoef2 <- cbind(Ik,-arcoef)
+	      arcoef <- arcoef1+arcoef2
+	      }
+            }
+  }
+#### seasonal difference, if any
+if(D > 0){
+    for (i in 1:D){
+      if(length(arcoef) < 1){arcoef=cbind(matrix(0,k,gap*k),Ik)
+                             arP=arP+s
+                     }
+		     else{
+		     arP = arP+s
+		     arcoef1 = cbind(arcoef,matrix(0,k,s*k))
+		     arcoef2 = cbind(matrix(0,k,(s-1)*k),Ik,-arcoef)
+		     arcoef=arcoef1+arcoef2
+		     }
+                   }
+            }
+macoef <- mtxpoly(theta,THETA,q,Q,s,k,switch)
+###
+mm <- list(data=x,ARorder=arP, MAorder=maQ,cnst=inc.mean,residuals=resi,Phi=arcoef,Theta=macoef,Ph0=Ph0,coef=t(cbind(cbind(arcoef,macoef))),Sigma=Sigma)
+
+m1 = VARMApred(mm,h=h,orig=orig)
+pred=m1$pred
+fse=m1$se.err
+
+sVARMApred <- list(data=x, orig=orig, pred=pred, se.err=fse)
+}
+
+"Kronpred" <- function(model,orig=0,h=1){
+### Compute forecasts of a fitted model via the command "Kronfit".
+zt <- as.matrix(model$data)
+Kdx <- model$Kindex
+ARid <- model$ARid
+MAid <- model$MAid
+include.mean <- model$cnst
+Kpar <- model$coef
+resi <- model$residuals
+Sig <- model$Sigma
+Ph0 <- model$Ph0
+Phi <- as.matrix(model$Phi)
+Theta <- as.matrix(model$Theta)
+const <- model$const
+##
+nT <- nrow(zt)
+k <- ncol(zt)
+nT1 <- nrow(resi)
+if (nT1 < nT){
+  resi=rbind(matrix(0,(nT-nT1),k),resi)
+  }
+if(orig <= 0)orig=nT
+if(orig > nT)orig=nT
+p <- floor(ncol(Phi)/k)
+Ph0i <- solve(Ph0)
+const=Ph0i%*%matrix(c(const),k,1)
+if(p > 0){
+ Phi <- Ph0i%*%Phi
+ Theta <- Ph0i%*%Theta
+}
+### 
+### Use the VARMApred command to compute the forecasts
+mod <- list(data=zt,residuals=resi,cnst=include.mean,ARorder=p,MAorder=p,Ph0=t(const),
+ Phi=Phi,Theta=Theta,Sigma=Sig)
+mm <- VARMApred(mod,h=h,orig=orig)
+ 
+Kronpred <- list(pred=mm$pred,se.err=mm$se.err,orig=orig)
+}
+
+"Corner" <- function(y,x,Nrow=11,Ncol=7){
+### compute the "corner-table" for output "y" and input "x".
+### y: filtered dependent variable
+### x: filtered input variable AND is supposed to be a white noise series
+if(is.matrix(y))y=y[,1]
+if(is.matrix(x))x=x[,1]
+nT <- min(length(y),length(x))
+lag <- Nrow+Ncol+1
+y1 <- y[1:nT]
+x1 <- x[1:nT]
+Sy <- sqrt(var(y1))
+Sx <- sqrt(var(x1))
+Y <- y1[lag:nT]
+X <- x1[lag:nT]
+for (i in 1:(lag-1)){
+X <- cbind(X,x1[(lag-i):(nT-i)])
+}
+vi <- cor(Y,X)
+vi <- vi*Sy/Sx
+vmax <- max(abs(vi))
+vi <- vi/vmax
+##cat("Corr: ",vi,"\n")
+tbl <- matrix(0,Nrow, Ncol)
+tbl[,1] <- vi[1:Nrow]
+for (j in 2:Ncol){
+for (i in 1:Nrow){
+ cmx = diag(rep(vi[i],j))
+ for (ii in 2:j){
+  for (jj in 1:(ii-1)){
+   idx = i+jj
+   cmx[ii,jj] = vi[idx]
+   }
+  }
+ for (jj in 2:j){
+  for (ii in 1:(jj-1)){
+   idx = i-jj+1
+   if(idx > 0)cmx[ii,jj]=vi[idx]
+   }
+  }
+#  cat("cmx: ",cmx,"\n")  
+tbl[i,j]=det(cmx)
+ }
+ }
+stbl <- tbl
+crit=2/sqrt(nT)
+tbl=cbind(c(1:Nrow)-1,tbl)
+colnames(tbl) <- c("r->",paste(c(1:Ncol)))
+cat("Corner Table: ","\n")
+print(round(tbl,3))
+for (i in 1:Nrow){
+ for (j in 1:Ncol){
+  if(abs(tbl[i,j+1]) <= crit){
+      stbl[i,j] = "O"
+      }
+      else{
+      stbl[i,j] = "X"
+      }
+   }
+ }
+cat("\n")
+cat("Simplified Table: 2/sqrt(T): ","\n")
+J=paste(c(1:Nrow)-1)
+stbl=cbind(J,stbl)
+colnames(stbl) <- c("r->",paste(c(1:Ncol)))
+print(stbl)
+
+Corner <- list(cornor = tbl)
+}
+
