@@ -6,7 +6,7 @@
 the mean squared errors of forecasts
 }
 \usage{
-VARpred(model, h = 1, orig = 0, Out.level = F)
+VARpred(model, h = 1, orig = 0, Out.level = FALSE, output = TRUE)
 }
 \arguments{
   \item{model}{An output object of a VAR or refVAR command
@@ -16,7 +16,9 @@ VARpred(model, h = 1, orig = 0, Out.level = F)
   \item{orig}{Forecast origin. Default is zero meaning the forecast origin 
 is the last data point
 }
-  \item{Out.level}{A logical switch to control output
+  \item{Out.level}{Boolean control for details of output
+}
+  \item{output}{Boolean control for printing forecast results
 }
 }
 \details{Computes point forecasts and the associated variances of forecast errors

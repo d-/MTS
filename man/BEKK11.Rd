@@ -6,21 +6,23 @@
 Only k = 2 or 3 is available
 }
 \usage{
-BEKK11(rt, include.mean = T, cond.dist = "normal")
+BEKK11(rt, include.mean = T, cond.dist = "normal", ini.estimates = NULL)
 }
 \arguments{
   \item{rt}{A T-by-k data matrix of k-dimensional asset returns
 }
   \item{include.mean}{A logical switch to include a constant vector in the 
-mean equation. Default is with a constant vector.
+mean equation.  Default is with a constant vector.
 }
   \item{cond.dist}{Conditional innovation distribution. 
-Only Gaussian inoovations are used in the current version.
+Only Gaussian innovations are used in the current version.
+}
+  \item{ini.estimates}{Optional initial estimates.
 }
 }
 \value{
 \item{estimates}{Parameter estimates}
-\item{HessianMtx}{Hessian matirx of the estimates}
+\item{HessianMtx}{Hessian matrix of the estimates}
 \item{Sigma.t}{The multivariate volatilities, each row contains k-by-k elements of 
 the volatility matrix Sigma(t)}
 }

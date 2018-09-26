@@ -8,8 +8,8 @@ and the other is by Tse and Tsui. Both models appear in the Journal of Business 
 Economic Statistics, 2002.
 }
 \usage{
-dccFit(rt, type = "TseTsui", theta = c(0.9, 0.02), 
-    ub = c(0.92, 0.079999), lb = c(0.4, 1e-04), 
+dccFit(rt, type = "TseTsui", theta = c(0.90, 0.02), 
+    ub = c(0.95, 0.049999), lb = c(0.4,0.00001),
     cond.dist = "std", df = 7, m = 0)
 }
 \arguments{
