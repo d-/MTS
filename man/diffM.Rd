@@ -10,7 +10,7 @@ diffM(zt, d = 1)
 \arguments{
   \item{zt}{A vector time series (T by k, with sample size T and dimension k)
 }
-  \item{d}{Order of differencing. Deafult is d=1. 
+  \item{d}{Order of differencing. Default is d=1. 
 }
 }
 \details{When d = 1, the command is equivalent to 

@@ -26,7 +26,7 @@ columns of ibeta is the number of co-integrating series
   \item{se.alpha}{Initial estimate of the standard error of alpha, if any}
   \item{se.beta}{Initial estimate of the standard error of beta, if any}
   \item{phip}{Initial estimate of the VAR coefficients, if any}
-  \item{se.phip}{Initial estimate of the stanard error of the VAR 
+  \item{se.phip}{Initial estimate of the standard error of the VAR 
 coefficients, if any}
 }
 \value{

@@ -47,7 +47,7 @@ b2 is the delay
 \item{rmse }{root mean squared forecast errors}
 \item{mae }{out-of-sample mean absolute forecast errors}
 \item{nobf }{The number of 1-step ahead forecast errors computed}
-\item{rAR}{Regulard AR coefficients}
+\item{rAR}{Regular AR coefficients}
 }
 \references{Box, G. E. P., Jenkins, G. M., and Reinsel, G. C. (1994). Time Series Analysis:
 Forecasting and Control, 3rd edition, Prentice Hall, Englewood Cliffs, NJ.

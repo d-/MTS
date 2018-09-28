@@ -7,7 +7,8 @@ The correlation matrices are parameterized by angles and the angles evolve
 over time via a DCC-type equation.
 }
 \usage{
-mtCopula(rt, g1, g2, grp = NULL, th0 = NULL, m = 0, include.th0 = TRUE, ub=c(0.95,0.049999))
+mtCopula(rt, g1, g2, grp = NULL, th0 = NULL, m = 0, 
+				 include.th0 = TRUE, ub=c(0.95,0.049999))
 }
 \arguments{
   \item{rt}{A T-by-k data matrix of k standardized time series (after 

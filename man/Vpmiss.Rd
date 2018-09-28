@@ -17,7 +17,7 @@ piwgt[pi0, pi1, pi2, ....]
 }
   \item{sigma}{Residual covariance matrix
 }
-  \item{tmiss}{Time index of the partilly missing data point
+  \item{tmiss}{Time index of the partially missing data point
 }
   \item{mdx}{A k-dimensional indicator with "0" denoting missing 
 component and ""1" denoting observed value.

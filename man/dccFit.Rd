@@ -35,7 +35,7 @@ used in local correlation matrix estimation
 }
 \value{
 \item{estimates}{Parameter estimates}
-\item{Hessian}{Hessian marix of the estimates}
+\item{Hessian}{Hessian matrix of the estimates}
 \item{rho.t}{Time-varying correlation matrices. 
 Each row contains elements of a cross-correlation matrix.
 }

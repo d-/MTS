@@ -1,6 +1,6 @@
 \name{Mtxprod1}
 \alias{Mtxprod1}
-\title{Alternative Ploynomial Matrix Product
+\title{Alternative Polynomial Matrix Product
 }
 \description{Compute the product of two polynomial matrices
 }

@@ -16,7 +16,7 @@ variables
   \item{include.mean}{Indicator for including a constant in the model. Default is 
 TRUE.
 }
-  \item{locInput}{Locators for the input variables in the data matrix. Deafult 
+  \item{locInput}{Locators for the input variables in the data matrix. Default 
 is the first column being the input variable. Multiple inputs are allowed.
 }
 }

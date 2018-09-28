@@ -17,7 +17,7 @@ k is the dimension.
 }
   \item{maxq}{Maximum MA order entertained. Default is 6.
 }
-  \item{include.mean}{A logical switch controling the mean vector in estimation. 
+  \item{include.mean}{A logical switch controlling the mean vector in estimation. 
 Default assumes zero mean.
 }
   \item{rev}{A logical switch to control the cross-correlation matrices used 
@@ -30,7 +30,7 @@ test statistics are compute from lag-(m-1) to lag-m, from lag-(m-2) to lag-m, et
 \item{pEccm}{A two-way table of the p-values of extended cross-correlation 
 matrices}
 \item{vEccm}{The sample extended cross-correlation matrices}
-\item{ARcoef}{AR coefficient marices of iterated VAR fitting}
+\item{ARcoef}{AR coefficient matrices of iterated VAR fitting}
 }
 \references{Tsay (2014, Chapter 3). Multivariate Time Series Analysis with 
 R and Financial Applications. John Wiley. Hoboken, NJ.

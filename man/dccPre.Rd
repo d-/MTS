@@ -10,7 +10,7 @@ further analysis. The garchFit command of fGarch package is used.
 dccPre(rtn, include.mean = T, p = 0, cond.dist = "norm")
 }
 \arguments{
-  \item{rtn}{A T-by-k data matrix of k-dimensinal asset returns
+  \item{rtn}{A T-by-k data matrix of k-dimensional asset returns
 }
   \item{include.mean}{A logical switch to include a mean vector. 
 Deafult is to include the mean.

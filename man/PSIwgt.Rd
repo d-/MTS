@@ -17,7 +17,7 @@ Theta=[Theta1, Theta2, ..., Thetaq]
   \item{lag}{The number of psi-weight matrices to be computed. 
 Deafult is 12.
 }
-  \item{plot}{A lofical switch to control plotting of the psi-weights.
+  \item{plot}{A logical switch to control plotting of the psi-weights.
 }
   \item{output}{A logical switch to control the output.
 }

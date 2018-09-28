@@ -11,7 +11,7 @@ VARMApred(model, h = 1, orig = 0)
 \arguments{
   \item{model}{A fitted VARMA model
 }
-  \item{h}{Number of steps of frecasts, i.e., forecast horizon.
+  \item{h}{Number of steps of forecasts, i.e., forecast horizon.
 }
   \item{orig}{Forecast origin. Default is the end of the sample.
 }

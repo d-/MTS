@@ -1,6 +1,6 @@
 \name{VMA}
 \alias{VMA}
-\title{Vector Moving Averge Model
+\title{Vector Moving Average Model
 }
 \description{Performs VMA estimation using the conditional multivariate 
 Gaussian likelihood function
@@ -30,7 +30,7 @@ simplification
 }
   \item{details}{A logical switch to control the amount of output
 }
-  \item{thres}{Threshold for t-ratio used to fix parameeter to zero. Deault is 2.
+  \item{thres}{Threshold for t-ratio used to fix parameter to zero. Default is 2.
 }
 }
 \value{

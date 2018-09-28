@@ -24,7 +24,7 @@ This is used mainly in the command refKronfit.
 }
   \item{seKpar}{Standard errors of the parameter estimates for use in model simplification
 }
-  \item{prelim}{A lofical switch for a preliminary estimation.
+  \item{prelim}{A logical switch for a preliminary estimation.
 }
   \item{details}{A logical switch to control output.
 }
@@ -34,7 +34,7 @@ Default is 1.
 }
 \value{
 \item{data}{The observed time series data}
-\item{Kindex}{Kronecker indicies}
+\item{Kindex}{Kronecker indices}
 \item{ARid}{Specification of AR parameters: 0 denotes fixing to zero, 1 denotes fixing to 1, and 2 denoting estimation}
 \item{MAid}{Specification of MA parameters}
 \item{cnst}{A logical variable: include.mean}

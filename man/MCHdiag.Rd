@@ -1,6 +1,6 @@
 \name{MCHdiag}
 \alias{MCHdiag}
-\title{Multivariate Conditional Heteroscadastic Model Cheking
+\title{Multivariate Conditional Heteroscedastic Model Checking
 }
 \description{Apply four portmanteau test statistics to check the 
 validity of a fitted multivariate volatility model

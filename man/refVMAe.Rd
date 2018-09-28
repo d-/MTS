@@ -13,7 +13,7 @@ refVMAe(model, thres = 1)
 refVMAe itself
 }
   \item{thres}{A threshold for individual t-ratio of parameter estimates. 
-Deafult is 1.
+Default is 1.
 }
 }
 \details{The program sets simultaneously all estimates with t-ratios 

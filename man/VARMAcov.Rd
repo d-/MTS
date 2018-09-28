@@ -12,7 +12,7 @@ VARMAcov(Phi = NULL, Theta = NULL, Sigma = NULL, lag = 12, trun = 120)
   \item{Phi}{A k-by-kp matrix consisting of VAR coefficient matrices, 
 Phi = [Phi1, Phi2, ..., Phip].
 }
-  \item{Theta}{A k-by-kq matrix consisting of VMA coefficient magrices,
+  \item{Theta}{A k-by-kq matrix consisting of VMA coefficient matrices,
 Theta = [Theta1, Theta2, ..., Thetaq]
 }
   \item{Sigma}{Covariance matrix of the innovations (k-by-k).

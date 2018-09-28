@@ -19,7 +19,7 @@ size T.
   \item{q}{MA order
 }
   \item{include.mean}{A logical switch to control estimation of the mean vector.
-Dafault is to include the mean in estimation.
+Default is to include the mean in estimation.
 }
   \item{fixed}{A logical matrix to control zero coefficients in estimation. 
 It is mainly used by the command refVARMA.
@@ -29,7 +29,7 @@ It is mainly used by the command refVARMA.
  \item{sebeta}{Standard errors of parameter estimates for use in model simplification
 }
   \item{prelim}{A logical switch to control preliminary estimation. 
-Deafult is none.
+Default is none.
 }
   \item{details}{A logical switch to control the amount of output.
 }

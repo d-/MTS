@@ -9,7 +9,7 @@ to zero
 refVARX(m1, thres = 1)
 }
 \arguments{
-  \item{m1}{An output object of the VARX commond or the refVARX command
+  \item{m1}{An output object of the VARX command or the refVARX command
 }
   \item{thres}{A threshold for the individual t-ratio. Default is 1.
 }

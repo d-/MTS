@@ -1456,16 +1456,3 @@ Sigma.t=m2$volmtx
 
 BEKK11 <- list(data=rt,estimates=est,HessianMtx=Hessian,Sigma.t=Sigma.t,include.mean=include.mean)
 }
-
-#### Refinement of BEKK11; added on June 29, 2014 ####
-
-"refBEKK11" <- function(mm){
-## mm: a model object from the command "BEKK11"
-##
-rt=mm$data; inc.mean=mm$include.mean
-est=mm$estimates
-m1=BEKK11(rt,include.mean=inc.mean,ini.estimates=est)
-
-refBEKK11 <- list(data=m1$data,estimates=m1$estimates,HessianMtx=m1$Hessian,Sigma.t=m1$Sigma.t,include.mean=m1$include.mean)
-}
-

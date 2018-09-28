@@ -17,15 +17,15 @@ k the number of time series
   \item{output}{A logical switch to control the output. Default is to provide output
 }
 }
-\details{For a given maxp, the command computes Akaike, Bayesin and 
-Hannan-Quinn informtation criteria for various VAR models using the 
+\details{For a given maxp, the command computes Akaike, Bayesian and 
+Hannan-Quinn information criteria for various VAR models using the 
 data from t=maxp+1 to T. It also computes the Tiao-Box sequential Chi-square 
 statistics and their p-values.
 }
 \value{\item{aic}{Akaike information criterion}
 \item{bic}{Bayesian information criterion}
 \item{hq}{Hannan and Quinn information criterion}
-\item{aicor, bicor, hqor}{Orders slected by various criteria}
+\item{aicor, bicor, hqor}{Orders selected by various criteria}
 \item{Mstat}{Chi-square test statistics}
 \item{Mpv}{p-values of the Mstat}
 }

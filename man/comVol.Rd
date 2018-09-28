@@ -25,7 +25,7 @@ are also computed for the sample principal components
 }
 \value{
 \item{residuals}{The residuals of a VAR(p) fit}
-\item{values}{Eigenvalues of the pricipal volatility component analysis}
+\item{values}{Eigenvalues of the principal volatility component analysis}
 \item{vectors}{Eigenvectors of the principal volatility component analysis}
 \item{M}{The transformation matrix}
 }

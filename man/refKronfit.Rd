@@ -12,7 +12,7 @@ refKronfit(model, thres = 1)
   \item{model}{The name of a model from the command Kronfit or refKronfit
 }
   \item{thres}{A threshold for t-ratio of individual parameter estimate.
-The deafult is 1.
+The default is 1.
 }
 }
 \details{For a given threshold, the program sets a parameter to zero if 

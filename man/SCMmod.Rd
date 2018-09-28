@@ -11,7 +11,7 @@ SCMmod(order, Ivor, output)
 \arguments{
   \item{order}{A k-by-2 matrix of the orders of SCM
 }
-  \item{Ivor}{A k-dimensioal vector indicating the location of "1" 
+  \item{Ivor}{A k-dimensional vector indicating the location of "1" 
 for each component in the transformation matrix.
 }
   \item{output}{A logical switch to control output.

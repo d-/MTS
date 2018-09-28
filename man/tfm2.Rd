@@ -25,7 +25,7 @@ sea=12,order1=c(0,1,0),order2=c(0,-1,0))
 }
  \item{orderS}{Order (P,D,Q) of the seasonal ARMA part of the disturbance component
 }
- \item{sea}{Seasonalityt, default is 12 for monthly data
+ \item{sea}{Seasonality, default is 12 for monthly data
 }
   \item{order1}{Order (r,s,b) of the transfer function model of the first input variable, where 
 r and s are the degrees of denominator and numerator polynomials and 
@@ -44,13 +44,13 @@ b2 is the delay
 \item{residuals }{Residual series}
 \item{varcoef }{Variance of the estimates}
 \item{Nt }{The disturbance series}
-\item{rAR}{Regulard AR coefficients}
+\item{rAR}{Regular AR coefficients}
 \item{rMA}{Regular MA coefficients}
 \item{sAR}{Seasonal AR coefficients}
 \item{sMA}{Seasonal MA coefficients}
 \item{omega}{Numerator coefficients of the first transfer function}
-\item{delta}{Denominator coefficiens of the first transfer function}
-\item{omega2}{Numerator coefficients of the 2nd transfer fucntion}
+\item{delta}{Denominator coefficients of the first transfer function}
+\item{omega2}{Numerator coefficients of the 2nd transfer function}
 \item{delta2}{Denominator coefficients of the 2nd transfer function}
 }
 \references{Box, G. E. P., Jenkins, G. M., and Reinsel, G. C. (1994). Time Series Analysis:

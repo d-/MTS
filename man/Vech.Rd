@@ -1,6 +1,6 @@
 \name{Vech}
 \alias{Vech}
-\title{Half-Stacking Vector of a Symmetrix Matrix
+\title{Half-Stacking Vector of a Symmetric Matrix
 }
 \description{Obtain the half-stacking vector of a symmetric matrix
 }

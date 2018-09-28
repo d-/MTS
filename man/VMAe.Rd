@@ -15,7 +15,7 @@ VMAe(da, q = 1, include.mean = T, coef0 = NULL,
 }
   \item{q}{The order of a VMA model
 }
-  \item{include.mean}{A logicak switch to include the mean vector in estimation. Default is to include the mean vector.
+  \item{include.mean}{A logical switch to include the mean vector in estimation. Default is to include the mean vector.
 }
   \item{coef0}{Initial estimates of the coefficients used mainly in model 
 refinement
@@ -34,8 +34,8 @@ refinement
 \value{
 \item{data}{The observed time series}
 \item{MAorder}{The VMA order}
-\item{cnst}{A logical switch to inlcude the mean vector}
-\item{coef}{Parameter estimayes}
+\item{cnst}{A logical switch to include the mean vector}
+\item{coef}{Parameter estimates}
 \item{secoef}{Standard errors of parameter estimates}
 \item{residuals}{Residual series}
 \item{Sigma}{Residual covariance matrix}

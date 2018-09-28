@@ -1,4 +1,4 @@
-\name{VAR}
+w\name{VAR}
 \alias{VAR}
 \title{Vector Autoregressive Model
 }
@@ -17,7 +17,7 @@ VAR(x, p = 1, output = T, include.mean = T, fixed = NULL)
   \item{include.mean}{A logical switch. It is true if mean vector is estimated.
 }
   \item{fixed}{A logical matrix used in constrained estimation. 
-It is used mainly in model simplifcation, e.g., removing insignificant 
+It is used mainly in model simplification, e.g., removing insignificant 
 estimates.
 }
 }

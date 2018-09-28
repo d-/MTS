@@ -1,6 +1,6 @@
 \name{refSCMfit}
 \alias{refSCMfit}
-\title{Refining Estimation of VARMA Model via SCM Approch
+\title{Refining Estimation of VARMA Model via SCM Approach
 }
 \description{Refine estimation of a VARMA model specified via the SCM 
 approach by removing insignificant parameters

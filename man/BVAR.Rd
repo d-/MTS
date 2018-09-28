@@ -16,7 +16,7 @@ The AR order. Default is p=1.
 }
   \item{C}{
 The precision matrix of the coefficient matrix. With constant, 
-the dimension of C is (kp+1)-by-(kp+1). The covariance marix of the 
+the dimension of C is (kp+1)-by-(kp+1). The covariance matrix of the 
 prior for the parameter vec(Beta) is Kronecker(Sigma_a,C-inverse).
 }
   \item{V0}{

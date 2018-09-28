@@ -11,7 +11,7 @@ Kronspec(kdx, output = TRUE)
 \arguments{
   \item{kdx}{A vector of Kronecker indices
 }
-  \item{output}{A logical switch to control output.  Deafult is with 
+  \item{output}{A logical switch to control output.  Default is with 
 output.
 }
 }

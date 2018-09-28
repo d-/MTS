@@ -23,7 +23,7 @@ VARMAsim(nobs, arlags = NULL, malags = NULL,
   \item{theta}{Matrix of VMA coefficient matrices in the order of the given 
 malags.
 }
-  \item{skip}{The number of initial data to be omitted. Deafult is 200.
+  \item{skip}{The number of initial data to be omitted. Default is 200.
 }
   \item{sigma}{Covariance matrix (k-by-k, positive definite) 
 of the innovations

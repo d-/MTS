@@ -17,7 +17,7 @@ sVARMA(da, order, sorder, s, include.mean = T, fixed = NULL, details = F, switch
 }
   \item{s}{Seasonality. s=4 for quarterly data and s=12 for monthly series
 }
-  \item{include.mean}{A logical switch to include the mean vector. Deafult is 
+  \item{include.mean}{A logical switch to include the mean vector. Default is 
 to include the mean
 }
   \item{fixed}{A logical matrix to set zero parameter constraints
@@ -28,11 +28,11 @@ to include the mean
 and seasonal VMA factors. Default is theta(B)*Theta(B).
 }
 }
-\details{Estimation of a sesonal VARMA model
+\details{Estimation of a seasonal VARMA model
 }
 \value{
 \item{data}{The data matrix of the observed k-dimensional time series}
-\item{order}{The reqular order (p,d,q)}
+\item{order}{The regular order (p,d,q)}
 \item{sorder}{The seasonal order (P,D,Q)}
 \item{period}{Seasonality}
 \item{cnst}{A logical switch for the constant term}
