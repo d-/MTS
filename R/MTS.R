@@ -4936,6 +4936,7 @@ for (it in orig:(nT-1)){
    nT=dim(da)[1];   k=dim(da)[2]
    ## obtain the maximum index value.
    p=floor(dim(ARid)[2]/k)-1
+### Minimum order is 1. 
    if(p <= 0)p=1
    ist = p + 1
    ## est: stores the estimates (equation 1, equation 2, etc.)
@@ -4979,13 +4980,13 @@ for (it in orig:(nT-1)){
       beta=XPXinv%*%XPY
       l1=dim(XPX)[1]
       resi=Y-X%*%matrix(beta,l1,1)
-      evar=crossprod(resi,resi)/(nT-p)
+      evar=c(crossprod(resi,resi)/(nT-p))
       est=c(est,beta)
-      estse=c(estse,sqrt(diag(XPXinv)*evar/nT))
+      estse=c(estse,sqrt(c(diag(XPXinv)*evar)/nT))
      }
    iniKro <- list(par=est,se=estse)
   }
- 
+## 
   if(length(Kpar) < 1){
       m1=VARorder(da,maxk+9,output=FALSE)
       porder=m1$aicor
@@ -5047,10 +5048,11 @@ for (it in orig:(nT-1)){
    icnt=0
    for (i in 1:k){
       idx=c(1:kp1)[ARid[i,] > 1]; jdx=c(1:kp1)[MAid[i,] > 1]
-      # kdx denotes the number of non-zero elements in lag-0.
+      # kdx denotes the locations of non-zero elements in lag-0.
       kdx=c(1:k)[ARid[i,1:k] > 1]
       if(length(kdx) > 0){
-         idx=idx[-kdx]; jdx=jdx[-kdx]
+         nlag0 <- length(kdx)
+         idx=idx[-c(1:nlag0)]; jdx=jdx[-c(1:nlag0)]
       }
       iend=length(idx); jend=length(jdx); kend=length(kdx)
       #### icnt: parameter count
@@ -5177,31 +5179,40 @@ for (it in orig:(nT-1)){
    icnt=0
    for (i in 1:k){
       idx=c(1:kp1)[ARid[i,] > 1]; jdx=c(1:kp1)[MAid[i,] > 1]
-      # kdx denotes the number of non-zero elements in lag-0.
+      # kdx denotes the locations of the non-zero elements in lag-0.
       kdx=c(1:k)[ARid[i,1:k] > 1]
       if(length(kdx) > 0){
-         idx=idx[-kdx]; jdx=jdx[-kdx]
+         nlag0 <- length(kdx)
+         idx=idx[-c(1:nlag0)]; jdx=jdx[-c(1:nlag0)]
       }
       iend=length(idx); jend=length(jdx); kend=length(kdx)
       if(include.mean){
          icnt=icnt+1
-         Cnt[i]=Kpar[icnt]
-         seCnt[i]=seKpar[icnt]
+##         Cnt[i]=Kpar[icnt]
+##         seCnt[i]=seKpar[icnt]
+          Cnt[i] <- fit$par[icnt]
+          seCnt[i] <- se.coef[icnt]
       }
       if(kend > 0){
-         Ph0[i,kdx]=Kpar[(icnt+1):(icnt+kend)]
-         sePh0[i,kdx]=seKpar[(icnt+1):(icnt+kend)]
+##         Ph0[i,kdx]=Kpar[(icnt+1):(icnt+kend)]
+##         sePh0[i,kdx]=seKpar[(icnt+1):(icnt+kend)]
+         Ph0[i,kdx]=fit$par[(icnt+1):(icnt+kend)]
+         sePh0[i,kdx]=se.coef[(icnt+1):(icnt+kend)]
          icnt=icnt+kend
       }
       if(iend > 0){
          ##cat("idx-k: ",idx-k,"\n")
-         PH[i,idx-k]=Kpar[(icnt+1):(icnt+iend)]
-         sePH[i,idx-k]=seKpar[(icnt+1):(icnt+iend)]
+#         PH[i,idx-k]=Kpar[(icnt+1):(icnt+iend)]
+#         sePH[i,idx-k]=seKpar[(icnt+1):(icnt+iend)]
+         PH[i,idx-k]=fit$par[(icnt+1):(icnt+iend)]
+         sePH[i,idx-k]=se.coef[(icnt+1):(icnt+iend)]
          icnt=icnt+iend
       }
       if(jend > 0){
-         TH[i,jdx-k]=Kpar[(icnt+1):(icnt+jend)]
-         seTH[i,jdx-k]=seKpar[(icnt+1):(icnt+jend)]
+##         TH[i,jdx-k]=Kpar[(icnt+1):(icnt+jend)]
+##         seTH[i,jdx-k]=seKpar[(icnt+1):(icnt+jend)]
+         TH[i,jdx-k]=fit$par[(icnt+1):(icnt+jend)]
+         seTH[i,jdx-k]=se.coef[(icnt+1):(icnt+jend)]
          icnt=icnt+jend
       }
    }
