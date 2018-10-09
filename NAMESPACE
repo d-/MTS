@@ -1,6 +1,6 @@
 useDynLib(MTS)
 exportPattern("^[^\\.]")
-import(Rcpp, fGarch, mvtnorm)
+import(Rcpp, fGarch, fBasics, mvtnorm)
 importFrom("graphics", "abline", "lines", "par", "points", "title")
 importFrom("stats", "acf", "arima", "cancor", "cor", "cov", "dnorm",
            "filter", "is.ts", "lm", "nlm", "nlminb", "optim", "pchisq",
