@@ -7,6 +7,7 @@
 using namespace std;
 using namespace Rcpp;
 
+
 // MARK: CMatrix
 class CMatrix {
 public:

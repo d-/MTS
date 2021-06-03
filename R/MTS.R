@@ -167,7 +167,7 @@
       cat("HQ  = ",hq,"\n")
       # end of if(output)
    }
-   
+
    VAR<-list(data=x,cnst=include.mean,order=p,coef=beta,aic=aic,bic=bic,hq=hq,residuals=res,secoef=sdbeta,Sigma=sse,Phi=Phi,Ph0=Ph0,fixed=fixed)
 }
 
@@ -241,9 +241,9 @@
       }
       ## end of the if(length(fixed)==0) statement
    }
-   
+
    mm=VAR(x,p,output=T,include.mean=cnst,fixed=fix)
-   
+
    refVAR <- list(data=mm$data,order=p,cnst=cnst,coef=mm$coef,aic=mm$aic,bic=mm$bic,hq=mm$hq,residuals=mm$residuals,secoef=mm$secoef,Sigma=mm$Sigma,Phi=mm$Phi,Ph0=mm$Ph0,fixed=fix)
 }
 
@@ -343,7 +343,7 @@
       }
       cat("Residuals cov-mtx:","\n")
       print(sse)
-      
+
       cat("       ","\n")
       dd=det(sse)
       cat("det(SSE) = ",dd,"\n")
@@ -354,9 +354,9 @@
       cat("BIC = ",bic,"\n")
       # end of if(output)
    }
-   
+
    VARs<-list(data=x,lags=lags,order=p,cnst=include.mean,coef=beta,aic=aic,bic=bic,residuals=res,secoef=sdbeta,Sigma=sse,Phi=Phi,Ph0=Ph0,fixed=fixed)
-   
+
 }
 
 #####
@@ -428,9 +428,9 @@
       }
       ## end of the if(length(fixed)==0) statement
    }
-   
+
    mm=VARs(x,lags,include.mean=cnst,output=T,fixed=fix)
-   
+
    refVARs <- list(data=x,lags=lags,cnst=cnst,coef=mm$coef,aic=mm$aic,bic=mm$bic,residuals=mm$residuals,secoef=mm$secoef,Sigma=mm$Sigma,Phi=mm$Phi,Ph0=mm$Ph0,fixed=fix)
 }
 
@@ -593,7 +593,7 @@
    bicor=c(1:(maxp+1))[bic==mbic]-1
    mhq=min(hq)
    hqor=c(1:(maxp+1))[hq==mhq]-1
-   
+
    Mstat=rep(0,maxp)
    pv=rep(0,maxp)
    for (j in 1:maxp){
@@ -618,7 +618,7 @@
       ##print(cri,digits=5)
       print(round(cri,4))
    }
-   
+
    VARorder <- list(aic=aic,aicor=aicor,bic=bic,bicor=bicor,hq=hq,hqor=hqor,Mstat=Mstat,Mpv=pv)
 }
 ################
@@ -670,14 +670,14 @@
    bicor=c(1:(maxp+1))[bic==mbic]-1
    mhq=min(hq)
    hqor=c(1:(maxp+1))[hq==mhq]-1
-   
+
    Mstat=rep(0,maxp)
    pv=rep(0,maxp)
    for (j in 1:maxp){
       Mstat[j]=(nT-maxp-k*j-1.5)*(chidet[j]-chidet[j+1])
       pv[j]=1-pchisq(Mstat[j],ksq)
    }
-   
+
    if(output){
       cat("selected order: aic = ",aicor,"\n")
       cat("selected order: bic = ",bicor,"\n")
@@ -693,7 +693,7 @@
       cat("Summary table: ","\n")
       print(cri,digits=5)
    }
-   
+
    VARorderI <- list(aic=aic,aicor=aicor,bic=bic,bicor=bicor,hq=hq,hqor=hqor,Mstat=Mstat,Mpv=pv)
 }
 ##############################
@@ -735,7 +735,7 @@
       }
       Si=cbind(Si,tmp)
    }
-   
+
    VARpsi <- list(psi=Si)
 }
 
@@ -903,11 +903,9 @@
       #print(tmp,digits=3)
       print(round(tmp,4))
    }
-   
+
    VARpred <- list(pred=pred,se.err=se,rmse=mse)
 }
-
-
 
 "VARfore" <- function(model,h=1,orig=0){
    # Computes the i=1, 2, ..., h-step ahead predictions of a VAR(p) model.
@@ -1015,7 +1013,7 @@
    ist=max(p,q)+1
    zt=matrix(0,nT,k)
    if(length(cnst)==0)cnst=rep(0,k)
-   
+
    for (it in ist:nT){
       tmp=matrix(at[it,],1,k)
       if(nma > 0){
@@ -1039,7 +1037,7 @@
    # skip the first "skip" points
    zt=zt[(1+skip):nT,]
    at=at[(1+skip):nT,]
-   
+
    VARMAsim <- list(series=zt,noises=at)
 }
 
@@ -1111,7 +1109,7 @@
          acuwk1=cbind(acuwk1,awk1)
       }
    }
-   
+
    tdx=c(1:(lag+1))-1
    par(mfcol=c(k,k),mai=c(0.3,0.3,0.3,0.3))
    if(orth){
@@ -1162,7 +1160,7 @@
          title(main="Orig. innovations")
       }
    }
-   
+
    VARirf <- list(irf=Si,orthirf=orSi)
 }
 
@@ -1296,7 +1294,7 @@
     THini <- list(estimates=beta,se=sebeta)
   }
 
-   if(length(fixed) < 1){ 
+   if(length(fixed) < 1){
     m1=VARorder(da,q+12,output=FALSE)
     porder=m1$aicor
     if(porder < 1)porder=1
@@ -1459,7 +1457,7 @@
       lower = lowerBounds, upper = upperBounds, control = list(trace=3))
    }
    else {
-      fit = nlminb(start = ParMA, objective = LLKvma, zt=da, fixed=fixed, include.mean=include.mean, q=q, 
+      fit = nlminb(start = ParMA, objective = LLKvma, zt=da, fixed=fixed, include.mean=include.mean, q=q,
        lower = lowerBounds, upper = upperBounds)
    }
    epsilon = 0.0001 * fit$par
@@ -1554,7 +1552,7 @@
       TH=rbind(cnt,TH)
       seTH=rbind(secnt,seTH)
    }
-   
+
    VMA <- list(data=da,MAorder=q,cnst=include.mean,coef=TH,secoef=seTH,residuals=at,Sigma=sig,Theta=Theta,mu=cnt,aic=aic,bic=bic)
 }
 
@@ -1590,9 +1588,9 @@
       idx=c(1:nc)[abs(tt) > 1.0]
       if(length(idx) > 0)fix[1,idx]=1
    }
-     
+
    mm=VMA(x,q=q,include.mean=cnst,fixed=fix,beta=coef,sebeta=secoef)
-   
+
    refVMA <- list(data=x,MAorder=q,cnst=cnst,coef=mm$coef,secoef=mm$secoef,residuals=mm$residuals,Sigma=mm$Sigma,aic=mm$aic,bic=mm$bic,mu=mm$mu,Theta=mm$Theta,fixed=fix)
   }
 
@@ -1647,7 +1645,7 @@
    for (j in 1:k){
       se=sqrt(dd*sse[j,j])
       sebeta=cbind(sebeta,se)
-     }   
+     }
    THinis <- list(estimates=beta, se=sebeta)
   }
 
@@ -1717,7 +1715,7 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
    nT=nrow(zt)
    nlags=length(MAlag)
    q=MAlag[nlags]
-   fix <- fixed 
+   fix <- fixed
    #
    mu=rep(0,k)
    ist=0
@@ -1743,7 +1741,7 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
          icnt=icnt+jcnt
       }
    }
-   
+
    # Theta = rbind[theta_1',theta_2', ..., theta_q']
    at=zt[1:MAlag[1],]
    if(MAlag[1]==1)at=matrix(at,1,k)
@@ -1783,11 +1781,11 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
 
    # Step 5: Estimate Parameters and Compute Numerically Hessian:
    if(details){
-      fit = nlminb(start = par, objective = LLKvmas, zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fixed, 
+      fit = nlminb(start = par, objective = LLKvmas, zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fixed,
       lower = lowerBounds, upper = upperBounds, control = list(trace=3))
    }
    else {
-      fit = nlminb(start = par, objective = LLKvmas, zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fixed, 
+      fit = nlminb(start = par, objective = LLKvmas, zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fixed,
         lower = lowerBounds, upper = upperBounds)
    }
    epsilon = 0.0001 * fit$par
@@ -1817,7 +1815,7 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
    " Std. Error", " t value", "Pr(>|t|)"))
    cat("\nCoefficient(s):\n")
    printCoefmat(matcoef, digits = 4, signif.stars = TRUE)
-   
+
    cat("---","\n")
    cat("Estimates in matrix form:","\n")
    icnt=0
@@ -1860,7 +1858,7 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
       icnt=icnt+k
    }
    ## Compute the residuals
-   zt=da 
+   zt=da
    if(include.mean){
       for (i in 1:k){
          zt[,i]=zt[,i]-cnt[i]
@@ -1912,7 +1910,7 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
       TH=rbind(cnt,TH)
       seTH=rbind(secnt,seTH)
    }
-   
+
    VMAs <- list(data=da,MAlags=MAlag,cnst=include.mean,coef=TH,secoef=seTH,residuals=at,aic=aic,bic=bic,Sigma=sig,Theta=Theta,mu=cnt,MAorder=q,fixed=fixed)
 }
 
@@ -1952,9 +1950,9 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
       idx=c(1:nc)[abs(tt) > 1.0]
       if(length(idx) > 0)fix[1,idx]=1
    }
-   
+
    mm=VMAs(x,malags,include.mean=cnst,fixed=fix)
-   
+
    refVMAs <- list(data=x,MAlags=malags,cnst=cnst,coef=mm$coef,secoef=mm$secoef,residuals=mm$residuals,aic=mm$aic,bic=mm$bic,Sigma=mm$Sigma,Theta=mm$Theta,mu=mm$mu,MAorder=mm$MAorder,fixed=fix)
 }
 
@@ -2030,7 +2028,7 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
       tmp = tmp[,idx]
       print(tmp,digits=3)
    }
-   
+
    VMApred <- list(pred=pred,se.err=se)
 }
 
@@ -2090,11 +2088,11 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
    for (j in 1:k){
       se=sqrt(dd*sse[j,j])
       sebeta=cbind(sebeta,se)
-   }   
+   }
    iniEST <- list(estimates=beta,se=sebeta)
   }
 
-  if(length(fixed) < 1){ 
+  if(length(fixed) < 1){
    m1=VARorder(da,p+q+9,output=FALSE)
    porder=m1$aicor
    if(porder < 1)porder=1
@@ -2289,7 +2287,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       lower = lowerBounds, upper = upperBounds, control = list(trace=3))
    }
    else {
-      fit = nlminb(start = par, objective = LLKvarma, zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed, 
+      fit = nlminb(start = par, objective = LLKvarma, zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed,
       lower = lowerBounds, upper = upperBounds)
    }
    epsilon = 0.0001 * fit$par
@@ -2445,7 +2443,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       }
       # end of if(pqmax > 1) statement
    }
-   
+
    ### for t from ist on
    Pcnt = NULL
    idim=kp+kq
@@ -2486,7 +2484,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    cat("bic= ",bic,"\n")
    if(length(PH) > 0)PH=t(PH)
    if(length(TH) > 0)TH=-t(TH)
-   
+
    VARMA <- list(data=da,ARorder=p,MAorder=q,cnst=include.mean,coef=beta,secoef=sebeta,residuals=at,Sigma=sig,aic=aic,bic=bic,Phi=PH,Theta=TH,Ph0=Ph0)
 }
 
@@ -2523,9 +2521,9 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       idx=c(1:nc)[abs(tt) > 1.0]
       if(length(idx) > 0)fix[1,idx]=1
    }
-   
+
    mm=VARMA(x,p=p1,q=q1,include.mean=cnst,fixed=fix,beta=coef,sebeta=secoef)
-   
+
    refVARMA <- list(data=x,coef=mm$coef,secoef=mm$secoef,ARorder=p1,MAorder=q1,cnst=cnst,residuals=mm$residuals,Ph0=mm$Ph0,Phi=mm$Phi,Theta=mm$Theta,Sigma=mm$Sigma,aic=mm$aic,bic=mm$bic)
 }
 ######
@@ -2660,7 +2658,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       tmp = tmp[,idx]
       print(tmp,digits=4)
    }
-   
+
    VARMApred <- list(pred=px[(orig+1):(orig+h),],se.err=sefcst,orig=orig)
    #end of the program
 }
@@ -2721,7 +2719,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       cat("standard error","\n")
       print(se,digits=3)
    }
-   
+
    cat("AR coefficient matrix","\n")
    jst=icnt
    for (i in 1:(p-1)){
@@ -2746,7 +2744,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    bic=d1+log(nT)*idm*k/nT
    cat("AIC = ",aic,"\n")
    cat("BIC = ",bic,"\n")
-   
+
    VARecm<-list(coef=beta,aic=aic,bic=bic,residuals=resi,secoef=sdbeta,Sigma=sse)
 }
 
@@ -2817,7 +2815,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    res=m1$residuals
    beta=matrix(v[2:(nx+1)],nx,1)
    nt=y1-v[1]-X%*%beta
-   
+
    tfm <- list(coef=v,se.coef=se.v,coef.arma=coef.arma,se.arma=se.arma,nt=nt,residuals=res)
   }
 
@@ -2977,7 +2975,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
       #
    }
    Nt = Nts(est,dY=dY,dX=dX,orderN=orderN,orderX=orderX)
-   
+
    tfm1 <- list(estimate=est,sigma2=sigma2,residuals=residuals,varcoef=varcoef, Nt=Nt)
 }
 
@@ -2990,7 +2988,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    ###            and w(B) = w_0+w_1B + ... + w_s B^s and b is the delay.
    ###
    ### order2 = c(r2,s2,b2) for the second exogenous variable
-   ### wt: for co-integrated system 
+   ### wt: for co-integrated system
    ### ct: a given determinsitic variable such as time trend
    ### par=c(c0,w0,w1,...,ws,d1,...,dr,c1,c2,W0, ...,Ws,D1,...,Dr,phi,theta,Phi,Theta): November 2014
    ###
@@ -3231,7 +3229,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
 #### re-ordering the estimate for computing Nt series
      jcnt=p+q+P+Q+1
      est1=c(est[jcnt:(jcnt+ncol(X))],est[1:(jcnt-1)])
-###   
+###
       nx=dim(X)[2]
       se=sqrt(diag(m1$var.coef))
       coef.arma=NULL
@@ -3354,7 +3352,7 @@ LLKvarma <- function(par,zt=da,p=p,q=q,include.mean=include.mean,fixed=fixed){
    }
 #
    Nt <- Nts(est,dY=dY,dX=dX,dX2=dX2,dW=dW,dC=dC,order1=order1,order2=order2)
-   
+
    tfm2 <- list(estimate=est,sigma2=sigma2,residuals=residuals,varcoef=varcoef,Nt=Nt,rAR=phi,rMA=theta,sAR=Phi,sMA=Theta,
 omega=omega,delta=delta,omega2=Omega,delta2=Delta)
 }
@@ -3740,7 +3738,7 @@ for (it in orig:(nT-1)){
    ### In mFilter
    ##cat("in mFilter: ","\n")
    ##print(Wgt)
-   
+
    nT=dim(da)[1]
    k=dim(da)[2]
    if(k == 1){
@@ -4071,7 +4069,7 @@ for (it in orig:(nT-1)){
 
   # Step 5: Estimate Parameters and Compute Numerically Hessian:
    if(details){
-      fit = nlminb(start = ParE, objective = EVMAq, zt=da,q=q,include.mean=include.mean,fixed=fixed, 
+      fit = nlminb(start = ParE, objective = EVMAq, zt=da,q=q,include.mean=include.mean,fixed=fixed,
                 lower = lowerBounds, upper = upperBounds, control = list(trace=3))}
    else{
       fit = nlminb(start = ParE, objective = EVMAq, zt=da,q=q,include.mean=include.mean,fixed=fixed,
@@ -4253,7 +4251,7 @@ for (it in orig:(nT-1)){
       TH=rbind(cnt,TH)
       seTH=rbind(secnt,seTH)
    }
-   
+
    VMAe <- list(data=da,MAorder=q,cnst=include.mean,coef=TH,secoef=seTH,residuals=at,Sigma=sig,Theta=Theta,mu=cnt,aic=aic,bic=bic)
  }
 
@@ -4285,7 +4283,7 @@ for (it in orig:(nT-1)){
       if(length(idx) > 0)fix[1,idx]=1
       }
      mm=VMAe(x,q=q,include.mean=cnst,fixed=fix,coef0=coef,secoef0=secoef)
-    refVMAe <- list(data=x,MAorder=q,cnst=cnst,coef=mm$coef,secoef=mm$secoef,residuals=mm$residuals,Sigma=mm$Sigma,aic=mm$aic,bic=mm$bic,mu=mm$mu,Theta=mm$Theta)   
+    refVMAe <- list(data=x,MAorder=q,cnst=cnst,coef=mm$coef,secoef=mm$secoef,residuals=mm$residuals,Sigma=mm$Sigma,aic=mm$aic,bic=mm$bic,mu=mm$mu,Theta=mm$Theta)
   }
 
 ###
@@ -4557,7 +4555,7 @@ for (it in orig:(nT-1)){
       cat("cross correlation matrix of lag: ",i,"\n")
       print(round(cormtx[,(ist+1):(ist+k)],4))
    }
-   
+
    VARMAcov <- list(autocov=covmtx,ccm=cormtx)
 }
 
@@ -4936,7 +4934,7 @@ for (it in orig:(nT-1)){
    nT=dim(da)[1];   k=dim(da)[2]
    ## obtain the maximum index value.
    p=floor(dim(ARid)[2]/k)-1
-### Minimum order is 1. 
+### Minimum order is 1.
    if(p <= 0)p=1
    ist = p + 1
    ## est: stores the estimates (equation 1, equation 2, etc.)
@@ -4986,7 +4984,7 @@ for (it in orig:(nT-1)){
      }
    iniKro <- list(par=est,se=estse)
   }
-## 
+##
   if(length(Kpar) < 1){
       m1=VARorder(da,maxk+9,output=FALSE)
       porder=m1$aicor
@@ -4998,7 +4996,7 @@ for (it in orig:(nT-1)){
       ### Kpar is the vector of ALL estimable parameters.
       Kpar <- m3$par; seKpar=m3$se
       ### Kpar is a vector; which stores parameters equation-by-equation.
-      nr=length(Kpar) 
+      nr=length(Kpar)
       ### Preliminary simplification
       if(prelim){
          fixed = rep(0,nr)
@@ -5033,7 +5031,7 @@ for (it in orig:(nT-1)){
    }
    cat("Upper-bound: ",round(upperBounds,4),"\n")
    cat("Lower-bound: ",round(lowerBounds,4),"\n")
-### likelihood function 
+### likelihood function
  LLKron <- function(par,zt=da,JJdx=JJdx,kidx=kidx,ARid=ARid,MAid=MAid,Kpar=Kpar,include.mean=include.mean){
    k=dim(zt)[2]
    nT=dim(zt)[1]
@@ -5130,11 +5128,11 @@ for (it in orig:(nT-1)){
   }
    # Step 5: Estimate Parameters and Compute Numerically Hessian:
    if(details){
-      fit = nlminb(start = par, objective = LLKron,zt=da,include.mean=include.mean,JJdx=JJdx,kidx=kidx, 
+      fit = nlminb(start = par, objective = LLKron,zt=da,include.mean=include.mean,JJdx=JJdx,kidx=kidx,
       Kpar=Kpar,ARid=ARid,MAid=MAid,lower = lowerBounds, upper = upperBounds, control = list(trace=3))
    }
    else {
-      fit = nlminb(start = par, objective = LLKron, zt=da,include.mean=include.mean,JJdx=JJdx,kidx=kidx, 
+      fit = nlminb(start = par, objective = LLKron, zt=da,include.mean=include.mean,JJdx=JJdx,kidx=kidx,
        Kpar=Kpar,ARid=ARid,MAid=MAid,lower = lowerBounds, upper = upperBounds)
    }
    epsilon = 0.0001 * fit$par
@@ -5245,7 +5243,7 @@ for (it in orig:(nT-1)){
    ARc=Ph0i%*%PH
    MAc=Ph0i%*%TH
    Cntc=Ph0i%*%as.matrix(Cnt,k,1)
-   zt=da 
+   zt=da
    ist=maxk+1
    #### consider the case t from 1 to maxk+1
    at=matrix((zt[1,]-Cntc),1,k)
@@ -5308,7 +5306,7 @@ for (it in orig:(nT-1)){
    cat("----","\n")
    cat("aic= ",aic,"\n")
    cat("bic= ",bic,"\n")
-    
+
    Kronfit <- list(data=da,Kindex=kidx,ARid=ARid,MAid=MAid,cnst=include.mean,coef=Kpar,secoef=seKpar,residuals=at,Sigma=sig,aic=aic,bic=bic, Ph0=Ph0,Phi=PH,Theta=-TH,const=Cnt)
 }
 
@@ -5342,7 +5340,7 @@ for (it in orig:(nT-1)){
    TH=-m1$Theta
    at=m1$residuals
    Cnt=m1$const
-   
+
    refKronfit <- list(data=zt,Kindex=kidx,ARid=ARid,MAid=MAid,cnst=inc.mean,coef=Kpar,secoef=seKpar,residuals=at,Sigma=sig,aic=aic,bic=bic, Ph0=Ph0,Phi=PH,Theta=-TH,const=Cnt)
 }
 
@@ -5387,7 +5385,7 @@ for (it in orig:(nT-1)){
          t1=t.test(DX[,j])
          if(t1$p.value < 0.05)Smean[j]=1
       }
-      if(sum(Smean) < 1)include.mean=FALSE 
+      if(sum(Smean) < 1)include.mean=FALSE
    }
    else{
       DX=X
@@ -5776,7 +5774,7 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
        fixed=fixed,swi=switch,Sresi=Sresi,lower = lowerBounds, upper = upperBounds, control = list(trace=3))
    }
    else {
-      fit = nlminb(start = par, objective = LLKsvarma,zt=DX,Order=Order,ARlags=ARlags,MAlags=MAlags,include.mean=include.mean, 
+      fit = nlminb(start = par, objective = LLKsvarma,zt=DX,Order=Order,ARlags=ARlags,MAlags=MAlags,include.mean=include.mean,
           fixed=fixed,swi=switch,Sresi=Sresi,lower = lowerBounds, upper = upperBounds)
    }
    epsilon = 0.0001 * fit$par
@@ -5789,7 +5787,7 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
          x2[i] = x2[i] + epsilon[i]; x2[j] = x2[j] - epsilon[j]
          x3[i] = x3[i] - epsilon[i]; x3[j] = x3[j] + epsilon[j]
          x4[i] = x4[i] - epsilon[i]; x4[j] = x4[j] - epsilon[j]
-         Hessian[i, j] = 
+         Hessian[i, j] =
           (LLKsvarma(x1,zt=DX,Order=Order,ARlags=ARlags,MAlags=MAlags,include.mean=include.mean,fixed=fixed,swi=switch,Sresi=Sresi)
           -LLKsvarma(x2,zt=DX,Order=Order,ARlags=ARlags,MAlags=MAlags,include.mean=include.mean,fixed=fixed,swi=switch,Sresi=Sresi)
           -LLKsvarma(x3,zt=DX,Order=Order,ARlags=ARlags,MAlags=MAlags,include.mean=include.mean,fixed=fixed,swi=switch,Sresi=Sresi)
@@ -6003,7 +6001,7 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
    if(length(sPH) > 0)sPH=t(sPH)
    if(length(TH) > 0)TH=t(TH)
    if(length(sTH) > 0)sTH=t(sTH)
-   
+
    sVARMA <- list(data=da,order=order,sorder=sorder,period=s,cnst=include.mean,coef=beta,secoef=sebeta,residuals=at,Sigma=sig,aic=aic,bic=bic,regPhi=PH,seaPhi=sPH, regTheta=TH, seaTheta=sTH, Ph0=Ph0,switch=switch)
 }
 
@@ -6084,11 +6082,11 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
       idx=c(1:nc)[abs(tt) > 1.0]
       if(length(idx) > 0)fix[1,idx]=1
    }
-   
+
    mm=sVARMA(x,order,sorder,s,include.mean=cnst,fixed=fix,switch=swi)
-   
+
    refsVARMA <- list(data=x,coef=mm$coef,secoef=mm$secoef,order=mm$order,sorder=mm$sorder,period=mm$period,cnst=cnst,residuals=mm$residuals,regPhi=mm$regPhi,seaPhi=mm$seaPhi,regTheta=mm$regTheta,seaTheta=mm$seaTheta,Ph0=mm$Pho,Sigma=mm$Sigma,aic=mm$aic,bic=mm$bic,switch=mm$switch)
-   
+
 }
 
 "VARX" <- function(zt,p,xt=NULL,m=0,include.mean=T,fixed=NULL,output=T){
@@ -6220,7 +6218,7 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
    cat("Information criteria: ","\n")
    cat("AIC: ",aic,"\n")
    cat("BIC: ",bic,"\n")
-   
+
    VARX <- list(data=zt,xt=xt,aror=p,m=m,Ph0=Ph0,Phi=Phi,beta=Beta,residuals=resi,Sigma=sig,
    coef=beta,se.coef=se.beta,include.mean=include.mean)
 }
@@ -6237,11 +6235,11 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
       if(length(idx) > 0){
          fix[idx,i]=1}
    }
-   
+
    mm=VARX(zt,p,xt,m,include.mean=include.m,fixed=fix)
    Ph0=mm$Ph0; Phi=mm$Phi; Beta=mm$beta; resi=mm$residuals
    sig=mm$Sigma; coef=mm$beta; se.coef=mm$se.coef
-   
+
    refVARX <- list(data=zt,aror=p,xt=xt,m=m,Ph0=Ph0,Phi=Phi,beta=Beta,residuals=resi,Sigma=sig,
    coef=coef,se.coef=se.coef,include.mean=include.m)
 }
@@ -6311,7 +6309,7 @@ LLKsvarma <- function(par,zt=DX,Order=Order,ARlags=arlags,MAlags=malags,include.
       print(round(nzt[(orig+1):(orig+hstep),],5))
       cat("Corresponding standard errors: ","\n")
       print(round(se[1:hstep,],5))
-      
+
    }
    else{
       cat("Need new data for input variables!","\n")
@@ -6420,7 +6418,7 @@ return <- list(pred=nzt[(orig+1):(orig+hstep),],se=se[1:hstep,],orig=orig,h=hste
       cat("selected order(p,s): bic = ",bicor,"\n")
       cat("selected order(p,s): hq = ",hqor,"\n")
    }
-   
+
    VARXorder<-list(aic=aic,aicor=aicor,bic=bic,bicor=bicor,hq=hq,hqor=hqor)
  }
 
@@ -6510,7 +6508,7 @@ return <- list(pred=nzt[(orig+1):(orig+hstep),],se=se[1:hstep,],orig=orig,h=hste
      }
    RegXmtx <- list(xmtx=xmtx,residuals=resi)
   }
- 
+
 lRegts <- function(par,zt=zt,xt=xt,p=p,include.mean=include.mean,fixed=fixed){
    # compute the log-likelihood function of a REGts model
    nT <- dim(zt)[1];    k <- dim(zt)[2]
@@ -6527,7 +6525,7 @@ lRegts <- function(par,zt=zt,xt=xt,p=p,include.mean=include.mean,fixed=fixed){
 
    # Estimate Parameters and Compute Numerically Hessian:
    if(details){
-      fit = nlminb(start = par, objective = lRegts, zt=zt,xt=xt,p=p,include.mean=include.mean,fixed=fixed, 
+      fit = nlminb(start = par, objective = lRegts, zt=zt,xt=xt,p=p,include.mean=include.mean,fixed=fixed,
               lower = lowerBounds, upper = upperBounds, control = list(trace=3))}
    else{
       fit = nlminb(start = par, objective = lRegts, zt=zt,xt=xt,p=p,include.mean=include.mean,fixed=fixed,
@@ -6624,7 +6622,7 @@ lRegts <- function(par,zt=zt,xt=xt,p=p,include.mean=include.mean,fixed=fixed){
    #
    coef=rbind(beta,Phi)
    se.coef=rbind(se.beta,se.Phi)
-      
+
    REGts <- list(data=zt,xt=xt,aror=p,include.mean=include.mean,Phi=t(Phi),se.Phi=t(se.Phi),
    beta=t(beta),se.beta=t(se.beta),residuals=resi,Sigma=sig,coef=coef,se.coef=se.coef)
 }
@@ -6671,11 +6669,11 @@ lRegts <- function(par,zt=zt,xt=xt,p=p,include.mean=include.mean,fixed=fixed){
    }
    fix=rbind(fix1,fix2)
    ####print(fix)
-   
+
    mm = REGts(zt,p,xt,include.mean=include.m,fixed=fix,par=par,se.par=separ)
    coef=mm$coef;se.coef=mm$se.coef;Phi=t(mm$Phi);se.Phi=t(mm$se.Phi)
    beta=t(mm$beta);se.beta=t(mm$se.beta);resi=mm$residuals;sig=mm$Sigma
-   
+
    refREGts <- list(data=zt,xt=xt,aror=p,include.mean=include.m,Phi=t(Phi),se.Phi=t(se.Phi),
    beta=t(beta),se.beta=t(se.beta),residuals=resi,Sigma=sig,coef=coef,se.coef=se.coef)
 }
@@ -7018,7 +7016,7 @@ lRegts <- function(par,zt=zt,xt=xt,p=p,include.mean=include.mean,fixed=fixed){
    colnames(diagDif) <- c(c(0:maxq))
    rownames(diagDif) <- c(c(0:maxp))
    printCoefmat(diagDif)
-   
+
    SCMid <- list(Nmtx=zeroTbl,DDmtx=diagDif)
  }
 
@@ -7052,7 +7050,7 @@ if(length(sseq) < 1){
    #end of if(length(sseq) < 1)
   }
 tcases=dim(sseq)[1]  ## The total number of SCM orders to be tested.
-## wkspace: storage space to store genuine eigenvectors. 
+## wkspace: storage space to store genuine eigenvectors.
 wkspace=matrix(0,tcases,cmax)
 Nscm=rep(0,tcases)
 ## Tmx: Transformation matrix.
@@ -7184,7 +7182,7 @@ if((nc > 1) && (Jcnt > 0)){
       }
      wk2=cbind(wk2,wk3)
      }
-###   
+###
      n12=dim(wk2)[2]
      if(icnt <= n12){
       cat("No new SCM found.","\n")
@@ -7206,9 +7204,9 @@ if((nc > 1) && (Jcnt > 0)){
       print(wk1,digits=3)
       }
 ###
-##  Checking for possible exchangeable SCM 
+##  Checking for possible exchangeable SCM
    if(ngenu > 0){
-    iexch = 0       
+    iexch = 0
     for (j1 in 1:(nc-1)){
      m1=sseq[j1,1]; j2=sseq[j1,2]
      if((m1+j2)==(m+j)){
@@ -7230,7 +7228,7 @@ if((nc > 1) && (Jcnt > 0)){
          }
         } # end of (m1+j2) == m+j
       }  ##end of for-loop
-     } ## end of if(ngenu > 0)   
+     } ## end of if(ngenu > 0)
 ####
    }### end of (if (nc > 1) && (Jcnt > 0))
     newSCM=icnt-n12
@@ -7245,8 +7243,8 @@ if((nc > 1) && (Jcnt > 0)){
     Nscm[nc]=icnt
     Jcnt=Jcnt+icnt
     leng=(m+1)*k*icnt
-    if(leng > 0){wkspace[nc,1:leng] = c(wk1)} ### 
-### 
+    if(leng > 0){wkspace[nc,1:leng] = c(wk1)} ###
+###
 ###    cat("Nscm: ", Nscm[1:nc],"\n")
     if(icnt > 0){Tmx=cbind(Tmx,wk1[1:k,])}
 #####    cat("dim: ",c(ncol(Tmx),ncol(wk1)),"\n")
@@ -7343,7 +7341,7 @@ if((nc > 1) && (Jcnt > 0)){
    # Estimation of a vector ARMA model using conditional MLE (Gaussian dist)
    #  The model is specified via SCMs.
    #
-   # The program is modified from Kronfit.R, July 2012. 
+   # The program is modified from Kronfit.R, July 2012.
    #
    # When prelim=TRUE, fixed is assigned based on the results of AR approximation.
    # Here "thres" is used either prelim = TRUE or in refined estimation.
@@ -7451,9 +7449,9 @@ if((nc > 1) && (Jcnt > 0)){
       y=da[(porder+1):nT,]
       x=m2$residuals
       m3=iniSCM(y,x,scms,Tdx,locTmtx,locAR,locMA,include.mean)
-      ### SCMpar is the vector of ALL estimable parameters. 
+      ### SCMpar is the vector of ALL estimable parameters.
       ####               [Some of which maybe fixed to zero.]
-      SCMpar <- m3$par; seSCMpar <- m3$se 
+      SCMpar <- m3$par; seSCMpar <- m3$se
       ### SCMpar is a vector; which stores parameters equation-by-equation.
       ##
       nr=length(SCMpar)
@@ -7501,7 +7499,7 @@ if((nc > 1) && (Jcnt > 0)){
    Cnt=rep(0,k)
    ### separate lag-0 coefficient matrix.
    Ph0=locTmtx; PH=NULL; TH=NULL
-   if(p > 0)PH=matrix(0,k,kp) 
+   if(p > 0)PH=matrix(0,k,kp)
    if(q > 0)TH=matrix(0,k,kq)
    icnt=0
    for (i in 1:k){
@@ -7529,13 +7527,13 @@ if((nc > 1) && (Jcnt > 0)){
          icnt=icnt+jend
        }
     }
-   ##### Compute the residuals 
+   ##### Compute the residuals
    ###### Compute the AR and MA coefficient matrix
    Ph0i=solve(Ph0); ARc=NULL; MAc=NULL
    if(p > 0)ARc=Ph0i%*%PH
    if(q > 0)MAc=Ph0i%*%TH
    Cntc=Ph0i%*%as.matrix(Cnt,k,1)
-   ## 
+   ##
    ist=pq+1
    #### consider the case t from 1 to pq+1
    at=matrix((zt[1,]-Cntc),1,k)
@@ -7601,12 +7599,12 @@ if((nc > 1) && (Jcnt > 0)){
  }
 
   #  Estimate Parameters and Compute Numerically Hessian:
-   if(details){ 
+   if(details){
       fit = nlminb(start = par, objective = LLSCM,zt=da,scms=scms,Tdx=Tdx,SCMpar=SCMpar,JJdx=JJdx,include.mean=include.mean,fixed=fixed,
       locTmtx=locTmtx,locAR=locAR,locMA=locMA,lower = lowerBounds, upper = upperBounds, control = list(trace=3))
    }
    else {
-      fit = nlminb(start = par, objective = LLSCM,zt=da,scms=scms,Tdx=Tdx,SCMpar=SCMpar,JJdx=JJdx,include.mean=include.mean,fixed=fixed, 
+      fit = nlminb(start = par, objective = LLSCM,zt=da,scms=scms,Tdx=Tdx,SCMpar=SCMpar,JJdx=JJdx,include.mean=include.mean,fixed=fixed,
        locTmtx=locTmtx,locAR=locAR,locMA=locMA,lower = lowerBounds, upper = upperBounds)
    }
    epsilon = 0.0001 * fit$par
@@ -7721,7 +7719,7 @@ if((nc > 1) && (Jcnt > 0)){
          icnt=icnt+k
       }
    }
-   ##### Compute the residuals 
+   ##### Compute the residuals
    ###### Compute the AR and MA coefficient matrix
    Ph0i=solve(Ph0); ARc = NULL; MAc=NULL
    if(p > 0)ARc=Ph0i%*%PH
@@ -7760,7 +7758,7 @@ if((nc > 1) && (Jcnt > 0)){
       }
       # end of if(pq > 1) statement
    }
-   
+
    ### for t from ist on
    ist=pq+1
    Pcnt=NULL
@@ -7815,7 +7813,7 @@ if((nc > 1) && (Jcnt > 0)){
    cat("bic= ",bic,"\n")
    TH1=NULL
    if(length(TH) > 0)TH1=-TH
-   
+
    SCMfit <- list(data=da,SCMs=scms,Tdx=Tdx,locTmtx=locTmtx,locAR=locAR,locMA=locMA,cnst=include.mean,coef=SCMpar,secoef=seSCMpar,residuals=at,Sigma=sig,aic=aic,bic=bic, Ph0=Ph0,Phi=PH,Theta=TH1)
 }
 
@@ -7847,7 +7845,7 @@ if((nc > 1) && (Jcnt > 0)){
    sig=m1$Sigma; aic=m1$aic; bic=m1$bic
    Ph0=m1$Ph0; PH=m1$Phi; TH=m1$Theta; if(length(TH)>0)TH=-TH
    at=m1$residuals
-   
+
    refSCMfit <- list(data=zt,SCMs=scms,Tdx=Tdx,locTmtx=locTmtx,locAR=locAR,locMA=locMA,cnst=inc.mean,coef=SCMpar,secoef=seSCMpar,residuals=at,Sigma=sig,aic=aic,bic=bic, Ph0=Ph0,Phi=PH,Theta=TH)
 }
 
@@ -7988,7 +7986,7 @@ if((nc > 1) && (Jcnt > 0)){
       cat("BIC = ",bic,"\n")
       ## end of if(output)
    }
-   
+
    ECMvar1 <-list(data=x,wt=wt,arorder=p,include.const=include.const,coef=beta,aic=aic,bic=bic,residuals=resi,secoef=sdbeta,Sigma=sse)
 }
 
@@ -8011,7 +8009,7 @@ if((nc > 1) && (Jcnt > 0)){
    mm=ECMvar1(x,p,wt,include.const=include.con,fixed=fix)
    beta=mm$coef; sdbeta=mm$secoef
    aic=mm$aic; bic=mm$bic; resi=mm$residuals; sse=mm$Sigma
-   
+
    refECMvar1 <- list(data=x,wt=wt,arorder=p,include.const=include.con,coef=beta,aic=aic,bic=bic,residuals=resi,secoef=sdbeta,Sigma=sse)
 }
 
@@ -8020,7 +8018,7 @@ if((nc > 1) && (Jcnt > 0)){
    # Fits an error-correction VAR model.
    ### This program assumes the co-integrating process w(t) is unknown.
    ### It is a refined version of ECMvar1.
-   ### ibeta: initial estimates of beta-matrix. (k by m matrix). 
+   ### ibeta: initial estimates of beta-matrix. (k by m matrix).
    ###   Typically, it is available from the co-integration test.
    if(!is.matrix(x))x=as.matrix(x)
    if(!is.matrix(ibeta))ibeta=as.matrix(ibeta)
@@ -8063,7 +8061,7 @@ if((nc > 1) && (Jcnt > 0)){
       }
     }
    npar=length(par)
-##Setup the X-matrix for ECMvar estimation. 
+##Setup the X-matrix for ECMvar estimation.
  ECMxmtx <- function(x,p,m,include.const){
    nT <- dim(x)[1]; k <- dim(x)[2]
    dx=x[2:nT,]-x[1:(nT-1),]
@@ -8077,7 +8075,7 @@ if((nc > 1) && (Jcnt > 0)){
       for (ii in 1:(p-1)){
          xm=cbind(xm,dx[(ist-ii):(nT-ii),])
       }
-   }   
+   }
    ECMxmtx <- list(xm = xm, y=dx[ist:nT,])
   }
    m2=ECMxmtx(x,p,m,include.const)
@@ -8161,7 +8159,7 @@ if((nc > 1) && (Jcnt > 0)){
    ##H=mm$hessian
    details=FALSE
    # Step 5: Estimate Parameters and Compute Numerically Hessian:
-   if(details){ 
+   if(details){
       fit = nlminb(start = par, objective = LECMvar,x=x,p=p,m=m,include.const=include.const,fixed=fixed,ECMy=ECMy,ECMxm=ECMxm,
       lower = lowerBounds, upper = upperBounds, control = list(trace=3))
    }
@@ -8195,7 +8193,7 @@ if((nc > 1) && (Jcnt > 0)){
    dimnames(matcoef) = list(names(tval), c(" Estimate",
    " Std. Error", " t value", "Pr(>|t|)"))
    cat("\nCoefficient(s):\n")
-   printCoefmat(matcoef, digits = 4, signif.stars = TRUE)  
+   printCoefmat(matcoef, digits = 4, signif.stars = TRUE)
    ### print parameter estimates in the ECM model
    km=k*m
    kmm = (k-m)*m
@@ -8226,7 +8224,7 @@ if((nc > 1) && (Jcnt > 0)){
          }
         }
       }
-   }   
+   }
    cat("alpha: ","\n")
    print(alpha,digits=3)
    cat("standard error","\n")
@@ -8279,7 +8277,7 @@ if((nc > 1) && (Jcnt > 0)){
    bic=d1+log(nT)*npar/nT
    cat("AIC = ",aic,"\n")
    cat("BIC = ",bic,"\n")
-   
+
    ECMvar <-list(data=x,ncoint=m,arorder=p,include.const=include.const,alpha=alpha,se.alpha=se.alpha,beta=beta,se.beta=se.beta,aic=aic,bic=bic,residuals=resi,Phip=phip,se.Phip=se.phip,Sigma=sse)
 }
 
@@ -8287,7 +8285,7 @@ if((nc > 1) && (Jcnt > 0)){
 
 #### refinemeant of ECMvar
 "refECMvar" <- function(m1,thres=1.0){
-   ### m1 is a fitted model from ECMvar or refECMvar. 
+   ### m1 is a fitted model from ECMvar or refECMvar.
    x=m1$data; m=m1$ncoint; p=m1$arorder; include.const=m1$include.const
    alpha=m1$alpha; se.alpha=m1$se.alpha; beta=m1$beta; se.beta=m1$se.beta
    Phip=m1$Phip; se.Phip=m1$se.Phip; aic=m1$aic; bic=m1$bic; resi=m1$residuals; sse=m1$Sigma
@@ -8310,7 +8308,7 @@ if((nc > 1) && (Jcnt > 0)){
     resi=mm$residuals; sse=mm$Sigma; include.const=mm$include.const
     }
    refECMvar <-list(data=x,ncoint=m,arorder=p,include.const=include.const,alpha=alpha,se.alpha=se.alpha,beta=beta,se.beta=se.beta,aic=aic,bic=bic,residuals=resi,Phip=Phip,se.Phip=se.Phip,Sigma=sse)
-   
+
 }
 
 "SWfore" <- function(y,x,orig,m){
@@ -8354,7 +8352,7 @@ if((nc > 1) && (Jcnt > 0)){
       MSE=mean(err^2)
       cat("MSE of out-of-sample forecasts: ",MSE,"\n")
    }
-   
+
    SWfore <- list(coef=coef,yhat=yhat,MSE=MSE,loadings=M1,DFindex=Dindex)
 }
 
@@ -8378,7 +8376,7 @@ if((nc > 1) && (Jcnt > 0)){
    factors=factors[,1:m]
    loadings=m1$scores[,1:m]
    sdev=m1$sdev
-   
+
    apca <- list(sdev=sdev,factors=factors,loadings=loadings)
 }
 
@@ -8413,8 +8411,8 @@ if((nc > 1) && (Jcnt > 0)){
    print(ratio)
    cat("Loadings: ","\n")
    print(mpca$vectors[,1:r],digits=3)
-   
-   ## New version use square-root of (H'H)^{-1} and 
+
+   ## New version use square-root of (H'H)^{-1} and
    ## [(H'H)^{-1/2}H'X'][XH(H'H)^{-1/2}] to perform eigenvalues analysis
    Y=as.matrix(x%*%H)
    HPH=t(H)%*%H
@@ -8428,18 +8426,18 @@ if((nc > 1) && (Jcnt > 0)){
    d=m1$vectors[,1:r]
    Fhat=YH%*%d
    HPHi=Mhinv%*%Mhinv
-   
+
    # standardize the eigen vectors so that cov(f_t) = I_r.
    V2=apply(Fhat,2,var)
    s1=sqrt(V2)
    for (i in 1:r){
       Fhat[,i]=Fhat[,i]*(1/s1[i])
    }
-   
+
    Omehat=HPHi%*%t(Y)%*%Fhat/nT
    print("Omega-Hat")
    print(Omehat,digits=3)
-   
+
    HO=H%*%Omehat
    pro=sum(diag(t(HO)%*%HO))/N
    cat("Variation explained by the constrained factors: ","\n")
@@ -8460,7 +8458,7 @@ if((nc > 1) && (Jcnt > 0)){
    print(diag(Psi),digits=3)
    cat("eigenvalues of Psi:","\n")
    print(mpsi$values,digits=3)
-   
+
    list(Omega=Omehat,F=Fhat,Psi=Psi)
 }
 
@@ -8512,7 +8510,7 @@ X=cbind(X,z[(p+1-i):(nT-i),])
 }
 Z=as.matrix(z[(p+1):nT,])
 X=as.matrix(X)
-### 
+###
 XpX=crossprod(X,X)
 XpY=crossprod(X,Z)
 ## Bayesian Estimate
@@ -8559,7 +8557,7 @@ k=dim(x)[2]
 #
 if(m < 1)m=1
 # standardize the returns
-# mean of x is zero because VARfit employs a constant term. 
+# mean of x is zero because VARfit employs a constant term.
 V1=cov(x)
 ##print(V1,digits=3)
 m1=eigen(V1)
@@ -8612,7 +8610,7 @@ Mmtx[,j]=Mmtx[,j]/sqrt(sum(Mmtx[,j]^2))
 }
 
 archTstC <- function(x,m){
-# perform F-test for ARCH effect using x^2 series 
+# perform F-test for ARCH effect using x^2 series
 # m*Fratio is asymptotically chi-square with m degrees of freedom.
 #
 if(m < 1)m=1
@@ -8624,7 +8622,7 @@ Y=matrix(x[ist:nT]^2,EffN,1)
 for (j in 1:m){
 Xmtx=cbind(Xmtx,x[(ist-j):(nT-j)]^2)
 }
-XtX=crossprod(Xmtx,Xmtx) 
+XtX=crossprod(Xmtx,Xmtx)
 XtY=crossprod(Xmtx,Y)
 beta=solve(XtX,XtY)
 Resi=Y-Xmtx%*%beta
@@ -8660,7 +8658,7 @@ comVol <- list(residuals=x,values=m2$values,vectors=m2$vectors,M=Mmtx)
 }
 
 
-"GrangerTest" <- function (X, p = 1, include.mean = T, locInput=c(1)) 
+"GrangerTest" <- function (X, p = 1, include.mean = T, locInput=c(1))
 {
     if (!is.matrix(X))X = as.matrix(X)
     Tn = dim(X)[1]
@@ -8727,7 +8725,7 @@ comVol <- list(residuals=x,values=m2$values,vectors=m2$vectors,M=Mmtx)
         tmp = C2inv %*% as.matrix(omega, v, 1)
         chi = sum(omega * tmp)
         pvalue = 1 - pchisq(chi, v)
-        cat("Chi-square test for Granger Causality and p-value: ", c(chi, pvalue), 
+        cat("Chi-square test for Granger Causality and p-value: ", c(chi, pvalue),
             "\n")
     }
 ### If p-value is large, perform the estimation of constrained model
@@ -8764,9 +8762,9 @@ comVol <- list(residuals=x,values=m2$values,vectors=m2$vectors,M=Mmtx)
    Ph0=NULL
    }
 #
-    GrangerTest <- list(data = X, cnst = include.mean, order = p, 
-        coef = coef, constraints = K, aic=aic, bic=bic, hq=hq, 
-        residuals=resi, secoef=secoef, Sigma=Sigma, 
+    GrangerTest <- list(data = X, cnst = include.mean, order = p,
+        coef = coef, constraints = K, aic=aic, bic=bic, hq=hq,
+        residuals=resi, secoef=secoef, Sigma=Sigma,
         Phi=Phi, Ph0=Ph0, omega = omega, covomega = C2, locInput=locInput)
 }
 
@@ -8847,7 +8845,7 @@ comVol <- list(residuals=x,values=m2$values,vectors=m2$vectors,M=Mmtx)
          acuwk1=cbind(acuwk1,awk1)
       }
    }
-   
+
    tdx=c(1:(lag+1))-1
    par(mfcol=c(k,k),mai=c(0.3,0.3,0.3,0.3))
    if(orth){
@@ -8931,7 +8929,7 @@ comVol <- list(residuals=x,values=m2$values,vectors=m2$vectors,M=Mmtx)
       acuwk=cbind(acuwk,awk)
       ##print(PsiX,digits=3)
    }
-### Plotting 
+### Plotting
  cat("Press return for impulse response of exogenous variables: ","\n")
  readline()
    par(mfcol=c(k,kx),mai=c(0.3,0.3,0.3,0.3))
@@ -8957,7 +8955,7 @@ comVol <- list(residuals=x,values=m2$values,vectors=m2$vectors,M=Mmtx)
          points(tdx,acuwk[j,],pch='*',cex=0.8)
          title(main="Cumulative IRF of X-variables")
       }
-###   
+###
 
    VARXirf <- list(irf=Si,orthirf=orSi,irfX=PsiX)
 }
@@ -9069,7 +9067,7 @@ cat("Standard errors of predictions: ","\n")
 print(round(se.err,5))
 cat("RMSE of predictions: ","\n")
 print(round(rmse,5))
- 
+
 REGtspred <- list(pred=pred,se.err=se.err,rmse=rmse,orig=orig)
 
 }
@@ -9206,12 +9204,12 @@ if(p > 0){
  Phi <- Ph0i%*%Phi
  Theta <- Ph0i%*%Theta
 }
-### 
+###
 ### Use the VARMApred command to compute the forecasts
 mod <- list(data=zt,residuals=resi,cnst=include.mean,ARorder=p,MAorder=p,Ph0=t(const),
  Phi=Phi,Theta=Theta,Sigma=Sig)
 mm <- VARMApred(mod,h=h,orig=orig)
- 
+
 Kronpred <- list(pred=mm$pred,se.err=mm$se.err,orig=orig)
 }
 
@@ -9254,7 +9252,7 @@ for (i in 1:Nrow){
    if(idx > 0)cmx[ii,jj]=vi[idx]
    }
   }
-#  cat("cmx: ",cmx,"\n")  
+#  cat("cmx: ",cmx,"\n")
 tbl[i,j]=det(cmx)
  }
  }

@@ -2,29 +2,29 @@
 \alias{VMACpp}
 \title{Vector Moving Average Model (Cpp)
 }
-\description{Performs VMA estimation using the conditional multivariate 
-Gaussian likelihood function.  This is the same function as VMA, with the likelihood function implemented in C++ for efficiency. 
+\description{Performs VMA estimation using the conditional multivariate
+Gaussian likelihood function.  This is the same function as VMA, with the likelihood function implemented in C++ for efficiency.
 
 }
 \usage{
-VMACpp(da, q = 1, include.mean = T, fixed = NULL, 
-    beta=NULL, sebeta=NULL, prelim = F, 
+VMACpp(da, q = 1, include.mean = T, fixed = NULL,
+    beta=NULL, sebeta=NULL, prelim = F,
     details = F, thres = 2)
 }
 \arguments{
-  \item{da}{Data matrix of a k-dimensional VMA process with each column 
+  \item{da}{Data matrix of a k-dimensional VMA process with each column
 containing one time series
 }
   \item{q}{The order of VMA model
 }
-  \item{include.mean}{A logical switch to include the mean vector. 
+  \item{include.mean}{A logical switch to include the mean vector.
 The default is to include the mean vector in estimation.
 }
   \item{fixed}{A logical matrix used to fix parameter to zero
 }
   \item{beta}{Parameter estimates for use in model simplification
 }
- \item{sebeta}{Standard errors of parameter estimates for use in model 
+ \item{sebeta}{Standard errors of parameter estimates for use in model
 simplification
 }
   \item{prelim}{A logical switch to select parameters to be included in estimation

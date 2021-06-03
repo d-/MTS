@@ -1,12 +1,12 @@
-#### Multivariate Volatility Modeling 
+#### Multivariate Volatility Modeling
 "dccFit" <- function(rt,type="TseTsui",theta=c(0.90,0.02),ub=c(0.95,0.049999),lb=c(0.4,0.00001),cond.dist="std",df=7,m=0){
 # Estimation of DCC model using sample correlation matrix as R0
 # rt: standardized return series
 # theta=c(theta1,theta2): parameter vector
 # ub and lb: upper and lower bounds for theta.
-# R0: initial correlation matrix 
+# R0: initial correlation matrix
 # m = number of past observations used to update the parameters Tse and Tsui model.
-# 
+#
 if(!is.matrix(rt))rt=as.matrix(rt)
 nT=dim(rt)[1]; k=dim(rt)[2]
 if (m < 2) m=k+1
@@ -45,7 +45,7 @@ else{
  }
 
 dcclike <- function(par,rt=rt,m=m,type=type,loccor=loccor,cond.dist=cond.dist){
- # evaluate the log-likelihood function of a time series with multivariate 
+ # evaluate the log-likelihood function of a time series with multivariate
  # Student-t distribution with v degrees of freedom or multivariate normal.
  # par: parameter vectors
  #
@@ -200,7 +200,7 @@ dccFit <- list(estimates=est,Hessian=H,rho.t=rho.t)
 
 "Vech" <- function(mtx){
 # produces half-stacking vector
-# mtx: symmetric 
+# mtx: symmetric
 if(!is.matrix(mtx))mtx=as.matrix(mtx)
  vec=mtx[,1]
  k=nrow(mtx)
@@ -232,7 +232,6 @@ for (i in 1:(k-1)){
 mtx
 }
 
-
 "Lminv" <- function(L){
 # find the inverse of a lower triangular matrix.
 if(!is.matrix(L))L=as.matrix(L)
@@ -244,7 +243,7 @@ L1=L
 for (i in 1:k){
 L1[i:k,i]=L1[i:k,i]/di[i]
 }
-# 
+#
  mtxinv <- function(x){
   # Computes the inverse of a Lower-triangular matrix (with one on the diagonal)
   if(!is.matrix(x))x=as.matrix(x)
@@ -277,7 +276,7 @@ Linv
 
 ##########
 "dccPre" <- function(rtn,include.mean=T,p=0,cond.dist="norm"){
-## Fits marginal GARCH models to each component to obtain 
+## Fits marginal GARCH models to each component to obtain
 ### marginally standardized series for "dccFit".
 if(!is.matrix(rtn))rtn=as.matrix(rtn)
 RTN=rtn
@@ -392,7 +391,7 @@ EWMAvol <- list(Sigma.t=V1,return=rtn,lambda=lambda)
 ### Perform diagnostic checks for a fitted volatility models.
 if(!is.matrix(at))at=as.matrix(at)
 if(!is.matrix(Sigma.t))Sigma.t=as.matrix(Sigma.t)
-## 
+##
 nT=dim(at)[1]; k=dim(at)[2]
 nT1=dim(Sigma.t)[1]; k1=dim(Sigma.t)[2]
 if((nT != nT1) || (k1 != k^2)){
@@ -480,7 +479,7 @@ cat("Test and p-value: ",c(Qrm,pv4),"\n")
 "MCholV" <- function(rtn,size=36,lambda=0.96,p=0){
 ### Perform multivariate volatility modeling via Cholesky Decomposition.
 ### It makes use of the sequential nature of the decomposition.
-### This is a rather highly structured multivariate volatility model by 
+### This is a rather highly structured multivariate volatility model by
 ### keeping the number of parameters low.
 ####
 if(!is.matrix(rtn))rtn=as.matrix(rtn)
@@ -594,7 +593,7 @@ MCholV <- list(betat=-BetaU,bt=bt,Vol=VOL,Sigma.t=Sigma.t)
 
 
 "RLS" <- function(y,x,ist=30,xpxi=NULL,xpy0=NULL){
-## Compute the recursive least squares estimates of the multiple linear 
+## Compute the recursive least squares estimates of the multiple linear
 ## regression: y=beta'x+e.
 ######## x should include a column of 1's if constant is needed.
 #### xpxi and xpy0 are initial inverse(X'X) and X'y matrices if available.
@@ -633,9 +632,9 @@ RLS <- list(beta=beta,resi=resi)
 
 ##################################
 "mtCopula" <- function(rt,g1,g2,grp=NULL,th0=NULL,m=0,include.th0=TRUE,ub=c(0.95,0.049999)){
-# Estimation of t-copula when the correlation matrix is constrained. 
+# Estimation of t-copula when the correlation matrix is constrained.
 # rt: standardized return series
-# grp: vector of group sizes. 
+# grp: vector of group sizes.
 # g1 and g2: initial parameter values
 # th0: initial values of the angles.
 ### Modified in January 2013 for the book. Remove grouping temporarily.
@@ -723,7 +722,7 @@ if(i < g){
  }
 
 the2Xmtx <- function(theta,grp){
-# For a given grp and theta, computes the Cholesky's decomposition of the 
+# For a given grp and theta, computes the Cholesky's decomposition of the
 # correlation matrix.
 #
 # grp: group sizes.
@@ -753,7 +752,7 @@ for (j in 1:(k-1)){
 Cmtx=t(Xmtx)
 THini=4
 TH=matrix(THini,km1,km1)
-## TH: upper triangular matrix should be sufficient, but do not 
+## TH: upper triangular matrix should be sufficient, but do not
 ## consider the space issue in this program.
 ## Xmtx: In the program, it is a symmetric matrix for ease in computing.
 # icnt: counting the number of elements in theta is used.
@@ -863,7 +862,7 @@ for (i in 1:g){
 if(grp[i]>1)ncor=ncor+1
 }
 
-if(m <= 0)m=ncor+1 
+if(m <= 0)m=ncor+1
 ist=m+1
 mgsize=max(grp)
 Theta = matrix(1,m,1)%*%matrix(th0,1,length(th0))
@@ -903,7 +902,7 @@ cat("Upper limits: ",c2,"\n")
 #
 # Other inputs needed:
 # rt: standardized return series nT-by-k
-# th0: initial value of the independent theta-vector 
+# th0: initial value of the independent theta-vector
 # grp: grouping of returns
 #
 nT=dim(rt)[1]; k=dim(rt)[2]
@@ -948,7 +947,7 @@ tmp1=vtimeU(yt,Xtinv)
 tmp=sum(tmp1^2)
 #
 llike=llike+k1+(k-1)*k2-k*k4-log(d1)-((par[1]+k)/2)*log(1+tmp/(par[1]-2))
-# 
+#
 llike=llike+((par[1]+1)/2)*sum(log(1+yt^2/(par[1]-2)))
 # end of loop for t.
 }
@@ -1116,8 +1115,6 @@ icnt=icnt+1
  SCCor <- list(unconCor=V1,conCor=V2)
  } ### end of SCCor routine
 
-
-
 ###########################
 "archTest" <- function(rt,lag=10){
 ### Perfrom test to detect ARCH effects in a univariate time series rt.
@@ -1151,7 +1148,6 @@ cat("Rank-based Test: ","\n")
 cat("Test statistic: ",QR," p-value: ",pv2,"\n")
 
 }
-
 
 "MarchTest" <- function(zt,lag=10){
 #### Testing the presence of Multivariate ARCH effect
@@ -1203,7 +1199,7 @@ for (i in 1:lag){
 }
 pv3=1-pchisq(qm,df)
 cat("Test statistic: ",qm," p-value: ",pv3,"\n")
-#### Robust approach via trimming 
+#### Robust approach via trimming
 cut1=quantile(rt2,0.95)
 idx=c(1:nT)[rt2 <= cut1]
 x=zt[idx,]^2
@@ -1321,7 +1317,7 @@ cat("Upper limits: ",c2,"\n")
   }
 #
  mlikeG <- function(par,RTN=RTN,include.mean=include.mean){
-# evaluate the log-likelihood function of a bivariate BEKK(1,1) model 
+# evaluate the log-likelihood function of a bivariate BEKK(1,1) model
 # par: parameter vectors
  nT=dim(RTN)[1]; k=dim(RTN)[2]; Cov1=cov(RTN)
 #
@@ -1376,7 +1372,7 @@ for (t in 2:nT){
 llike
 }
 # Estimate Parameters and Compute Numerically Hessian:
-fit = nlminb(start = par, objective = mlikeG, RTN=RTN, include.mean=include.mean, 
+fit = nlminb(start = par, objective = mlikeG, RTN=RTN, include.mean=include.mean,
    lower = c1, upper = c2) ##, control = list(trace=3))
 va=mlikeG(fit$par,RTN=RTN,include.mean=include.mean)
 cat("Log likelihood function: ",-va,"\n")

@@ -1,4 +1,4 @@
-w\name{VAR}
+\name{VAR}
 \alias{VAR}
 \title{Vector Autoregressive Model
 }
