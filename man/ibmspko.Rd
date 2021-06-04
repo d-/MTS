@@ -13,7 +13,6 @@ The sample period is from January 1961 to December
 (CRSP) of the University of Chicago. The files has four columns. They 
 are dates, IBM, SP, and KO.
 }
-\usage{ibmspko}
 \format{A 2-d list containing 612x4 observations.  The files has four columns. They 
 are dates, IBM, SP, and KO.}
 \source{World Almanac and Book of Facts, 1975, page 406.}
