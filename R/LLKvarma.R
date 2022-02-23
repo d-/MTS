@@ -1,5 +1,5 @@
 #' Likelihood function for VARMA
-LLKvarma <- function(par, zt = da, p = p, q = q, include.mean = include.mean, fixed = fixed) {
+LLKvarma <- function(par, zt, p, q, include.mean, fixed) {
   nT <- dim(zt)[1]
   k <- dim(zt)[2]
   pqmax <- max(p, q)

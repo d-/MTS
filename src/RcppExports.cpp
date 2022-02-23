@@ -29,22 +29,3 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-
-RcppExport SEXP GetSVarmaResiduals(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP GetVarmaResiduals(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP GetVMAObs(SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP GetVMATH(SEXP, SEXP, SEXP, SEXP, SEXP);
-
-static const R_CallMethodDef CallEntries[] = {
-    {"_MTS_varmaResiduals", (DL_FUNC) &_MTS_varmaResiduals, 8},
-    {"GetSVarmaResiduals", (DL_FUNC) &GetSVarmaResiduals, 9},
-    {"GetVarmaResiduals",  (DL_FUNC) &GetVarmaResiduals,  6},
-    {"GetVMAObs",          (DL_FUNC) &GetVMAObs,          5},
-    {"GetVMATH",           (DL_FUNC) &GetVMATH,           5},
-    {NULL, NULL, 0}
-};
-
-RcppExport void R_init_MTS(DllInfo *dll) {
-    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
-    R_useDynamicSymbols(dll, FALSE);
-}
