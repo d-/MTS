@@ -8843,61 +8843,190 @@ comVol <- list(residuals=x,values=m2$values,vectors=m2$vectors,M=Mmtx)
 }
 
 #####
-"backtest" <- function(m1,rt,orig,h,xre=NULL,fixed=NULL,inc.mean=TRUE,reest=1){
-# m1: is a time-series model object
-# orig: is the starting forecast origin
-# rt: the time series
-# xre: the independent variables
-# h: forecast horizon
-# fixed: parameter constriant
-# inc.mean: flag for constant term of the model.
-# reest: the number of new observations required for model re-estimation
-#         The default is 1 so that the model is re-estimated every time.
-##
-regor=c(m1$arma[1],m1$arma[6],m1$arma[2])
-seaor=list(order=c(m1$arma[3],m1$arma[7],m1$arma[4]),period=m1$arma[5])
-T=length(rt)
-if(orig > T)orig=T
-if(h < 1) h=1
-rmse=rep(0,h)
-mabso=rep(0,h)
-nori=T-orig
-err=matrix(0,nori,h)
-fcst=matrix(0,nori,h)
-jlast=T-1
-#### The next line to ensure that the model is estimated at the beginning forecast origin
-ireest <- reest
-for (n in orig:jlast){
- jcnt=n-orig+1
- x=rt[1:n]
- if (is.null(xre))pretor=NULL else pretor=xre[1:n]
- if(ireest == reest){
-  mm=arima(x,order=regor,seasonal=seaor,xreg=pretor,fixed=fixed,include.mean=inc.mean)
-  ireest <- 0
-  }else{
-   ireest <- ireest+1}
- if (is.null(xre)) {nx=NULL}else{nx=xre[(n+1):(n+h)]}
- fore=predict(mm,h,newxreg=nx)
- kk=min(T,(n+h))
-# nof is the effective number of forecats at the forecast origin n.
- nof=kk-n
- pred=fore$pred[1:nof]
- obsd=rt[(n+1):kk]
- err[jcnt,1:nof]=obsd-pred
- fcst[jcnt,1:nof]=pred
-}
+"backtest" <- function(m1,rt,orig,h=1,xre=NULL,fixed=NULL,inc.mean=TRUE, 
+    reest=1,method=c("CSS-ML")){
+    regor = c(m1$arma[1], m1$arma[6], m1$arma[2])
+    seaor = list(order = c(m1$arma[3], m1$arma[7], m1$arma[4]), 
+        period = m1$arma[5])
+    if((regor[2]>0) || (seaor[2] > 0))inc.mean=FALSE
 #
+### Attaching sub-routines used.
+#### 
+forehstep=function(m1,rt,at,orig,h,xreg,include.mean){
+####
+ p <- m1$arma[1]; d=m1$arma[6]; q=m1$arma[2]
+ P <- m1$arma[3]; D=m1$arma[7]; Q=m1$arma[4]
+ s <- m1$arma[5]; coef=m1$coef  
+ nx <- 0
+ if(!is.null(xreg)){xreg=as.matrix(xreg); nx <- ncol(xreg)}
+ rar <- NULL
+ if(p > 0)rar=c(1,-coef[1:p])
+ rma <- NULL
+ if(q > 0)rma=c(1,coef[(p+1):(p+q)])
+ ist=p+q
+ sar <- NULL
+ if(P > 0){
+      sar=c(1,-coef[(ist+1):(ist+P)])
+      ist=ist+P
+      }
+ sma <- NULL
+ if(Q > 0){
+  sma=c(1,coef[(ist+1):(ist+Q)])
+  ist=ist+Q
+  }
+ mu=0
+ if(include.mean){mu=coef[ist+1]
+    ist=ist+1
+   }
+beta <- NULL
+ if(nx > 0)beta=coef[(ist+1):(ist+nx)]
+### AR and MA polynomials with difference
+phi <- multiplicate(rar,sar,s)$poly
+if(D==1)phi=multiplicate(phi,c(1,-1),s)$poly
+if(D==2)phi=multiplicate(phi,c(1,-1),s)$poly
+if(d==1)phi=c(phi,0)-c(0,phi)
+if(d==2)phi=c(phi,0)-c(0,phi)
+arorder=length(phi)-1
+###
+theta <- multiplicate(rma,sma,s)$poly
+maorder=length(theta)-1
+###
+###
+ xt <- rt[1:orig]
+### removing exogenous effects
+ xt <- xt-mu
+ if(nx > 0){
+   for (j in 1:nx){
+    xt=xt-beta[j]*xreg[1:orig,j]
+    }
+  }
+##
+### Prediction of mean-adjusted series
+pred <- NULL
 for (i in 1:h){
-iend=nori-i+1
-tmp=err[1:iend,i]
-mabso[i]=sum(abs(tmp))/iend
-rmse[i]=sqrt(sum(tmp^2)/iend)
+ it=orig+i
+ w <- 0
+ if(arorder > 0){
+  for (j in 1:arorder){
+   w = w-phi[j+1]*xt[it-j]
+   }
+ }
+
+ if(maorder > 0){
+   for (j in 1:maorder){
+    w = w +theta[j+1]*at[it-j]
+    }
+  }
+if(0){
+ cat("after ma-- w: ",w,"\n")
 }
-print("RMSE of out-of-sample forecasts")
-print(rmse)
-print("Mean absolute error of out-of-sample forecasts")
-print(mabso)
-backtest <- list(origin=orig,error=err,forecasts=fcst,rmse=rmse,mabso=mabso,reest=reest)
+## update xt 
+  xt=c(xt,w)
+### compute actual prediction
+  w=w+mu
+  if(nx > 0){
+    for (j in 1:nx){
+     w = w+beta[j]*xreg[it,j]
+     }
+   }
+
+  at=c(at,0)
+  pred=c(pred,w)
+ }
+
+forehsetp <- list(pred=pred)
+}
+
+multiplicate=function(p1,p2,s=1){
+### p1: coefficient vector of regular part
+### p2: coefficient vector of the seasonal part
+### s: period
+###
+if(!is.null(p1)){
+   d1 <- length(p1)-1
+   }else{
+   d1 = 0; p1=c(1)}
+if(!is.null(p2)){
+  d2 <- length(p2)-1
+  }else{d2=0; p2=c(1)}
+##
+### p3: product vector with degrees d3.
+d3 <- 0; p3=c(1)
+if((d1==0) && (d2 > 0)){d3=d2
+    p3 <- c(1)
+    for (i in 1:d2){
+     p3 <- c(p1,rep(0,s-1),p2[i+1])
+     }
+   }
+if((d2==0) && (d1 > 0)){d3=d1; p3=p1}
+if((d1 > 0) && (d2 > 0)){
+d3 <- d1+s*d2
+p3 <- c(1,rep(0,d3))
+p3[2:(d1+1)]=p1[2:(d1+1)]
+for (i in 1:d2){
+ ist = i*s+1
+ p3[ist:(ist+d1)]=p3[ist:(ist+d1)]+p1*p2[i+1]
+ }
+}
+multiplicative <- list(degree=d3,poly=p3)
+}
+### end of subroutines used.
+###
+### Resume the backtest program.
+    nT = length(rt)
+    if (orig > nT) orig = nT-1
+    if (h < 1) h = 1
+    rmse = rep(0, h)
+    mabso = rep(0, h)
+    nori = nT - orig
+    err = matrix(0, nori, h)
+    fcst = matrix(0, nori, h)
+    jlast = nT - 1
+    ireest <- reest
+    for (n in orig:jlast) {
+        jcnt = n - orig + 1
+        x = rt[1:n]
+        if (is.null(xre)){ 
+            pretor = NULL
+        }else{ pretor = xre[1:n,]}
+        if (ireest == reest) {
+           mm=arima(x,order=regor,seasonal=seaor,xreg=pretor,fixed=fixed,include.mean=inc.mean,method=method)
+            ireest <- 1
+            at <- mm$residuals
+           if (is.null(xre)) {
+            nx = NULL
+           }else {
+            nx = xre[(n + 1):(n + h),]
+         }
+         fore =predict(mm,h,newxreg=nx)
+         at=c(at,rt[n+1]-fore$pred[1])
+        }
+        else{
+         ireest <- ireest + 1
+         fore = forehstep(mm,rt,at,orig=n,h=h,xreg=xre,include.mean=inc.mean)
+          at <- c(at,rt[n+1]-fore$pred[1])
+        }
+        kk = min(nT, (n + h))
+        nof = kk - n
+        pred = fore$pred[1:nof]
+        obsd = rt[(n + 1):kk]
+        err[jcnt, 1:nof] = obsd - pred
+        fcst[jcnt, 1:nof] = pred
+    }
+    for (i in 1:h) {
+        iend = nori - i + 1
+        tmp = err[1:iend, i]
+        mabso[i] = sum(abs(tmp))/iend
+        rmse[i] = sqrt(sum(tmp^2)/iend)
+    }
+    print("RMSE of out-of-sample forecasts")
+    print(rmse)
+    print("Mean absolute error of out-of-sample forecasts")
+    print(mabso)
+
+### end of backtest
+backtest <- list(origin = orig, error = err, forecasts = fcst, 
+        rmse = rmse, mabso = mabso, reest = reest)
 }
 
 ####
