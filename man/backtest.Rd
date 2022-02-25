@@ -5,7 +5,7 @@
 \description{Perform out-of-sample prediction of a given ARIMA model and compute the summary statistics
 }
 \usage{
-backtest(m1,rt,orig,h,xre=NULL,fixed=NULL,inc.mean=TRUE,reest=1)
+function(m1, rt, orig, h = 1, xre = NULL, fixed = NULL, inc.mean = TRUE, reest = 1, method = c("CSS-ML"))
 }
 \arguments{
   \item{m1}{An output of the arima command for scalar time series
@@ -26,6 +26,8 @@ in R for parameter constraint.
  \item{reest}{A control variable used to re-fit the model in prediction. The program will 
 re-estimate the model for every new reest observations. The default is 1. That is, re-estimate 
 the model with every new data point.
+}
+\item{method}{Estimation method in the ARIMA model
 }
 }
 \details{Perform estimation-prediction-reestimation in the forecasting subsample, and 
