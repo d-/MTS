@@ -5,7 +5,8 @@
 \description{Perform out-of-sample prediction of a given ARIMA model and compute the summary statistics
 }
 \usage{
-function(m1, rt, orig, h = 1, xre = NULL, fixed = NULL, inc.mean = TRUE, reest = 1, method = c("CSS-ML"))
+backtest(m1, rt, orig, h = 1, xre = NULL, fixed = NULL, 
+  inc.mean = TRUE, reest = 1, method = c("CSS-ML"))
 }
 \arguments{
   \item{m1}{An output of the arima command for scalar time series
