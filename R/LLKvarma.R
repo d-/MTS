@@ -18,9 +18,8 @@ LLKvarma <- function(par, zt, p, q, include.mean, fixed) {
     ist <- 1
     beta <- rbind(beta, Ph0)
   }
-  PH <- NULL
+  PH <- matrix(0, kp, k)
   if (p > 0) {
-    PH <- matrix(0, kp, k)
     for (j in 1:k) {
       idx <- seq_len(kp)[fixed[(ist + 1):(ist + kp), j] == 1]
       jdx <- length(idx)
@@ -32,9 +31,8 @@ LLKvarma <- function(par, zt, p, q, include.mean, fixed) {
     ist <- ist + kp
     beta <- rbind(beta, PH)
   }
-  TH <- NULL
+  TH <- matrix(0, kq, k)
   if (q > 0) {
-    TH <- matrix(0, kq, k)
     for (j in 1:k) {
       idx <- c(1:kq)[fixed[(ist + 1):(ist + kq), j] == 1]
       jdx <- length(idx)
