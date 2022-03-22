@@ -3,6 +3,7 @@
 
 #include <RcppEigen.h>
 #include <Rcpp.h>
+#include "varma.h"
 
 using namespace Rcpp;
 
@@ -32,6 +33,10 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_MTS_varmaResiduals", (DL_FUNC) &_MTS_varmaResiduals, 8},
+    {"GetVarmaResiduals", (DL_FUNC) &GetVarmaResiduals, 6},
+    {"GetSVarmaResiduals", (DL_FUNC) &GetSVarmaResiduals, 9},
+    {"GetVMAObs", (DL_FUNC) &GetVMAObs, 5},
+    {"GetVMATH", (DL_FUNC) &GetVMATH, 5},
     {NULL, NULL, 0}
 };
 
