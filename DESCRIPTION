@@ -2,7 +2,7 @@ Package: MTS
 Type: Package
 Title: All-Purpose Toolkit for Analyzing Multivariate Time Series (MTS)
         and Estimating Multivariate Volatility Models
-Version: 1.2.0
+Version: 1.2.1
 Date: 2022-04-02
 Maintainer: Ruey S. Tsay <ruey.tsay@chicagobooth.edu>
 Author: Ruey S. Tsay [aut, cre], David Wood [aut], Jon Lachmann [ctb]
