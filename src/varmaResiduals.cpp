@@ -61,6 +61,5 @@ Eigen::MatrixXd varmaResiduals(const Eigen::Map<Eigen::MatrixXd> &zt,
         Eigen::VectorXd tmp3 = zt.row(t) - tmp.transpose();
         at.row(t) = tmp3.transpose();
     }
-    at = at.bottomRows(nT-pqmax);
-    return at;
+    return at.bottomRows(nT-pqmax);
 }
