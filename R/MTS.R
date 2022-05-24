@@ -2438,7 +2438,7 @@ LLKvmas <- function(par,zt=da, include.mean=include.mean, MAlag=MAlag, fixed=fix
    #
    if(length(Ph0) < 1)Ph0=rep(0,k)
    if(orig < 1)orig=nT
-   if(orig > T)orig=nT
+   if(orig > nT)orig=nT
    px=x[1:orig,]
    presi=resi[1:orig,]
    # Compute the psi-weights for the variance of forecast errors.
