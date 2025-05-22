@@ -6265,7 +6265,7 @@ return <- list(pred=nzt[(orig+1):(orig+hstep),],se=se[1:hstep,],orig=orig,h=hste
          sse=(t(resi)%*%resi)/enob
          #print(paste("For p = ",p,"residual variance is", sse))
          d1=log(det(sse))
-         npar=p*ksq+k*(mm+1)
+         npar=p*ksq+k*m*(mm+1)
          aic[p+1,mm+1]=d1+(2*npar)/enob
          bic[p+1,mm+1]=d1+(log(enob)*npar)/enob
          hq[p+1,mm+1]=d1+(2*log(log(enob))*npar)/enob
